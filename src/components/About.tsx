@@ -12,10 +12,10 @@ export default class About extends React.Component<any, {}> {
       <AboutContainer style={{textAlign: "left"}}>
         <Card>
           <Row>
-            <Col>
+            <Col sm={12} md={6}>
               <CardImg height="100%" src={require("../assets/images/mff-tours-logo.jpg")} alt="MFF-TOUR LOGO" />
             </Col>
-            <Col>
+            <Col sm={12} md={6}>
               <CardBody>
                 <CardTitle>
                   <strong>MFF-TOURS VISSION</strong>
