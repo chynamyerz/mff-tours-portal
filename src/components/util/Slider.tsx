@@ -9,7 +9,17 @@ const items = [
   },
   {
     src: require("../../assets/images/mff-tours-vehicle.jpg"),
-    altText: 'MFF-TOURS BEHICLE',
+    altText: 'MFF-TOURS VEHICLE',
+    caption: ''
+  },
+  {
+    src: require("../../assets/images/mff-tours-vehicles.jpg"),
+    altText: 'MFF-TOURS VEHICLES',
+    caption: ''
+  },
+  {
+    src: require("../../assets/images/mff-tours-vehicles1.jpg"),
+    altText: 'MFF-TOURS VEHICLES',
     caption: ''
   }
 ];
