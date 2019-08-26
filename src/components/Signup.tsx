@@ -244,7 +244,7 @@ export default class Signup extends React.Component<{}, ISignupState> {
                       type="text" 
                       name="email" 
                       id="email" 
-                      placeholder="e.g smith@gmail.com"
+                      placeholder="e.g. smith@gmail.com"
                       value={email}
                       onChange={this.onInputChange}
                     />

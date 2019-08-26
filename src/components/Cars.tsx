@@ -5,8 +5,7 @@ import moment from "moment";
 import { Query } from 'react-apollo';
 import { VEHICLE_QUERY } from '../graphql/Query';
 import { ErrorMessage } from './util/ErrorMessage';
-import ClientBook from './ClientBook';
-import UserBook from './UserBook';
+import { Redirect } from 'react-router';
 
 const CarsContainer = styled.div`
   margin: 5%;
@@ -19,49 +18,47 @@ const CardContainer = styled.div`
 
 export default class Cars extends React.Component<any, {}> {
   public state = {
+    addVehicle: false,
     moreDetails: false,
-    selectedVehicle: null
+    selectedVehicle: {}
   }
 
   render() {
     const { user } = this.props;
-    const { moreDetails, selectedVehicle } = this.state;
+    const { addVehicle, moreDetails, selectedVehicle } = this.state;
 
-    if (moreDetails && selectedVehicle && (user && user.role === "ADMIN")) {
-      return (
-        <CarsContainer style={{textAlign: "left"}}>
-          <Col sm="12" md="12" lg="12">
-            <Button 
-              style={{ marginBottom: "1%"}}
-              size={"sm"} 
-              color={"primary"}
-              onClick={() => this.setState({selectedVehicle: null, moreDetails: false})}
-            >{"Go back to cars selection"}</Button>
-          </Col>
-          <UserBook user={user} vehicle={selectedVehicle}/>
-        </CarsContainer>
-      )
+    if (addVehicle) {
+      return <Redirect to={{
+        pathname: "/add-vehicle",
+        state: {
+          user
+        }
+      }} />
     }
 
-    if (moreDetails && selectedVehicle) {
-      return (
-        <CarsContainer style={{textAlign: "left"}}>
-          <Col sm={12} md={{size: 8, offset: 2}} lg={{ size: 10, offset: 1}}>
-            <Button 
-              style={{ marginBottom: "1%"}}
-              size={"sm"} 
-              color={"primary"}
-              onClick={() => this.setState({selectedVehicle: null, moreDetails: false})}
-            >{"Go back to cars selection"}</Button>
-          </Col>
-          <ClientBook user={user} vehicle={selectedVehicle}/>
-        </CarsContainer>
-      )
+    if (moreDetails && selectedVehicle && (user && user.role === "ADMIN")) {
+      return <Redirect to={{
+        pathname: "/admin-vehicle-booking",
+        state: {
+          user, 
+          vehicle:{selectedVehicle}
+        }
+      }} />
+    }
+
+    if (moreDetails && Object.keys(selectedVehicle).length) {
+      return <Redirect to={{
+        pathname: "/client-vehicle-booking",
+        state: {
+          user, 
+          vehicle:{selectedVehicle}
+        }
+      }} />
     }
  
     return (
       <CarsContainer>
-        <Col sm="12" md="12" lg="12">
+        <Col sm={12} md={12} lg={{size: 8, offset: 2}}>
           <Query
             query={VEHICLE_QUERY}
           >
@@ -79,6 +76,18 @@ export default class Cars extends React.Component<any, {}> {
 
               return (
                 <>
+                {(user && user.role === "ADMIN") &&
+                  <div style={{textAlign: "left"}}>
+                    <Button
+                      size={"sm"} 
+                      color={"info"}
+                      onClick={() => this.setState({addVehicle: true})}
+                    >
+                      Add a new vehicle
+                    </Button>
+                  </div>
+                }
+                  
                   {error && <ErrorMessage>{error.message.replace("Network error: ", "").replace("GraphQL error: ", "")}</ErrorMessage>}
                   {
                     availableVehicles.map((vehicle: any) => {
@@ -87,7 +96,7 @@ export default class Cars extends React.Component<any, {}> {
                           <Card>
                             <Row>
                               <Col sm={12} md={6} lg={5}>
-                                <CardImg width="100%" src={require(`../${vehicle.imageURI}`)} alt="Card image cap" />
+                                <CardImg width="100%" src={vehicle.imageURI} alt="Card image cap" />
                               </Col>
                               <Col sm={12} md={6} lg={7}>
                                 <CardBody className="text-left">

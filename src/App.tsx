@@ -15,6 +15,9 @@ import ResetPassword from './components/ResetPassword';
 import UpdateUser from './components/UpdateUser';
 import Home from './components/Home';
 import About from './components/About';
+import AddVehicle from './components/AddVehicle';
+import ClientBook from './components/ClientBook';
+import UserBook from './components/UserBook';
 
 const AppContainer = styled.div`
   margin-top: 7%;
@@ -47,7 +50,7 @@ const AppContainer = styled.div`
 /**
  * A route which redirects to the login page if the user is not logged in.
  */
-function ProtectedRoute({
+export function ProtectedRoute({
   component: Component,
   user,
   ...rest
@@ -116,6 +119,28 @@ class App extends React.Component {
 
                     <Route
                       exact={true}
+                      path="/client-vehicle-booking"
+                      component={(props: any) => (
+                        <ClientBook 
+                          user={props.location.state.user}
+                          vehicle={props.location.state.vehicle.selectedVehicle}
+                        />
+                      )}
+                    />
+
+                    <Route
+                      exact={true}
+                      path="/admin-vehicle-booking"
+                      component={(props: any) => (
+                        <UserBook 
+                          user={props.location.state.user}
+                          vehicle={props.location.state.vehicle.selectedVehicle}
+                        />
+                      )}
+                    />
+
+                    <Route
+                      exact={true}
                       path="/sign-in"
                       component={() => (
                         <Signin />
@@ -140,6 +165,18 @@ class App extends React.Component {
                       exact={true}
                       path="/request-password-reset"
                       component={RequestPasswordReset}
+                    />
+
+                    <ProtectedRoute
+                      user={currentUser}
+                      exact={true}
+                      path="/add-vehicle"
+                      component={(props: any) => (
+                        <AddVehicle 
+                          user={props.location.state.user}
+                        />
+                        )
+                      }
                     />
 
                     <ProtectedRoute

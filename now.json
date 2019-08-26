@@ -1,0 +1,8 @@
+{
+  "version": 2,
+  "build": {
+    "env": {
+      "REACT_APP_MMF_BACKEND_URL": "@react_app_mmf_backend_url"
+    }
+  }
+}

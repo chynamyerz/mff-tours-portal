@@ -151,6 +151,43 @@ const CANCEL_VEHICLE_BOOKING_MUTATION = gql`
 `;
 
 /**
+ * Book a vehicle
+ * 
+ * parameters
+ * vehicleId:
+ *      Vehicle id to book
+ * pickupDate:
+ *      A vehicle pick up date
+ * returnDate:
+ *      A vehicle return date
+ */
+const ADD_VEHICLE_MUTATION = gql`
+  mutation ADD_VEHICLE_MUTATION(
+    $group: String!
+    $size: String!
+    $name: String!
+    $model: String!
+    $make: String!
+    $year: String!
+    $imageURI: String!
+    $status: String!
+  ){
+    addVehicle(
+      group: $group
+      size: $size
+      name: $name
+      model: $model
+      make: $make
+      year: $year
+      imageURI: $imageURI
+      status: $status
+    ){
+      message
+    }
+  }
+`;
+
+/**
  * Log the user in.
  *
  * The following arguments must be supplied
@@ -243,6 +280,7 @@ const SEND_EMAIL_MUTATION = gql`
 `;
 
 export { 
+  ADD_VEHICLE_MUTATION,
   BOOK_VEHICLE_MUTATION,
   CANCEL_VEHICLE_BOOKING_MUTATION,
   USER_UPDATE_MUTATION, 

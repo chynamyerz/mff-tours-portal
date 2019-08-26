@@ -213,9 +213,10 @@ export default class AddNewUser extends React.Component<{}, ISignupState> {
           { (signup: any, { loading, error }: any) => {
             return (
               <Form style={{ textAlign: "left"}}>
+                <h2 style={{ textAlign: "center"}}>Add a new user</h2>
                 {error && <ErrorMessage>{this.state.errors.responseError}</ErrorMessage>}
                 <Row>
-                  <Col md={6}>
+                  <Col sm= {12} md={6}>
                     <FormGroup>
                       <Label for="name">Name</Label>
                       <Input 
@@ -229,7 +230,7 @@ export default class AddNewUser extends React.Component<{}, ISignupState> {
                         {errors.name && <Error>{ errors.name }</Error>}
                     </FormGroup>
                   </Col>
-                  <Col md={6}>
+                  <Col sm= {12} md={6}>
                     <FormGroup>
                       <Label for="surname">Surname</Label>
                       <Input 
@@ -245,7 +246,7 @@ export default class AddNewUser extends React.Component<{}, ISignupState> {
                   </Col>
                 </Row>
                 <Row>
-                  <Col md={6}>
+                  <Col sm= {12} md={6}>
                   <FormGroup>
                     <Label for="email">Email address</Label>
                     <Input 
@@ -259,7 +260,7 @@ export default class AddNewUser extends React.Component<{}, ISignupState> {
                     {errors.email && <Error>{ errors.email }</Error>}
                   </FormGroup>
                   </Col>
-                  <Col md={6}>
+                  <Col sm= {12} md={6}>
                     <FormGroup>
                       <Label for="contact">Contact number</Label>
                       <Input 
@@ -274,7 +275,6 @@ export default class AddNewUser extends React.Component<{}, ISignupState> {
                     </FormGroup>
                   </Col>
                 </Row>
-                
                 <FormGroup>
                   <Label for="exampleAddress">Address</Label>
                   <Input
@@ -288,7 +288,7 @@ export default class AddNewUser extends React.Component<{}, ISignupState> {
                   {errors.address && <Error>{ errors.address }</Error>}
                 </FormGroup>
                 <Row>
-                  <Col md={6}>
+                  <Col sm= {12} md={4}>
                     <FormGroup>
                       <Label for="exampleCity">City</Label>
                       <Input 
@@ -301,7 +301,7 @@ export default class AddNewUser extends React.Component<{}, ISignupState> {
                       {errors.city && <Error>{ errors.city }</Error>}
                     </FormGroup>
                   </Col>
-                  <Col md={4}>
+                  <Col sm= {12} md={4}>
                     <FormGroup>
                       <Label for="exampleState">State</Label>
                       <Input 
@@ -314,7 +314,7 @@ export default class AddNewUser extends React.Component<{}, ISignupState> {
                       {errors.state && <Error>{ errors.state }</Error>}
                     </FormGroup>
                   </Col>
-                  <Col md={2}>
+                  <Col sm= {12} md={4}>
                     <FormGroup>
                       <Label for="exampleZip">Zip</Label>
                       <Input 
@@ -329,7 +329,7 @@ export default class AddNewUser extends React.Component<{}, ISignupState> {
                   </Col>
                 </Row>
                 <Row>
-                  <Col md={6}>
+                  <Col sm= {12} md={6}>
                     <FormGroup>
                       <Label for="password">Password</Label>
                       <Input 
@@ -343,7 +343,7 @@ export default class AddNewUser extends React.Component<{}, ISignupState> {
                       {errors.password && <Error>{ errors.password }</Error>}
                     </FormGroup>
                   </Col>
-                  <Col md={6}>
+                  <Col sm= {12} md={6}>
                     <FormGroup>
                       <Label for="confirmPassword">Confirm password</Label>
                       <Input 

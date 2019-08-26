@@ -54,7 +54,7 @@ export default class Bookings extends React.Component<any, {}> {
  
     return (
       <CarsContainer>
-        <Col sm="12" md="12" lg="12">
+        <Col sm={12} md={12} lg={{size: 8, offset: 2}}>
           <Query
             query={VEHICLE_BOOKINGS_QUERY}
           >
@@ -95,7 +95,7 @@ export default class Bookings extends React.Component<any, {}> {
                                   <Card>
                                     <Row>
                                       <Col sm={12} md={6} lg={5}>
-                                        <CardImg width="100%" src={require(`../${booking.vehicle.imageURI}`)} alt="Card image cap" />
+                                        <CardImg width="100%" src={booking.vehicle.imageURI} alt="Card image cap" />
                                       </Col>
                                       <Col sm={12} md={6} lg={7}>
                                         <CardBody className="text-left">

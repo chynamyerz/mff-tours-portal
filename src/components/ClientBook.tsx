@@ -28,7 +28,7 @@ const validateCarField = (
   return errors;
 };
 
-export default class ClientBook extends React.Component<any, {}> {
+export default class ClientBook extends React.Component<any, any> {
   public state = {
     errors: {
       pickupDate: "",
@@ -92,14 +92,13 @@ export default class ClientBook extends React.Component<any, {}> {
   };
 
   render() {
-    if (this.state.booked) {
+    const { user, vehicle } = this.props;
+    const { booked ,errors } = this.state;
+    const minDate: any = moment(Date.now()).add(1, "day").format("YYYY-MM-DD")
+
+    if (booked) {
       return (<Redirect to="/bookings" />)
     }
-
-    const { user, vehicle } = this.props;
-    const { errors } = this.state;
-
-    const minDate: any = moment(Date.now()).add(1, "day").format("YYYY-MM-DD")
  
     return (
       <Col sm="12" md="12" lg="12">
@@ -121,7 +120,7 @@ export default class ClientBook extends React.Component<any, {}> {
                 <Row>
                   <Col sm={12} md={{size: 8, offset: 2}} lg={{ size: 10, offset: 1}}>
                     <Card>
-                      <CardImg top width="400px" height="300px" src={require(`../${vehicle.imageURI}`)} alt="Card image cap" />
+                      <CardImg top width="400px" height="300px" src={vehicle.imageURI} alt="Card image cap" />
                       <CardBody className="text-left">
                         <CardTitle style={{fontWeight: "bold", fontSize: 20}}>{vehicle.name}</CardTitle>
                         <CardSubtitle style={{fontWeight: "bold"}}>{vehicle.model} | {vehicle.make} | {moment(vehicle.year).format("YYYY-MM-DD")}</CardSubtitle>

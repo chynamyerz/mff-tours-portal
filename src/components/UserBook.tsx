@@ -122,8 +122,8 @@ export default class UserBook extends React.Component<any, {}> {
                 {error && <ErrorMessage>{error.message.replace("Network error: ", "").replace("GraphQL error: ", "")}</ErrorMessage>}
                 <Row>
                   <Col sm={12} md={6} lg={6}>
-                    <Card>
-                      <CardImg top width="50%" height="25%" src={require(`../${vehicle.imageURI}`)} alt="Card image cap" />
+                    <Card style={{marginBottom: "2%"}}>
+                      <CardImg top width="50%" height="25%" src={vehicle.imageURI} alt="Card image cap" />
                       <CardBody className="text-left">
                         <CardTitle style={{fontWeight: "bold", fontSize: 20}}>{vehicle.name}</CardTitle>
                         <CardSubtitle style={{fontWeight: "bold"}}>{vehicle.model} | {vehicle.make} | {moment(vehicle.year).format("YYYY-MM-DD")}</CardSubtitle>
@@ -148,7 +148,7 @@ export default class UserBook extends React.Component<any, {}> {
                             </Col>
                           </Row>
                           <Row>
-                            <Col md={6}>
+                            <Col sm= {12} md={6}>
                               <FormGroup>
                                 <Label for="pickupDate">Pick up date</Label>
                                 <Input 
@@ -162,7 +162,7 @@ export default class UserBook extends React.Component<any, {}> {
                                 {errors.pickupDate && <Error>{ errors.pickupDate }</Error>}
                               </FormGroup>
                             </Col>
-                            <Col md={6}>
+                            <Col sm= {12} md={6}>
                               <FormGroup>
                                 <Label for="returnDate">Return date</Label>
                                 <Input 
@@ -179,6 +179,7 @@ export default class UserBook extends React.Component<any, {}> {
                           </Row>
                           <Button 
                             disabled={loading}
+                            block
                             size={"sm"} 
                             color={"success"}
                             onClick={(e) => this.handleSubmit(e, user, vehicle, bookVehicle)}
@@ -188,7 +189,7 @@ export default class UserBook extends React.Component<any, {}> {
                     </Card>
                   </Col>
                   <Col sm={12} md={6} lg={6}>
-                    <Card>
+                    <Card style={{marginBottom: "2%"}}>
                       <AddNewUser />
                       <br />
                     </Card>

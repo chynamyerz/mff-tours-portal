@@ -1,3 +1,4 @@
+require("now-env");
 import axios from "axios";
 
 /**
