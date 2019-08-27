@@ -121,6 +121,12 @@ export default class UserBook extends React.Component<any, {}> {
               <>
                 {error && <ErrorMessage>{error.message.replace("Network error: ", "").replace("GraphQL error: ", "")}</ErrorMessage>}
                 <Row>
+                <Col sm={12} md={6} lg={6}>
+                    <Card style={{marginBottom: "2%"}}>
+                      <AddNewUser />
+                      <br />
+                    </Card>
+                  </Col>
                   <Col sm={12} md={6} lg={6}>
                     <Card style={{marginBottom: "2%"}}>
                       <CardImg top width="50%" height="25%" src={vehicle.imageURI} alt="Card image cap" />
@@ -186,12 +192,6 @@ export default class UserBook extends React.Component<any, {}> {
                           >{loading ? "Booking..." : "Book"}</Button>
                         </Form>
                       </CardBody>
-                    </Card>
-                  </Col>
-                  <Col sm={12} md={6} lg={6}>
-                    <Card style={{marginBottom: "2%"}}>
-                      <AddNewUser />
-                      <br />
                     </Card>
                   </Col>
                 </Row>

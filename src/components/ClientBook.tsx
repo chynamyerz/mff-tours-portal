@@ -101,7 +101,7 @@ export default class ClientBook extends React.Component<any, any> {
     }
  
     return (
-      <Col sm="12" md="12" lg="12">
+      <Col sm={12} md={12} lg={{size: 8, offset: 2}}>
         <Mutation
           mutation={BOOK_VEHICLE_MUTATION}
           refetchQueries={[
@@ -117,10 +117,12 @@ export default class ClientBook extends React.Component<any, any> {
             return (
               <>
                 {error && <ErrorMessage>{error.message.replace("Network error: ", "").replace("GraphQL error: ", "")}</ErrorMessage>}
-                <Row>
-                  <Col sm={12} md={{size: 8, offset: 2}} lg={{ size: 10, offset: 1}}>
-                    <Card>
-                      <CardImg top width="400px" height="300px" src={vehicle.imageURI} alt="Card image cap" />
+                <Card>
+                  <Row>
+                    <Col sm={12} md={6} lg={5}>
+                      <CardImg width="100%" src={vehicle.imageURI} alt="MFF TOURS VEHICLE" />
+                    </Col>
+                    <Col sm={12} md={6} lg={7}>
                       <CardBody className="text-left">
                         <CardTitle style={{fontWeight: "bold", fontSize: 20}}>{vehicle.name}</CardTitle>
                         <CardSubtitle style={{fontWeight: "bold"}}>{vehicle.model} | {vehicle.make} | {moment(vehicle.year).format("YYYY-MM-DD")}</CardSubtitle>
@@ -164,9 +166,9 @@ export default class ClientBook extends React.Component<any, any> {
                           >{loading ? "Booking..." : "Book"}</Button>
                         </Form>
                       </CardBody>
-                    </Card>
-                  </Col>
-                </Row>
+                    </Col>
+                  </Row>
+                </Card>
               </>
             )
           }}

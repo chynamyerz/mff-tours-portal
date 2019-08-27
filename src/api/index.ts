@@ -1,4 +1,3 @@
-import "now-env";
 import axios from "axios";
 
 /**
