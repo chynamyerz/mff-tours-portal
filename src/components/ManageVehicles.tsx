@@ -159,15 +159,20 @@ export default class ManageVehicles extends React.Component<any, any> {
                               <td>{moment(vehicle.year).format("YYYY-MM-DD")}</td>
                               <td style={{textAlign: "right"}}>
                                 <Row>
+                                  <Col sm={12} md={4} lg={4}>
                                     <Button
+                                      block
                                       style={{marginRight: "2%"}}
                                       size={"sm"} 
                                       color={"secondary"}
                                       onClick={() => this.setState({vehicle, moreDetails: true})}
                                     >
-                                      Book for client
+                                      Book
                                     </Button>
+                                  </Col>
+                                  <Col sm={12} md={4} lg={4}>
                                     <Button
+                                      block
                                       style={{marginRight: "2%"}}
                                       size={"sm"} 
                                       color={"warning"}
@@ -175,7 +180,10 @@ export default class ManageVehicles extends React.Component<any, any> {
                                     >
                                       Update
                                     </Button>
+                                  </Col>
+                                  <Col sm={12} md={4} lg={4}>
                                     <Button
+                                      block
                                       disabled={loading}
                                       style={{marginRight: "2%"}}
                                       size={"sm"} 
@@ -184,6 +192,7 @@ export default class ManageVehicles extends React.Component<any, any> {
                                     >
                                       Delete
                                     </Button>
+                                  </Col>
                                 </Row>
                               </td>
                             </tr>

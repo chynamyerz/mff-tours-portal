@@ -165,7 +165,7 @@ export default class UserBook extends React.Component<any, {}> {
                           <Row>
                             <Col>
                               <FormGroup>
-                                <Label for="email1">Email address of the newly created user</Label>
+                                <Label for="email1">Email address</Label>
                                 <Input 
                                   type="text" 
                                   name="email1" 
