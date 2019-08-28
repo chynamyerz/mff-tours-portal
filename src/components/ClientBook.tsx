@@ -5,7 +5,7 @@ import { Mutation } from 'react-apollo';
 import { BOOK_VEHICLE_MUTATION } from '../graphql/Mutation';
 import { USER_QUERY, VEHICLE_QUERY, VEHICLE_BOOKINGS_QUERY } from '../graphql/Query';
 import { ErrorMessage } from './util/ErrorMessage';
-import { Redirect } from 'react-router';
+import { Redirect } from 'react-router-dom';
 import { Error } from './util/Error';
 
 const validateCarField = (
@@ -93,8 +93,10 @@ export default class ClientBook extends React.Component<any, any> {
 
   render() {
     const { user, vehicle } = this.props;
-    const { booked ,errors } = this.state;
-    const minDate: any = moment(Date.now()).add(1, "day").format("YYYY-MM-DD")
+    const { booked ,errors, pickupDate } = this.state;
+
+    const minPickUpDate: any = moment(Date.now()).add(1, "day").format("YYYY-MM-DD")
+    const minReturnDate: any = moment(pickupDate).add(1, "day").format("YYYY-MM-DD")
 
     if (booked) {
       return (<Redirect to="/bookings" />)
@@ -138,7 +140,7 @@ export default class ClientBook extends React.Component<any, any> {
                                   type="date" 
                                   name="pickupDate" 
                                   id="pickupDate"
-                                  min={minDate}  
+                                  min={minPickUpDate}  
                                   onChange={this.onInputChange}
                                 />
                                 {errors.pickupDate && <Error>{ errors.pickupDate }</Error>}
@@ -148,10 +150,11 @@ export default class ClientBook extends React.Component<any, any> {
                               <FormGroup>
                                 <Label for="returnDate">Return date</Label>
                                 <Input 
+                                  disabled={!pickupDate}
                                   type="date" 
                                   name="returnDate" 
                                   id="returnDate" 
-                                  min={minDate} 
+                                  min={minReturnDate} 
                                   onChange={this.onInputChange}
                                 />
                                 {errors.returnDate && <Error>{ errors.returnDate }</Error>}

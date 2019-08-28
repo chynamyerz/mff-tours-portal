@@ -5,7 +5,7 @@ import moment from "moment";
 import { Query } from 'react-apollo';
 import { VEHICLE_QUERY } from '../graphql/Query';
 import { ErrorMessage } from './util/ErrorMessage';
-import { Redirect } from 'react-router';
+import { Redirect } from 'react-router-dom';
 
 const CarsContainer = styled.div`
   margin: 5%;
@@ -18,40 +18,29 @@ const CardContainer = styled.div`
 
 export default class Cars extends React.Component<any, {}> {
   public state = {
-    addVehicle: false,
     moreDetails: false,
-    selectedVehicle: {}
+    vehicle: {}
   }
 
   render() {
     const { user } = this.props;
-    const { addVehicle, moreDetails, selectedVehicle } = this.state;
+    const { moreDetails, vehicle } = this.state;
 
-    if (addVehicle) {
+    if (user && (user.role === "ADMIN")) {
       return <Redirect to={{
-        pathname: "/add-vehicle",
+        pathname: "/manage-vehicle",
         state: {
           user
         }
       }} />
     }
 
-    if (moreDetails && selectedVehicle && (user && user.role === "ADMIN")) {
-      return <Redirect to={{
-        pathname: "/admin-vehicle-booking",
-        state: {
-          user, 
-          vehicle:{selectedVehicle}
-        }
-      }} />
-    }
-
-    if (moreDetails && Object.keys(selectedVehicle).length) {
+    if (moreDetails && Object.keys(vehicle).length) {
       return <Redirect to={{
         pathname: "/client-vehicle-booking",
         state: {
           user, 
-          vehicle:{selectedVehicle}
+          vehicle
         }
       }} />
     }
@@ -76,18 +65,6 @@ export default class Cars extends React.Component<any, {}> {
 
               return (
                 <>
-                {(user && user.role === "ADMIN") &&
-                  <div style={{textAlign: "left"}}>
-                    <Button
-                      size={"sm"} 
-                      color={"info"}
-                      onClick={() => this.setState({addVehicle: true})}
-                    >
-                      Add a new vehicle
-                    </Button>
-                  </div>
-                }
-                  
                   {error && <ErrorMessage>{error.message.replace("Network error: ", "").replace("GraphQL error: ", "")}</ErrorMessage>}
                   {
                     availableVehicles.map((vehicle: any) => {
@@ -107,7 +84,7 @@ export default class Cars extends React.Component<any, {}> {
                                     disabled={loading}
                                     size={"sm"} 
                                     color={"success"}
-                                    onClick={() => this.setState({selectedVehicle: vehicle, moreDetails: true})}
+                                    onClick={() => this.setState({vehicle, moreDetails: true})}
                                   >{"More details"}</Button>
                                 </CardBody>
                               </Col>

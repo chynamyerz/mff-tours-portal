@@ -1,12 +1,12 @@
 import React from 'react';
-import { Col, Card, CardImg, CardBody, CardTitle, CardSubtitle, CardText, Button, Row, Form, FormGroup, Label, Input } from 'reactstrap';
+import { Col, Card, CardImg, CardBody, CardTitle, CardSubtitle, CardText, Button, Row, Form, FormGroup, Label, Input, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import moment from "moment";
 import { Mutation } from 'react-apollo';
 import { BOOK_VEHICLE_MUTATION } from '../graphql/Mutation';
 import { USER_QUERY, VEHICLE_QUERY, VEHICLE_BOOKINGS_QUERY } from '../graphql/Query';
 import { ErrorMessage } from './util/ErrorMessage';
 import { Error } from './util/Error';
-import AddNewUser from './AddNewUser';
+import AddUser from './AddUser';
 import { validate } from 'isemail';
 
 const validateCarField = (
@@ -43,6 +43,7 @@ export default class UserBook extends React.Component<any, {}> {
       email1: "",
     },
     email1: "",
+    modal: false,
     pickupDate: "",
     returnDate: ""
   }
@@ -100,14 +101,22 @@ export default class UserBook extends React.Component<any, {}> {
     });
   };
 
+  toggle = () => {
+    this.setState({
+      ...this.state,
+      modal: !this.state.modal
+    });
+  }
+
   render() {
     const { user, vehicle } = this.props;
     const { email1, errors, pickupDate, returnDate } = this.state;
 
-    const minDate: any = moment(Date.now()).add(1, "day").format("YYYY-MM-DD")
+    const minPickUpDate: any = moment(Date.now()).add(1, "day").format("YYYY-MM-DD")
+    const minReturnDate: any = moment(pickupDate).add(1, "day").format("YYYY-MM-DD")
  
     return (
-      <Col sm="12" md="12" lg="12">
+      <Col sm={12} md={12} lg={{size: 8, offset: 2}}>
         <Mutation
           mutation={BOOK_VEHICLE_MUTATION}
           refetchQueries={[
@@ -119,17 +128,33 @@ export default class UserBook extends React.Component<any, {}> {
           {(bookVehicle: any, {loading, error}: any) => {
             return (
               <>
+                <div>
+                  <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
+                    <ModalHeader toggle={this.toggle}><strong>Add a new user</strong></ModalHeader>
+                    <ModalBody>
+                      <AddUser />
+                    </ModalBody>
+                    <ModalFooter>
+                      <Button color="secondary" onClick={this.toggle}>Cancel</Button>
+                    </ModalFooter>
+                  </Modal>
+                </div>
                 {error && <ErrorMessage>{error.message.replace("Network error: ", "").replace("GraphQL error: ", "")}</ErrorMessage>}
-                <Row>
-                <Col sm={12} md={6} lg={6}>
-                    <Card style={{marginBottom: "2%"}}>
-                      <AddNewUser />
-                      <br />
-                    </Card>
-                  </Col>
-                  <Col sm={12} md={6} lg={6}>
-                    <Card style={{marginBottom: "2%"}}>
-                      <CardImg top width="50%" height="25%" src={vehicle.imageURI} alt="Card image cap" />
+                <div style={{textAlign: "left", marginBottom: "2%"}}>
+                  <Button
+                    size={"sm"} 
+                    color={"info"}
+                    onClick={this.toggle}
+                  >
+                    Booking for a new user? Click to add the user first.
+                  </Button>
+                </div>
+                <Card style={{marginBottom: "2%"}}>
+                  <Row>
+                    <Col sm={12} md={6} lg={5}>
+                      <CardImg width="100%" src={vehicle.imageURI} alt="Card image cap" />
+                    </Col>
+                    <Col sm={12} md={6} lg={7}>
                       <CardBody className="text-left">
                         <CardTitle style={{fontWeight: "bold", fontSize: 20}}>{vehicle.name}</CardTitle>
                         <CardSubtitle style={{fontWeight: "bold"}}>{vehicle.model} | {vehicle.make} | {moment(vehicle.year).format("YYYY-MM-DD")}</CardSubtitle>
@@ -140,7 +165,7 @@ export default class UserBook extends React.Component<any, {}> {
                           <Row>
                             <Col>
                               <FormGroup>
-                                <Label for="email1">Email address</Label>
+                                <Label for="email1">Email address of the newly created user</Label>
                                 <Input 
                                   type="text" 
                                   name="email1" 
@@ -161,7 +186,7 @@ export default class UserBook extends React.Component<any, {}> {
                                   type="date" 
                                   name="pickupDate" 
                                   id="pickupDate"
-                                  min={minDate}
+                                  min={minPickUpDate}
                                   value={pickupDate}  
                                   onChange={this.onInputChange}
                                 />
@@ -172,10 +197,11 @@ export default class UserBook extends React.Component<any, {}> {
                               <FormGroup>
                                 <Label for="returnDate">Return date</Label>
                                 <Input 
+                                  disabled={!pickupDate}
                                   type="date" 
                                   name="returnDate" 
                                   id="returnDate" 
-                                  min={minDate}
+                                  min={minReturnDate}
                                   value={returnDate} 
                                   onChange={this.onInputChange}
                                 />
@@ -192,9 +218,9 @@ export default class UserBook extends React.Component<any, {}> {
                           >{loading ? "Booking..." : "Book"}</Button>
                         </Form>
                       </CardBody>
-                    </Card>
-                  </Col>
-                </Row>
+                    </Col>
+                  </Row>
+                </Card>
               </>
             )
           }}

@@ -6,7 +6,7 @@ import { Mutation } from 'react-apollo';
 import { SIGNUP_MUTATION } from '../graphql/Mutation';
 import { ErrorMessage } from './util/ErrorMessage';
 import { Error } from './util/Error';
-import { Redirect } from 'react-router';
+import { Redirect } from 'react-router-dom';
 
 interface ISignupFormInput {
   email: string;

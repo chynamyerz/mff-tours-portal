@@ -1,93 +1,52 @@
 import React from 'react';
 import { Col, Row, Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import { Mutation } from 'react-apollo';
-import { ADD_VEHICLE_MUTATION } from '../graphql/Mutation';
+import { UPDATE_VEHICLE_MUTATION } from '../graphql/Mutation';
 import { ErrorMessage } from './util/ErrorMessage';
 import { Error } from './util/Error';
 import { VEHICLE_QUERY } from '../graphql/Query';
 import { Redirect } from 'react-router-dom';
 
-interface IAddVehicleFormInput {
-  group: string;
-  size: string;
-  name: string;
-  model: string;
-  make: string;
-  year: string;
-  imageURI: string;
-  status: string;
+interface IUpdateVehicleFormInput {
+  password: string;
+  group?: string;
+  size?: string;
+  name?: string;
+  model?: string;
+  make?: string;
+  year?: string;
+  imageURI?: string;
+  status?: string;
 }
 
-interface IAddVehicleState {
-  added: boolean;
-  errors: Partial<IAddVehicleFormInput> & { responseError?: string };
-  vehicleInput: IAddVehicleFormInput;
+interface IUpdateVehicleState {
+  updated: boolean;
+  errors: Partial<IUpdateVehicleFormInput> & { responseError?: string };
+  vehicleInput: IUpdateVehicleFormInput;
 };
 
-const validateAddVehicleField = (
-  addVehicleInput: IAddVehicleFormInput
+const validateUpdateVehicleField = (
+  updateVehicleInput: IUpdateVehicleFormInput
 ) => {
   // An object to store errors for all fields.
-  const errors: Partial<IAddVehicleFormInput> = {};
+  const errors: Partial<IUpdateVehicleFormInput> = {};
 
   // Check if the submitted group is not empty.
-  if (!addVehicleInput.group) {
-    errors.group = "Vehicle group is required";
-  }
-
-  // Check if the submitted size is not empty.
-  if (!addVehicleInput.size) {
-    errors.size = "Vehicle size is required";
-  }
-
-  // Check if the submitted name is not empty.
-  if (!addVehicleInput.name) {
-    errors.name = "Vehicle brand name is required";
-  }
-
-  // Check if the submitted model is not empty.
-  if (!addVehicleInput.model) {
-    errors.model = "Vehicle model is required";
-  }
-
-  // Check if the submitted make is not empty.
-  if (!addVehicleInput.make) {
-    errors.make = "Vehicle make is required";
-  }
-
-  // Check if the submitted year is not empty.
-  if (!addVehicleInput.year) {
-    errors.year = "Vehicle year is required";
-  }
-
-  // Check if the submitted imageURI is not empty.
-  if (!addVehicleInput.imageURI) {
-    errors.imageURI = "Vehicle imageURI is required";
-  }
-
-  // Check if the submitted status is not empty.
-  if (!addVehicleInput.status) {
-    errors.status = "Vehicle status is required";
+  if (!updateVehicleInput.password) {
+    errors.password = "Password is required";
   }
 
   // return an array consisting of error message if any or empty.
   return errors;
 };
 
-export default class AddVehicle extends React.Component<any, IAddVehicleState> {
+export default class UpdateVehicle extends React.Component<any, IUpdateVehicleState> {
   public state = {
     errors: {
-      group: "",
-      size: "",
-      name: "",
-      model: "",
-      make: "",
-      year: "",
-      imageURI: "",
-      status: "",
+      password: "",
       responseError: ""
     },
-    added: false,
+    updated: false,
     vehicleInput: {
       group: "",
       size: "",
@@ -97,40 +56,34 @@ export default class AddVehicle extends React.Component<any, IAddVehicleState> {
       year: "",
       imageURI: "",
       status: "",
+      password: ""
     }
   };
 
-  handleSubmit = async (e: React.FormEvent<EventTarget>, addVehicle: any) => {
+  handleSubmit = async (e: React.FormEvent<EventTarget>, updateVehicle: any) => {
     e.preventDefault();
 
     // Validate the vehicle input fields
-    const errors: object = validateAddVehicleField(this.state.vehicleInput);
+    const errors: object = validateUpdateVehicleField(this.state.vehicleInput);
     this.setState({ errors });
 
-    // Check if there is an error, if there is abort adding a vehicle.
+    // Check if there is an error, if there is abort updating a vehicle.
     if (Object.keys(errors).length > 0) {
       return;
     }
 
     try {
       // If all fields are validated, add the vehicle
-      const vehicleDetails = { ...this.state.vehicleInput };
-      await addVehicle({ variables: vehicleDetails });
+      const vehicleDetails = { ...this.state.vehicleInput, vehicleId: this.props.vehicle.id  };
+      await updateVehicle({ variables: vehicleDetails });
 
       // Update the form according to whether logging in was successful
       this.setState({
         errors: {
-          group: "",
-          size: "",
-          name: "",
-          model: "",
-          make: "",
-          year: "",
-          imageURI: "",
-          status: "",
-          responseError: ""
+          responseError: "",
+          password: ""
         },
-        added: true,
+        updated: true,
         vehicleInput: {
           group: "",
           size: "",
@@ -140,9 +93,10 @@ export default class AddVehicle extends React.Component<any, IAddVehicleState> {
           year: "",
           imageURI: "",
           status: "",
+          password: ""
         }
       });
-      alert("Successfully added vehicle");
+      alert("Successfully updated vehicle information");
     } catch (error) {
       this.setState({
         errors: {
@@ -175,7 +129,7 @@ export default class AddVehicle extends React.Component<any, IAddVehicleState> {
 
   render() {
     const { user } = this.props;
-    const { added ,errors } = this.state;
+    const { updated ,errors } = this.state;
     const {
       group,
       size,
@@ -185,6 +139,7 @@ export default class AddVehicle extends React.Component<any, IAddVehicleState> {
       year,
       imageURI,
       status,
+      password
     } = this.state.vehicleInput;
 
     if (user && user.role !== "ADMIN") {
@@ -192,18 +147,18 @@ export default class AddVehicle extends React.Component<any, IAddVehicleState> {
       return <Redirect to="/cars" />
     }
 
-    if (added) {
+    if (updated) {
       return <Redirect to="/cars" />
     }
 
     return (
       <Mutation 
-        mutation={ADD_VEHICLE_MUTATION}
+        mutation={UPDATE_VEHICLE_MUTATION}
         refetchQueries={[
           {query: VEHICLE_QUERY}
         ]}
       >
-        { (addVehicle: any, { loading, error }: any) => {
+        { (updateVehicle: any, { loading, error }: any) => {
           return (
             <Form style={{ textAlign: "left"}}>
               {error && <ErrorMessage>{this.state.errors.responseError}</ErrorMessage>}
@@ -219,7 +174,6 @@ export default class AddVehicle extends React.Component<any, IAddVehicleState> {
                       value={name}
                       onChange={this.onInputChange}
                       />
-                      {errors.name && <Error>{ errors.name }</Error>}
                   </FormGroup>
                 </Col>
                 <Col sm= {12} md={6}>
@@ -233,7 +187,6 @@ export default class AddVehicle extends React.Component<any, IAddVehicleState> {
                       value={model}
                       onChange={this.onInputChange}
                     />
-                    {errors.model && <Error>{ errors.model }</Error>}
                   </FormGroup>
                 </Col>
               </Row>
@@ -249,7 +202,6 @@ export default class AddVehicle extends React.Component<any, IAddVehicleState> {
                     value={group}
                     onChange={this.onInputChange}
                   />
-                  {errors.group && <Error>{ errors.group }</Error>}
                 </FormGroup>
                 </Col>
                 <Col sm= {12} md={6}>
@@ -263,7 +215,6 @@ export default class AddVehicle extends React.Component<any, IAddVehicleState> {
                       value={size}
                       onChange={this.onInputChange}
                     />
-                    {errors.size && <Error>{ errors.size }</Error>}
                   </FormGroup>
                 </Col>
               </Row>
@@ -278,7 +229,6 @@ export default class AddVehicle extends React.Component<any, IAddVehicleState> {
                       value={make}
                       onChange={this.onInputChange}
                     />
-                    {errors.make && <Error>{ errors.make }</Error>}
                   </FormGroup>
                 </Col>
                 <Col sm= {12} md={4}>
@@ -291,7 +241,6 @@ export default class AddVehicle extends React.Component<any, IAddVehicleState> {
                       value={year}
                       onChange={this.onInputChange}
                     />
-                    {errors.year && <Error>{ errors.year }</Error>}
                   </FormGroup>
                 </Col>
                 <Col sm= {12} md={4}>
@@ -304,7 +253,6 @@ export default class AddVehicle extends React.Component<any, IAddVehicleState> {
                       value={status}
                       onChange={this.onInputChange}
                     />
-                    {errors.status && <Error>{ errors.status }</Error>}
                   </FormGroup>  
                 </Col>
               </Row>
@@ -318,15 +266,26 @@ export default class AddVehicle extends React.Component<any, IAddVehicleState> {
                   value={imageURI}
                   onChange={this.onInputChange}
                 />
-                {errors.imageURI && <Error>{ errors.imageURI }</Error>}
+              </FormGroup>
+              <FormGroup>
+                <Label for="password">Password</Label>
+                <Input 
+                  type="password" 
+                  name="password" 
+                  id="password" 
+                  placeholder="" 
+                  value={password}
+                  onChange={this.onInputChange}
+                />
+                {errors.password && <Error>{ errors.password }</Error>}
               </FormGroup>
               <Button
                 disabled={loading}
                 block
                 size={"sm"}
                 color={'success'}
-                onClick={(e) => this.handleSubmit(e, addVehicle)}
-              >{ loading ? "Adding vehicle..." : "Add vehicle" }</Button>
+                onClick={(e) => this.handleSubmit(e, updateVehicle)}
+              >{ loading ? "Updating vehicle..." : "Update vehicle" }</Button>
             </Form>
           )
         }}

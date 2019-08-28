@@ -1,7 +1,7 @@
 import React from 'react';
 import { Col, Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import styled from 'styled-components';
-import { Redirect } from 'react-router';
+import { Redirect } from 'react-router-dom';
 import { Mutation } from 'react-apollo';
 import { USER_QUERY } from '../graphql/Query';
 import { LOGIN_MUTATION } from '../graphql/Mutation';

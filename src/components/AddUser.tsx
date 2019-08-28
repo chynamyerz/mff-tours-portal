@@ -70,7 +70,7 @@ const validateSignupField = (
   return errors;
 };
 
-export default class AddNewUser extends React.Component<{}, ISignupState> {
+export default class AddUser extends React.Component<{}, ISignupState> {
   public state = {
     added: false,
     errors: {
@@ -213,7 +213,6 @@ export default class AddNewUser extends React.Component<{}, ISignupState> {
           { (signup: any, { loading, error }: any) => {
             return (
               <Form style={{ textAlign: "left"}}>
-                <h2 style={{ textAlign: "center"}}>Add a new user</h2>
                 {error && <ErrorMessage>{this.state.errors.responseError}</ErrorMessage>}
                 <Row>
                   <Col sm= {12} md={6}>

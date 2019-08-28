@@ -18,6 +18,7 @@ import About from './components/About';
 import AddVehicle from './components/AddVehicle';
 import ClientBook from './components/ClientBook';
 import UserBook from './components/UserBook';
+import ManageVehicles from './components/ManageVehicles';
 
 const AppContainer = styled.div`
   margin-top: 7%;
@@ -123,7 +124,7 @@ class App extends React.Component {
                       component={(props: any) => (
                         <ClientBook 
                           user={props.location.state.user}
-                          vehicle={props.location.state.vehicle.selectedVehicle}
+                          vehicle={props.location.state.vehicle}
                         />
                       )}
                     />
@@ -134,7 +135,7 @@ class App extends React.Component {
                       component={(props: any) => (
                         <UserBook 
                           user={props.location.state.user}
-                          vehicle={props.location.state.vehicle.selectedVehicle}
+                          vehicle={props.location.state.vehicle}
                         />
                       )}
                     />
@@ -173,6 +174,18 @@ class App extends React.Component {
                       path="/add-vehicle"
                       component={(props: any) => (
                         <AddVehicle 
+                          user={props.location.state.user}
+                        />
+                        )
+                      }
+                    />
+
+                    <ProtectedRoute
+                      user={currentUser}
+                      exact={true}
+                      path="/manage-vehicle"
+                      component={(props: any) => (
+                        <ManageVehicles 
                           user={props.location.state.user}
                         />
                         )

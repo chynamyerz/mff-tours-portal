@@ -151,15 +151,25 @@ const CANCEL_VEHICLE_BOOKING_MUTATION = gql`
 `;
 
 /**
- * Book a vehicle
+ * Add a vehicle
  * 
  * parameters
- * vehicleId:
- *      Vehicle id to book
- * pickupDate:
- *      A vehicle pick up date
- * returnDate:
- *      A vehicle return date
+ * group:
+ *      Vehicle group
+ * size:
+ *      Vehicle size
+ * name:
+ *      Vehicle name
+ * model:
+ *      Vehicle model
+ * make:
+ *      Vehicle make
+ * year:
+ *      Vehicle year
+ * imageURI:
+ *      Vehiccle image uri
+ * status:
+ *      Vehicle status
  */
 const ADD_VEHICLE_MUTATION = gql`
   mutation ADD_VEHICLE_MUTATION(
@@ -181,6 +191,92 @@ const ADD_VEHICLE_MUTATION = gql`
       year: $year
       imageURI: $imageURI
       status: $status
+    ){
+      message
+    }
+  }
+`;
+
+/**
+ * Update a vehicle
+ * 
+ * parameters
+ * group:
+ *      Vehicle group
+ * size:
+ *      Vehicle size
+ * name:
+ *      Vehicle name
+ * model:
+ *      Vehicle model
+ * make:
+ *      Vehicle make
+ * year:
+ *      Vehicle year
+ * imageURI:
+ *      Vehiccle image uri
+ * status:
+ *      Vehicle status
+ */
+const UPDATE_VEHICLE_MUTATION = gql`
+  mutation UPDATE_VEHICLE_MUTATION(
+    $vehicleId: ID!
+    $group: String
+    $size: String
+    $name: String
+    $model: String
+    $make: String
+    $year: String
+    $imageURI: String
+    $status: String
+    $password: String!
+  ){
+    updateVehicle(
+      vehicleId: $vehicleId
+      group: $group
+      size: $size
+      name: $name
+      model: $model
+      make: $make
+      year: $year
+      imageURI: $imageURI
+      status: $status
+      password: $password
+    ){
+      message
+    }
+  }
+`;
+
+/**
+ * Update a vehicle
+ * 
+ * parameters
+ * group:
+ *      Vehicle group
+ * size:
+ *      Vehicle size
+ * name:
+ *      Vehicle name
+ * model:
+ *      Vehicle model
+ * make:
+ *      Vehicle make
+ * year:
+ *      Vehicle year
+ * imageURI:
+ *      Vehiccle image uri
+ * status:
+ *      Vehicle status
+ */
+const DELETE_VEHICLE_MUTATION = gql`
+  mutation DELETE_VEHICLE_MUTATION(
+    $vehicleId: ID!
+    $password: String!
+  ){
+    deleteVehicle(
+      vehicleId: $vehicleId
+      password: $password
     ){
       message
     }
@@ -283,11 +379,13 @@ export {
   ADD_VEHICLE_MUTATION,
   BOOK_VEHICLE_MUTATION,
   CANCEL_VEHICLE_BOOKING_MUTATION,
+  DELETE_VEHICLE_MUTATION,
   USER_UPDATE_MUTATION, 
   RESET_PASSWORD_MUTATION, 
   REQUEST_RESET_MUTATION, 
   SIGNUP_MUTATION, 
   LOGIN_MUTATION,
   LOGOUT_USER_MUTATION,
-  SEND_EMAIL_MUTATION
+  SEND_EMAIL_MUTATION,
+  UPDATE_VEHICLE_MUTATION
 }
