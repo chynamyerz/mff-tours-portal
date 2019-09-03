@@ -356,6 +356,7 @@ export default class UpdateUser extends React.Component<{}, IUpdateUserState> {
                   </Col>
                 </Row>
                 <Button
+                  outline
                   disabled={loading}
                   block
                   size={"sm"}

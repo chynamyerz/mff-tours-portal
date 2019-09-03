@@ -4,7 +4,7 @@ import NavigationBar from './components/navigation/NavigationBar';
 import Signin from './components/Signin';
 import './App.css';
 import Signup from './components/Signup';
-import Cars from './components/Cars';
+import VehicleResults from './components/VehicleResults';
 import styled from 'styled-components';
 import Bookings from './components/Bookings';
 import { Query } from 'react-apollo';
@@ -19,6 +19,10 @@ import AddVehicle from './components/AddVehicle';
 import ClientBook from './components/ClientBook';
 import UserBook from './components/UserBook';
 import ManageVehicles from './components/ManageVehicles';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faEnvelope, faKey, faSignInAlt, faSignOutAlt, faEdit } from '@fortawesome/free-solid-svg-icons';
+
+library.add(faEnvelope, faKey, faSignInAlt, faSignOutAlt, faEdit);
 
 const AppContainer = styled.div`
   margin-top: 7%;
@@ -112,9 +116,13 @@ class App extends React.Component {
 
                     <Route
                       exact={true}
-                      path="/cars"
-                      component={() => (
-                        <Cars user={currentUser}/>
+                      path="/vehicle-results"
+                      component={(props: any) => (
+                        <VehicleResults 
+                          location={props.location.state.location}
+                          user={props.location.state.user}
+                          vehicles={props.location.state.vehicles}
+                        />
                       )}
                     />
 

@@ -133,6 +133,7 @@ export default class ManageVehicles extends React.Component<any, any> {
                   {error && <ErrorMessage>{error.message.replace("Network error: ", "").replace("GraphQL error: ", "")}</ErrorMessage>}
                   <div style={{textAlign: "left", marginBottom: "2%"}}>
                     <Button
+                      outline
                       size={"sm"} 
                       color={"info"}
                       onClick={this.toggleForAddVehicle}
@@ -161,6 +162,7 @@ export default class ManageVehicles extends React.Component<any, any> {
                                 <Row>
                                   <Col sm={12} md={4} lg={4}>
                                     <Button
+                                      outline
                                       block
                                       style={{marginRight: "2%"}}
                                       size={"sm"} 
@@ -172,10 +174,11 @@ export default class ManageVehicles extends React.Component<any, any> {
                                   </Col>
                                   <Col sm={12} md={4} lg={4}>
                                     <Button
+                                      outline
                                       block
                                       style={{marginRight: "2%"}}
                                       size={"sm"} 
-                                      color={"warning"}
+                                      color={"primary"}
                                       onClick={() => this.toggleForUpdateVehicle(vehicle)}
                                     >
                                       Update
@@ -183,6 +186,7 @@ export default class ManageVehicles extends React.Component<any, any> {
                                   </Col>
                                   <Col sm={12} md={4} lg={4}>
                                     <Button
+                                      outline
                                       block
                                       disabled={loading}
                                       style={{marginRight: "2%"}}

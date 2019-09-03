@@ -190,6 +190,7 @@ export default class ResetPassword extends React.Component<{}, IResetPasswordSta
                   {errors.confirmPassword && <Error>{ errors.confirmPassword }</Error>}
                 </FormGroup>
                 <Button
+                  outline
                   disabled={ loading }
                   block
                   size={"sm"}

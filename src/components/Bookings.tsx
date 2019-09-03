@@ -1,13 +1,14 @@
 import React from 'react';
-import { Col, Card, CardImg, CardBody, CardTitle, CardSubtitle, CardText, Button, Row, Spinner } from 'reactstrap';
+import { Col, Card, CardImg, CardBody, CardTitle, CardSubtitle, CardText, Button, Row, Spinner, Alert } from 'reactstrap';
 import styled from 'styled-components';
 import moment from "moment";
 import { Mutation, Query } from 'react-apollo';
 import { CANCEL_VEHICLE_BOOKING_MUTATION } from '../graphql/Mutation';
 import { USER_QUERY, VEHICLE_QUERY, VEHICLE_BOOKINGS_QUERY } from '../graphql/Query';
 import { ErrorMessage } from './util/ErrorMessage';
+import { Redirect } from 'react-router-dom';
 
-const CarsContainer = styled.div`
+const VehicleContainer = styled.div`
   margin: 3%;
 `;
 
@@ -18,7 +19,8 @@ const CardContainer = styled.div`
 export default class Bookings extends React.Component<any, {}> {
   public state = {
     cancelled: false,
-    selected: ""
+    selected: "",
+    goToSearch: false
   }
 
   handleSubmit = async (e: React.FormEvent<EventTarget>, user: any, booking: any, cancelVehicleBooking: any) => {
@@ -47,13 +49,24 @@ export default class Bookings extends React.Component<any, {}> {
     }
   };
 
+  goToSearch = () => {
+    this.setState((prevState: any) => ({
+      ...prevState,
+      goToSearch: true,
+    }))
+  }
+
   render() {
 
     const { user } = this.props;
-    const { selected } = this.state;
+    const { goToSearch, selected } = this.state;
+
+    if (goToSearch) {
+      return <Redirect to={"/"} />
+    }
  
     return (
-      <CarsContainer>
+      <VehicleContainer>
         <Col sm={12} md={12} lg={{size: 8, offset: 2}}>
           <Query
             query={VEHICLE_BOOKINGS_QUERY}
@@ -66,7 +79,16 @@ export default class Bookings extends React.Component<any, {}> {
               const bookings: any = data && data.bookings ? data.bookings.filter((booking: any) => (booking.status === "BOOKED")) : [];
 
               if (!bookings.length) {
-                return (<p>No bookings</p>)
+                return (
+                  <>
+                    <Alert color={"danger"}>You currently have no bookings</Alert>
+                    <Button
+                      outline
+                      size={"sm"}
+                      onClick={this.goToSearch}
+                    >Click here to search for available vehicles</Button>
+                  </>
+                )
               }
 
               const userBookings: any = bookings.filter((booking: any) => (booking.user.id === user.id))
@@ -126,7 +148,7 @@ export default class Bookings extends React.Component<any, {}> {
             }}
           </Query>
         </Col>
-      </CarsContainer>
+      </VehicleContainer>
     );
   }
 }

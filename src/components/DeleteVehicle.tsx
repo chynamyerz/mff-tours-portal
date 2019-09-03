@@ -112,11 +112,11 @@ export default class DeleteVehicle extends React.Component<any, IDeleteVehicleSt
 
     if (user && user.role !== "ADMIN") {
       alert("Only admin can delete a vehicle.")
-      return <Redirect to="/cars" />
+      return <Redirect to="/vehicle-results" />
     }
 
     if (deleted) {
-      return <Redirect to="/cars" />
+      return <Redirect to="/vehicle-results" />
     }
 
     return (
@@ -143,6 +143,7 @@ export default class DeleteVehicle extends React.Component<any, IDeleteVehicleSt
                 {errors.password && <Error>{ errors.password }</Error>}
               </FormGroup>
               <Button
+                outline
                 disabled={loading}
                 block
                 size={"sm"}

@@ -147,6 +147,7 @@ export default class RequestPasswordReset extends React.Component<{}, IRequestPa
                   {errors.email && <Error>{ errors.email }</Error>}
                 </FormGroup>
                 <Button
+                  outline
                   disabled={ loading }
                   block
                   size={"sm"}

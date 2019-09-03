@@ -16,6 +16,7 @@ import { Mutation } from 'react-apollo';
 import { ErrorMessage } from '../util/ErrorMessage';
 import { USER_QUERY } from '../../graphql/Query';
 import { LOGOUT_USER_MUTATION } from '../../graphql/Mutation';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const NavbarItem = styled.div`
   margin-right: 5px;
@@ -69,6 +70,7 @@ export default class NavigationBar extends React.Component<any, {}> {
         <NavbarItem onClick={this.toggleNavItem}>
           <NavItem>
             <RouterNavLink
+              style={{ textDecoration: "none", color: "hsl(48, 100%, 67%)"}}
               exact={true}
               to="/"
             >
@@ -79,20 +81,11 @@ export default class NavigationBar extends React.Component<any, {}> {
         <NavbarItem onClick={this.toggleNavItem}>
           <NavItem>
             <RouterNavLink
+              style={{ textDecoration: "none", color: "hsl(48, 100%, 67%)"}}
               exact={true}
               to="/about"
             >
               About
-            </RouterNavLink>
-          </NavItem>
-        </NavbarItem>
-        <NavbarItem onClick={this.toggleNavItem}>
-          <NavItem>
-            <RouterNavLink
-              exact={true}
-              to="/cars"
-            >
-              Cars
             </RouterNavLink>
           </NavItem>
         </NavbarItem>
@@ -107,14 +100,19 @@ export default class NavigationBar extends React.Component<any, {}> {
         {(logout: any) => {
           return (
             <>
-            <Navbar fixed="top" color="light" light expand="md">
+            <Navbar fixed="top" color="dark" light expand="md">
               <NavbarBrand
                 tag={"div"}
                 onClick={this.toggleNavItem}
               >
                 <NavbarItem>
                   <RouterNavLink
-                    style={{ textDecoration: "none", color: "grey"}}
+                    style={{ 
+                      textDecoration: "none", 
+                      color: "hsl(48, 100%, 67%)", 
+                      fontStyle: "italic",
+                      fontWeight: "bolder"
+                    }}
                     exact={true}
                     to="/"
                   >
@@ -131,6 +129,7 @@ export default class NavigationBar extends React.Component<any, {}> {
                       <NavbarItem onClick={this.toggleNavItem}>
                         <NavItem>
                           <RouterNavLink
+                            style={{ textDecoration: "none", color: "hsl(48, 100%, 67%)"}}
                             exact={true}
                             to="/bookings"
                           >
@@ -141,7 +140,7 @@ export default class NavigationBar extends React.Component<any, {}> {
 
                       <NavbarItem>
                         <UncontrolledDropdown nav inNavbar>
-                          <DropdownToggle nav caret style={{display: "inline"}}>
+                          <DropdownToggle nav caret style={{display: "inline", color: "white"}}>
                             Hi {user.name}
                           </DropdownToggle>
                           <DropdownMenu right={!this.state.isOpen}>
@@ -151,6 +150,9 @@ export default class NavigationBar extends React.Component<any, {}> {
                                 exact={true}
                                 to="/update-user"
                               >
+                                <FontAwesomeIcon
+                                  icon="edit"
+                                />
                                 Edit-Profile
                               </RouterNavLink>
                             </DropdownItem>
@@ -162,6 +164,9 @@ export default class NavigationBar extends React.Component<any, {}> {
                                 onClick={() => this.signout(logout)}
                                 to="/"
                               >
+                                <FontAwesomeIcon
+                                  icon="sign-out-alt"
+                                />
                                 Sign-Out
                               </RouterNavLink>
                             </DropdownItem>
@@ -176,9 +181,13 @@ export default class NavigationBar extends React.Component<any, {}> {
                       <NavbarItem onClick={this.toggleNavItem}>
                         <NavItem>
                           <RouterNavLink
+                            style={{ textDecoration: "none", color: "white"}}
                             exact={true}
                             to="/sign-in"
                           >
+                            <FontAwesomeIcon
+                              icon="sign-in-alt"
+                            />
                             Sign-In
                           </RouterNavLink>
                         </NavItem>

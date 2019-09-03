@@ -1,13 +1,12 @@
 import React from 'react';
-import { Col, Button, Form, FormGroup, Label, Input } from 'reactstrap';
+import { Col, Button, Form, FormGroup, Label, Input, Card, Row, CardImg, CardBody, Alert } from 'reactstrap';
 import styled from 'styled-components';
 import { Redirect } from 'react-router-dom';
 import { Mutation } from 'react-apollo';
 import { USER_QUERY } from '../graphql/Query';
 import { LOGIN_MUTATION } from '../graphql/Mutation';
-import { ErrorMessage } from './util/ErrorMessage';
 import { validate } from 'isemail';
-import { Error } from './util/Error';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 interface ISigninFormInput {
   email: string;
@@ -23,7 +22,7 @@ interface ISigninState {
 };
 
 const SigninContainer = styled.div`
-  margin-top: 5%;
+  margin-top: 10%;
   margin-bottom: 5%;
 `;
 
@@ -40,7 +39,7 @@ const validateSigninField = (
 
   // Check if the password is secure enough.
   if (signUpInput.password.length < 5) {
-    errors.password = "Password should be at least 5 characters long";
+    errors.password = "Password is not long enough";
   }
 
   // return an array consisting of error message if any or empty.
@@ -146,7 +145,7 @@ export default class Signin extends React.Component<{}, ISigninState> {
 
   render() {
     if (this.state.loggedIn) {
-      return (<Redirect to="/cars" />)
+      return (<Redirect to="/" />)
     }
 
     const { redirectToForgotPassword, redirectToSignup, errors } = this.state;
@@ -162,60 +161,96 @@ export default class Signin extends React.Component<{}, ISigninState> {
 
     return (
       <SigninContainer>
-        <Col sm={{ size: 6, offset: 3 }} md={{ size: 4, offset: 4 }}>
+        <Col sm={12} md={{ size: 8, offset: 2 }}>
         <Mutation
           mutation={LOGIN_MUTATION}
           refetchQueries={[{ query: USER_QUERY }]}
         >
           {(login: any, { loading, error }: any) => {
             return (
-              <Form style={{ textAlign: "left"}}> 
-                {error && <ErrorMessage>{this.state.errors.responseError}</ErrorMessage>}
-                <FormGroup>
-                  <Label for="email">Email</Label>
-                  <Input 
-                    type="email" 
-                    name="email" 
-                    id="email" 
-                    placeholder="e.g. example@mail.com" 
-                    value={email}
-                    onChange={this.onInputChange}
-                  />
-                  {errors.email && <Error>{ errors.email }</Error>}
-                </FormGroup>
-                <FormGroup>
-                  <Label for="password">Password</Label>
-                  <Input 
-                    type="password" 
-                    name="password" 
-                    id="password" 
-                    placeholder="Must be 5 characters long" 
-                    value={password}
-                    onChange={this.onInputChange}
-                  />
-                  {errors.password && <Error>{ errors.password }</Error>}
-                </FormGroup>
-                <Button
-                  disabled={ loading }
-                  block
-                  size={"sm"}
-                  color={"success"}
-                  onClick={(e) => this.handleSubmit(e, login)}
-                >{ loading ? "Signing in..." : "Sign in" }</Button>
+              <Card style={{background: "hsl(0, 0%, 96%)"}}>
+                <Row>
+                  <Col sm={12} md={6}>
+                    <CardImg 
+                      style={{height: "100%"}} 
+                      src={require("../assets/images/mff-tours-logo.jpg")} alt="MFF-TOUR LOGO" 
+                    />
+                  </Col>
+                  <Col sm={12} md={6}>
+                    <CardBody>
+                      <Form style={{ textAlign: "left"}}> 
+                        {error && <Alert color={"danger"}>{this.state.errors.responseError}</Alert>}
+                        <FormGroup>
+                          <Label for="email">
+                            <FontAwesomeIcon
+                              icon="envelope"
+                            />
+                            Email
+                          </Label>
+                          <Input 
+                            type="email" 
+                            name="email" 
+                            id="email" 
+                            placeholder="e.g. example@mail.com" 
+                            value={email}
+                            onChange={this.onInputChange}
+                          />
+                          {errors.email && <Alert color={"danger"}>{ errors.email }</Alert>}
+                        </FormGroup>
+                        <FormGroup>
+                          <Label for="password">
+                            <FontAwesomeIcon
+                              icon="key"
+                            />
+                            Password
+                          </Label>
+                          <Input 
+                            type="password" 
+                            name="password" 
+                            id="password" 
+                            placeholder="Must be 5 characters long" 
+                            value={password}
+                            onChange={this.onInputChange}
+                          />
+                          {errors.password && <Alert color={"danger"}>{ errors.password }</Alert>}
+                        </FormGroup>
+                        <Row>
+                          <Col sm={12} md={6}>
+                            <FormGroup>
+                              <Button
+                                outline
+                                disabled={ loading }
+                                block
+                                size={"sm"}
+                                color={"success"}
+                                onClick={(e) => this.handleSubmit(e, login)}
+                              >{ loading ? "Signing in..." : "Sign-In" }</Button>
+                            </FormGroup>
+                          </Col>
 
-                <Button
-                  block
-                  size={"sm"}
-                  color={"primary"}
-                  onClick={(e) => this.redirectToRequestPasswordReset(e)}
-                >Forgot password</Button>
+                          <Col sm={12} md={6}>
+                            <FormGroup>
+                              <Button
+                                outline
+                                block
+                                size={"sm"}
+                                color={"info"}
+                                onClick={(e) => this.redirectToSignup(e)}
+                              >New user</Button>
+                            </FormGroup>
+                          </Col>
+                        </Row>
 
-                <Button
-                  style={{ padding: 0 }}
-                  color={"link"}
-                  onClick={(e) => this.redirectToSignup(e)}
-                >Not registered? Click here to sign up</Button>
-              </Form>
+                        <Button
+                          style={{ padding: 0 }}
+                          color={"link"}
+                          onClick={(e) => this.redirectToRequestPasswordReset(e)}
+                        >Forgot password</Button>
+                      </Form>
+                    </CardBody>
+                  </Col>
+                </Row>
+              </Card>
             )
           }}
         </Mutation>

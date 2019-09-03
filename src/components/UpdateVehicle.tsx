@@ -144,11 +144,11 @@ export default class UpdateVehicle extends React.Component<any, IUpdateVehicleSt
 
     if (user && user.role !== "ADMIN") {
       alert("Only admin can add a new vehicle.")
-      return <Redirect to="/cars" />
+      return <Redirect to="/vehicle-results" />
     }
 
     if (updated) {
-      return <Redirect to="/cars" />
+      return <Redirect to="/vehicle-results" />
     }
 
     return (

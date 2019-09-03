@@ -1,15 +1,15 @@
 import React from 'react';
-import { Slider } from './util/Slider';
 import { Col } from 'reactstrap';
+import SearchVehicles from './SearchVehicles';
 
 
-export default class Home extends React.Component<any, {}> {
+export default class Home extends React.Component<any, any> {
   render() {
+    const { user } = this.props
     return (
-      <Col>
-        <h1><strong>MFF-TOURS</strong></h1>
-        <Slider />
-        <h4 style={{marginTop: "2%"}}>ALWAYS THERE TO DRIVE YOU AND YOUR PEOPLE TO YOUR CHOICE OF GREATNESS</h4>
+      <Col sm={12} md={{size: 6, offset: 3}} lg={{size: 8, offset: 2}}>
+        <h1 style={{marginTop: "25%"}}><strong>MFF Cars Rental</strong></h1>
+        <SearchVehicles user={user}/>
       </Col>
     );
   }

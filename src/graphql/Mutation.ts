@@ -284,6 +284,30 @@ const DELETE_VEHICLE_MUTATION = gql`
 `;
 
 /**
+ * The search vehicles mutation
+ */
+const SEARCH_VEHICLE_MUTATION = gql`
+  mutation SEARCH_VEHICLE_MUTATION(
+    $location: String!
+  ) {
+    searchVehicles(
+      location: $location
+    ) {
+      id
+      group
+      size
+      name
+      model
+      make
+      year
+      imageURI
+      status
+      location
+    }
+  }
+`;
+
+/**
  * Log the user in.
  *
  * The following arguments must be supplied
@@ -376,6 +400,7 @@ const SEND_EMAIL_MUTATION = gql`
 `;
 
 export { 
+  SEARCH_VEHICLE_MUTATION,
   ADD_VEHICLE_MUTATION,
   BOOK_VEHICLE_MUTATION,
   CANCEL_VEHICLE_BOOKING_MUTATION,

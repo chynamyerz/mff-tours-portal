@@ -189,11 +189,11 @@ export default class AddVehicle extends React.Component<any, IAddVehicleState> {
 
     if (user && user.role !== "ADMIN") {
       alert("Only admin can add a new vehicle.")
-      return <Redirect to="/cars" />
+      return <Redirect to="/vehicle-results" />
     }
 
     if (added) {
-      return <Redirect to="/cars" />
+      return <Redirect to="/vehicle-results" />
     }
 
     return (
@@ -321,6 +321,7 @@ export default class AddVehicle extends React.Component<any, IAddVehicleState> {
                 {errors.imageURI && <Error>{ errors.imageURI }</Error>}
               </FormGroup>
               <Button
+                outline
                 disabled={loading}
                 block
                 size={"sm"}

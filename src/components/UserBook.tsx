@@ -210,6 +210,7 @@ export default class UserBook extends React.Component<any, {}> {
                             </Col>
                           </Row>
                           <Button 
+                            outline
                             disabled={loading}
                             block
                             size={"sm"} 

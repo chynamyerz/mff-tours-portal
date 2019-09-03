@@ -10,7 +10,7 @@ export default class About extends React.Component<any, {}> {
   render() {
     return (
       <AboutContainer style={{textAlign: "left"}}>
-        <Card>
+        <Card style={{background: "hsl(0, 0%, 96%)"}}>
           <Row>
             <Col sm={12} md={6}>
               <CardImg height="100%" src={require("../assets/images/mff-tours-logo.jpg")} alt="MFF-TOUR LOGO" />

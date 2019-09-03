@@ -351,6 +351,7 @@ export default class Signup extends React.Component<{}, ISignupState> {
                   </Col>
                 </Row>
                 <Button
+                  outline
                   disabled={loading}
                   block
                   size={"sm"}

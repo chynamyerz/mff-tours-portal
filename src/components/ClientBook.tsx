@@ -162,6 +162,7 @@ export default class ClientBook extends React.Component<any, any> {
                             </Col>
                           </Row>
                           <Button 
+                            outline
                             disabled={loading}
                             size={"sm"} 
                             color={"success"}
