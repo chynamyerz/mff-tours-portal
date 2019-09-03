@@ -285,13 +285,23 @@ const DELETE_VEHICLE_MUTATION = gql`
 
 /**
  * The search vehicles mutation
+ * location:
+ *      A vehicles pick up location
+ * pickupDate:
+ *      A vehicle pick up date
+ * returnDate:
+ *      A vehicle return date
  */
 const SEARCH_VEHICLE_MUTATION = gql`
   mutation SEARCH_VEHICLE_MUTATION(
     $location: String!
+    $pickupDate: String!
+    $returnDate: String!
   ) {
     searchVehicles(
       location: $location
+      pickupDate: $pickupDate
+      returnDate: $returnDate
     ) {
       id
       group

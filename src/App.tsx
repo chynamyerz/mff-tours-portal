@@ -117,35 +117,44 @@ class App extends React.Component {
                     <Route
                       exact={true}
                       path="/vehicle-results"
-                      component={(props: any) => (
-                        <VehicleResults 
-                          location={props.location.state.location}
-                          user={props.location.state.user}
-                          vehicles={props.location.state.vehicles}
-                        />
-                      )}
+                      component={(props: any) => {
+                        const { state } = props.location
+                        return (
+                          <VehicleResults 
+                            location={state ? state.location : ""}
+                            user={state ? state.user : null}
+                            vehicles={state ? state.vehicles : []}
+                          />
+                        )
+                    }}
                     />
 
                     <Route
                       exact={true}
                       path="/client-vehicle-booking"
-                      component={(props: any) => (
-                        <ClientBook 
-                          user={props.location.state.user}
-                          vehicle={props.location.state.vehicle}
-                        />
-                      )}
+                      component={(props: any) => {
+                        const { state } = props.location
+                        return (
+                          <ClientBook 
+                            user={state ? state.user : null}
+                            vehicle={state ? state.vehicle : {}}
+                          />
+                        )
+                    }}
                     />
 
                     <Route
                       exact={true}
                       path="/admin-vehicle-booking"
-                      component={(props: any) => (
-                        <UserBook 
-                          user={props.location.state.user}
-                          vehicle={props.location.state.vehicle}
-                        />
-                      )}
+                      component={(props: any) => {
+                        const { state } = props.location
+                        return (
+                          <UserBook 
+                            user={state ? state.user : null}
+                            vehicle={state ? state.vehicle : {}}
+                          />
+                        )
+                    }}
                     />
 
                     <Route
@@ -180,24 +189,28 @@ class App extends React.Component {
                       user={currentUser}
                       exact={true}
                       path="/add-vehicle"
-                      component={(props: any) => (
-                        <AddVehicle 
-                          user={props.location.state.user}
-                        />
+                      component={(props: any) => {
+                        const { state } = props.location
+                        return (
+                          <AddVehicle 
+                            user={state ? state.user : null}
+                          />
                         )
-                      }
+                      }}
                     />
 
                     <ProtectedRoute
                       user={currentUser}
                       exact={true}
                       path="/manage-vehicle"
-                      component={(props: any) => (
-                        <ManageVehicles 
-                          user={props.location.state.user}
-                        />
+                      component={(props: any) => {
+                        const { state } = props.location
+                        return (
+                          <ManageVehicles 
+                            user={state ? state.user : null}
+                          />
                         )
-                      }
+                      }}
                     />
 
                     <ProtectedRoute

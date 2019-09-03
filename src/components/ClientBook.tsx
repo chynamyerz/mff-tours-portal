@@ -1,5 +1,5 @@
 import React from 'react';
-import { Col, Card, CardImg, CardBody, CardTitle, CardSubtitle, CardText, Button, Row, Form, FormGroup, Label, Input, Spinner } from 'reactstrap';
+import { Col, Card, CardImg, CardBody, CardTitle, CardSubtitle, CardText, Button, Row, Form, FormGroup, Label, Input, Spinner, Alert } from 'reactstrap';
 import moment from "moment";
 import { Mutation } from 'react-apollo';
 import { BOOK_VEHICLE_MUTATION } from '../graphql/Mutation';
@@ -35,6 +35,7 @@ export default class ClientBook extends React.Component<any, any> {
       returnDate: ""
     },
     booked: false,
+    goToSearch: false,
     pickupDate: "",
     returnDate: "",
   }
@@ -91,15 +92,39 @@ export default class ClientBook extends React.Component<any, any> {
     });
   };
 
+  goToSearch = () => {
+    this.setState((prevState: any) => ({
+      ...prevState,
+      goToSearch: true,
+    }))
+  }
+
   render() {
     const { user, vehicle } = this.props;
-    const { booked ,errors, pickupDate } = this.state;
+    const { goToSearch, booked ,errors, pickupDate } = this.state;
 
     const minPickUpDate: any = moment(Date.now()).add(1, "day").format("YYYY-MM-DD")
     const minReturnDate: any = moment(pickupDate).add(1, "day").format("YYYY-MM-DD")
 
+    if (goToSearch) {
+      return <Redirect to={"/"} />
+    }
+
     if (booked) {
       return (<Redirect to="/bookings" />)
+    }
+
+    if (!Object.keys(vehicle).length) {
+      return (
+        <>
+          <Alert color={"danger"}>Something doesn't seem right.</Alert>
+          <Button
+            outline
+            size={"sm"}
+            onClick={this.goToSearch}
+          >Click here to search for available vehicles</Button>
+        </>
+      )
     }
  
     return (

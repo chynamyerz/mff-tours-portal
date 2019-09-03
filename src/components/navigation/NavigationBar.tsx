@@ -120,7 +120,7 @@ export default class NavigationBar extends React.Component<any, {}> {
                   </RouterNavLink>
                 </NavbarItem>
               </NavbarBrand>
-              <NavbarToggler onClick={this.toggle} />
+              <NavbarToggler onClick={this.toggle} tag={"div"} style={{color: "white"}} />
               <Collapse isOpen={this.state.isOpen} navbar className={"clearfix"}>
                 <Nav className="ml-auto float-left" navbar>
                   {user &&
