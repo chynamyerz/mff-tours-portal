@@ -280,6 +280,7 @@ export default class UpdateVehicle extends React.Component<any, IUpdateVehicleSt
                 {errors.password && <Error>{ errors.password }</Error>}
               </FormGroup>
               <Button
+                outline
                 disabled={loading}
                 block
                 size={"sm"}

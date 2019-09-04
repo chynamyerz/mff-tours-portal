@@ -70,7 +70,7 @@ const validateSignupField = (
   return errors;
 };
 
-export default class AddUser extends React.Component<any, ISignupState> {
+export default class FirstTimeUser extends React.Component<any, ISignupState> {
   public state = {
     added: false,
     errors: {
@@ -96,8 +96,8 @@ export default class AddUser extends React.Component<any, ISignupState> {
       city: "",
       state: "",
       zip: "",
-      password: "12345",
-      confirmPassword: "12345"
+      password: "",
+      confirmPassword: ""
     }
   };
 
@@ -145,13 +145,13 @@ export default class AddUser extends React.Component<any, ISignupState> {
           city: "",
           state: "",
           zip: "",
-          password: "12345",
-          confirmPassword: "12345"
+          password: "",
+          confirmPassword: ""
         }
       });
       this.props.closeModal()
       this.props.newEmail(this.state.newUserEmail)
-      alert("Successfully added client information.");
+      alert("Successfully added a user to the database.");
     } catch (error) {
       this.setState({
         errors: {
@@ -213,7 +213,7 @@ export default class AddUser extends React.Component<any, ISignupState> {
                       <Input 
                         type="text" 
                         name="name"
-                        d="name" 
+                        id="name" 
                         placeholder="" 
                         value={name}
                         onChange={this.onInputChange}
@@ -356,7 +356,7 @@ export default class AddUser extends React.Component<any, ISignupState> {
                   size={"sm"}
                   color={'success'}
                   onClick={(e) => this.handleSubmit(e, signup)}
-                >{ loading ? "Adding client..." : "Add new client" }</Button>
+                >{ loading ? "Welcoming you..." : "first time user" }</Button>
               </Form>
             )
           }}

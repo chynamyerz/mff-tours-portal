@@ -44,14 +44,13 @@ export default class UserBook extends React.Component<any, {}> {
     },
     email1: "",
     modal: false,
-    pickupDate: "",
-    returnDate: ""
   }
 
   handleSubmit = async (e: React.FormEvent<EventTarget>, user: any, vehicle: any, bookVehicle: any) => {
     e.preventDefault();
 
-    const { email1, pickupDate, returnDate } = this.state
+    const { email1 } = this.state
+    const { pickupDate, returnDate } = this.props
 
     // Validate the user input fields
     const errors: object = validateCarField({email1, pickupDate, returnDate});
@@ -63,7 +62,7 @@ export default class UserBook extends React.Component<any, {}> {
     }
 
     if (!user) {
-      alert("You must be logged in to book")
+      alert("You must be logged in as an admin to book for a client")
       return;
     }
 
@@ -110,10 +109,7 @@ export default class UserBook extends React.Component<any, {}> {
 
   render() {
     const { user, vehicle } = this.props;
-    const { email1, errors, pickupDate, returnDate } = this.state;
-
-    const minPickUpDate: any = moment(Date.now()).add(1, "day").format("YYYY-MM-DD")
-    const minReturnDate: any = moment(pickupDate).add(1, "day").format("YYYY-MM-DD")
+    const { email1, errors } = this.state;
  
     return (
       <Col sm={12} md={12} lg={{size: 8, offset: 2}}>
@@ -130,9 +126,12 @@ export default class UserBook extends React.Component<any, {}> {
               <>
                 <div>
                   <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
-                    <ModalHeader toggle={this.toggle}><strong>Add a new user</strong></ModalHeader>
+                    <ModalHeader toggle={this.toggle}><strong>Add a new client</strong></ModalHeader>
                     <ModalBody>
-                      <AddUser />
+                      <AddUser 
+                        closeModal={this.toggle} 
+                        newEmail={(email1: string) => this.setState({email1})}
+                      />
                     </ModalBody>
                     <ModalFooter>
                       <Button color="secondary" onClick={this.toggle}>Cancel</Button>
@@ -142,11 +141,12 @@ export default class UserBook extends React.Component<any, {}> {
                 {error && <ErrorMessage>{error.message.replace("Network error: ", "").replace("GraphQL error: ", "")}</ErrorMessage>}
                 <div style={{textAlign: "left", marginBottom: "2%"}}>
                   <Button
+                    outline
                     size={"sm"} 
                     color={"info"}
                     onClick={this.toggle}
                   >
-                    Booking for a new user? Click to add the user first.
+                    Booking for a new client?
                   </Button>
                 </div>
                 <Card style={{marginBottom: "2%"}}>
@@ -175,37 +175,6 @@ export default class UserBook extends React.Component<any, {}> {
                                   onChange={this.onInputChange}
                                 />
                                 {errors.email1 && <Error>{ errors.email1 }</Error>}
-                              </FormGroup>
-                            </Col>
-                          </Row>
-                          <Row>
-                            <Col sm= {12} md={6}>
-                              <FormGroup>
-                                <Label for="pickupDate">Pick up date</Label>
-                                <Input 
-                                  type="date" 
-                                  name="pickupDate" 
-                                  id="pickupDate"
-                                  min={minPickUpDate}
-                                  value={pickupDate}  
-                                  onChange={this.onInputChange}
-                                />
-                                {errors.pickupDate && <Error>{ errors.pickupDate }</Error>}
-                              </FormGroup>
-                            </Col>
-                            <Col sm= {12} md={6}>
-                              <FormGroup>
-                                <Label for="returnDate">Return date</Label>
-                                <Input 
-                                  disabled={!pickupDate}
-                                  type="date" 
-                                  name="returnDate" 
-                                  id="returnDate" 
-                                  min={minReturnDate}
-                                  value={returnDate} 
-                                  onChange={this.onInputChange}
-                                />
-                                {errors.returnDate && <Error>{ errors.returnDate }</Error>}
                               </FormGroup>
                             </Col>
                           </Row>

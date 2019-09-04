@@ -124,6 +124,8 @@ class App extends React.Component {
                             location={state ? state.location : ""}
                             user={state ? state.user : null}
                             vehicles={state ? state.vehicles : []}
+                            pickupDate={state ? state.pickupDate : ""}
+                            returnDate={state ? state.returnDate : ""}
                           />
                         )
                     }}
@@ -138,6 +140,8 @@ class App extends React.Component {
                           <ClientBook 
                             user={state ? state.user : null}
                             vehicle={state ? state.vehicle : {}}
+                            pickupDate={state ? state.pickupDate : ""}
+                            returnDate={state ? state.returnDate : ""}
                           />
                         )
                     }}
@@ -152,6 +156,8 @@ class App extends React.Component {
                           <UserBook 
                             user={state ? state.user : null}
                             vehicle={state ? state.vehicle : {}}
+                            pickupDate={state ? state.pickupDate : ""}
+                            returnDate={state ? state.returnDate : ""}
                           />
                         )
                     }}

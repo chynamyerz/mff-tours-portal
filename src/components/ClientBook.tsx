@@ -4,15 +4,22 @@ import moment from "moment";
 import { Mutation } from 'react-apollo';
 import { BOOK_VEHICLE_MUTATION } from '../graphql/Mutation';
 import { USER_QUERY, VEHICLE_QUERY, VEHICLE_BOOKINGS_QUERY } from '../graphql/Query';
-import { ErrorMessage } from './util/ErrorMessage';
 import { Redirect } from 'react-router-dom';
 import TermsAndConditions from './TermsAndConditions';
+import { validate } from 'isemail';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import FirstTimeUser from './FirstTimeUser';
 
 const validateCarField = (
   bookInput: any
 ) => {
   // An object to store errors for all fields.
   const errors: any = {};
+
+  // Check if the submitted email address is valid.
+  if (!validate(bookInput.email, { minDomainAtoms: 2 })) {
+    errors.email = "Email address is invalid";
+  }
 
   // Check if pick up date is chosen
   if (!bookInput.pickupDate) {
@@ -31,12 +38,18 @@ const validateCarField = (
 export default class ClientBook extends React.Component<any, any> {
   public state = {
     errors: {
+      email: "",
       pickupDate: "",
-      returnDate: ""
+      returnDate: "",
+      responseError: ""
     },
+    email: "",
     signed: false,
     booked: false,
     modal: false,
+    firstTimeBook: false,
+    notFirstTimeBook: false,
+    terms: false,
     goToSearch: false,
     pickupDate: "",
     returnDate: "",
@@ -45,10 +58,11 @@ export default class ClientBook extends React.Component<any, any> {
   handleSubmit = async (e: React.FormEvent<EventTarget>, user: any, vehicle: any, bookVehicle: any) => {
     e.preventDefault();
 
-    const { pickupDate, returnDate } = this.props.location.state
+    const { pickupDate, returnDate } = this.props
+    const { email } = this.state;
 
     // Validate the user input fields
-    const errors: object = validateCarField({pickupDate, returnDate});
+    const errors: object = validateCarField({email, pickupDate, returnDate});
     this.setState({ errors });
 
     // Check if there is an error, if there is abort booking.
@@ -56,26 +70,29 @@ export default class ClientBook extends React.Component<any, any> {
       return;
     }
 
-    if (!user) {
-      alert("You must be logged in to book")
-      return;
-    }
-
     try {
       // Book the car
       await bookVehicle({
-        variables: { vehicleId: vehicle.id, pickupDate, returnDate }
+        variables: { vehicleId: vehicle.id, pickupDate, returnDate, email }
       });
 
       this.setState({
         booked: true,
+        email: "",
         pickupDate: "",
         returnDate: "",
       })
 
       alert("Booked successfully!");
     } catch (error) {
-      alert("Something went wrong, please try again later.")
+      this.setState({
+        errors: {
+          ...this.state.errors,
+          responseError: error.message
+            .replace("Network error: ", "")
+            .replace("GraphQL error: ", "")
+        }
+      });
     }
   };
 
@@ -116,16 +133,45 @@ export default class ClientBook extends React.Component<any, any> {
     });
   }
 
+  toggleFirstTimeBook = () => {
+    this.setState({
+      ...this.state,
+      modal: !this.state.modal,
+      firstTimeBook: true,
+      terms: false,
+      notFirstTimeBook: false
+    });
+  }
+
+  toggleNotFirstTimeBook = () => {
+    this.setState({
+      ...this.state,
+      notFirstTimeBook: true,
+      firstTimeBook: false,
+      terms: false
+    });
+  }
+
+  toggleTerms = () => {
+    this.setState({
+      ...this.state,
+      modal: !this.state.modal,
+      terms: true,
+      firstTimeBook: false,
+      notFirstTimeBook: false
+    });
+  }
+
   render() {
     const { user, vehicle } = this.props;
-    const { goToSearch, booked, signed } = this.state;
+    const { email, firstTimeBook, notFirstTimeBook, goToSearch, booked, signed, terms, errors } = this.state;
 
     if (goToSearch) {
       return <Redirect to={"/"} />
     }
 
     if (booked) {
-      return (<Redirect to="/bookings" />)
+      return (<Redirect to="/" />)
     }
 
     if (!Object.keys(vehicle).length) {
@@ -159,18 +205,34 @@ export default class ClientBook extends React.Component<any, any> {
               <>
                 <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className} size={"lg"}>
 
-                    <ModalHeader toggle={this.toggle}><strong>MFF Cars Rental Terms and Conditions</strong></ModalHeader>
+                  { firstTimeBook &&
+                    <>
+                      <ModalHeader toggle={this.toggle}><strong>Let get to know each other.</strong></ModalHeader>
                     
-                    <ModalBody>
-                      <TermsAndConditions />
-                    </ModalBody>
+                      <ModalBody>
+                        <FirstTimeUser 
+                          closeModal={this.toggle} 
+                          newEmail={(email: string) => this.setState({email})}
+                        />
+                      </ModalBody>
+                    </>
+                  }
+                  { terms &&
+                    <>
+                      <ModalHeader toggle={this.toggle}><strong>MFF Cars Rental Terms and Conditions</strong></ModalHeader>
+                    
+                      <ModalBody>
+                        <TermsAndConditions />
+                      </ModalBody>
+                    </>
+                  }
 
-                    <ModalFooter>
-                      <Button color="secondary" onClick={this.toggle}>Cancel</Button>
-                    </ModalFooter>
-                    
-                  </Modal>
-                {error && <ErrorMessage>{error.message.replace("Network error: ", "").replace("GraphQL error: ", "")}</ErrorMessage>}
+                  <ModalFooter>
+                    <Button color="secondary" onClick={this.toggle}>Cancel</Button>
+                  </ModalFooter>
+                  
+                </Modal>
+                {error && <Alert color={"danger"}>{this.state.errors.responseError}</Alert>}
                 <Card>
                   <Row>
                     <Col sm={12} md={6} lg={5}>
@@ -184,6 +246,49 @@ export default class ClientBook extends React.Component<any, any> {
                         <CardText>Car details</CardText>
                         <hr />
                         <Form style={{ textAlign: "left"}}> 
+                          <FormGroup>
+                            <Row>
+                              <Col>
+                                <Button 
+                                  outline
+                                  size={"sm"} 
+                                  color={"secondary"}
+                                  onClick={this.toggleFirstTimeBook}
+                                >First time booking?</Button>
+                              </Col>
+
+                              <Col>
+                                <Button 
+                                  outline
+                                  size={"sm"} 
+                                  color={"secondary"}
+                                  onClick={this.toggleNotFirstTimeBook}
+                                >Booked before?</Button>
+                              </Col>
+                            </Row>
+                            
+                          </FormGroup>
+                          {
+                            notFirstTimeBook &&
+                            <FormGroup>
+                              <Label for="email">
+                                <FontAwesomeIcon
+                                  icon="envelope"
+                                />
+                                Please, provide an email address was used when booking previously.
+                              </Label>
+                              <Input 
+                                type="email" 
+                                name="email" 
+                                id="email" 
+                                placeholder="e.g. example@mail.com" 
+                                value={email}
+                                onChange={this.onInputChange}
+                              />
+                              {errors.email && <Alert color={"danger"}>{ errors.email }</Alert>}
+                            </FormGroup>
+                          }
+
                           <FormGroup check>
                             <Row>
                               <Col>
@@ -203,19 +308,20 @@ export default class ClientBook extends React.Component<any, any> {
                                 <Button
                                   style={{ padding: 0 }}
                                   color={"link"}
-                                  onClick={this.toggle}
+                                  onClick={this.toggleTerms}
                                 >View terms and conditions</Button> <br />
                               </Col>
                             </Row>
                           </FormGroup>
-
-                          <Button 
-                            outline
-                            disabled={loading || !signed}
-                            size={"sm"} 
-                            color={"success"}
-                            onClick={(e) => this.handleSubmit(e, user, vehicle, bookVehicle)}
-                          >{loading ? "Booking..." : "Book"}</Button>
+                          <FormGroup>
+                            <Button 
+                              outline
+                              disabled={loading || !signed}
+                              size={"sm"} 
+                              color={"success"}
+                              onClick={(e) => this.handleSubmit(e, user, vehicle, bookVehicle)}
+                            >{loading ? "Booking..." : "Book"}</Button>
+                          </FormGroup>
                         </Form>
                       </CardBody>
                     </Col>

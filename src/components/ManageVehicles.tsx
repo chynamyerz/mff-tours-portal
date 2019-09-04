@@ -18,7 +18,7 @@ export default class ManageVehicles extends React.Component<any, any> {
   public state = {
     addVehicle: false,
     deleteVehicle: false,
-    moreDetails: false,
+    book: false,
     modal: false,
     vehicle: {},
     updateVehicle: false
@@ -66,14 +66,13 @@ export default class ManageVehicles extends React.Component<any, any> {
 
   render() {
     const { user } = this.props;
-    const { addVehicle, deleteVehicle, updateVehicle, moreDetails, vehicle } = this.state;
+    const { addVehicle, deleteVehicle, updateVehicle, book, vehicle } = this.state;
 
-    if (moreDetails && vehicle) {
+    if (book) {
       return <Redirect to={{
-        pathname: "/admin-vehicle-booking",
+        pathname: "/",
         state: {
           user, 
-          vehicle
         }
       }} />
     }
@@ -89,8 +88,6 @@ export default class ManageVehicles extends React.Component<any, any> {
                 return <Spinner color="info" size="lg" style={{marginTop: "15%"}}/>
               }
               const vehicles: any = data && data.vehicles ? data.vehicles : []
-
-              const availableVehicles: any = vehicles.filter((vehicle: any) => vehicle.status === "AVAILABLE")
 
               return (
                 <>
@@ -132,14 +129,28 @@ export default class ManageVehicles extends React.Component<any, any> {
                   </Modal>
                   {error && <ErrorMessage>{error.message.replace("Network error: ", "").replace("GraphQL error: ", "")}</ErrorMessage>}
                   <div style={{textAlign: "left", marginBottom: "2%"}}>
-                    <Button
-                      outline
-                      size={"sm"} 
-                      color={"info"}
-                      onClick={this.toggleForAddVehicle}
-                    >
-                      Add a new vehicle
-                    </Button>
+                    <Row>
+                      <Button
+                        style={{marginRight: "2%"}}
+                        outline
+                        size={"sm"} 
+                        color={"info"}
+                        onClick={this.toggleForAddVehicle}
+                      >
+                        Add a new vehicle
+                      </Button>
+                    
+                      <Button
+                        outline
+                        style={{marginRight: "2%"}}
+                        size={"sm"} 
+                        color={"secondary"}
+                        onClick={() => this.setState({book: true})}
+                      >
+                        Book for a client
+                      </Button>
+                    </Row>
+                    
                   </div>
                   <Table striped>
                     <thead style={{textAlign: "left"}}>
@@ -152,7 +163,7 @@ export default class ManageVehicles extends React.Component<any, any> {
                     </thead>
                     <tbody style={{textAlign: "left"}}>
                       {
-                        availableVehicles.map((vehicle: any) => {
+                        vehicles.map((vehicle: any) => {
                           return (
                             <tr key={vehicle.id}>
                               <th scope="row">{vehicle.name}</th>
@@ -160,19 +171,7 @@ export default class ManageVehicles extends React.Component<any, any> {
                               <td>{moment(vehicle.year).format("YYYY-MM-DD")}</td>
                               <td style={{textAlign: "right"}}>
                                 <Row>
-                                  <Col sm={12} md={4} lg={4}>
-                                    <Button
-                                      outline
-                                      block
-                                      style={{marginRight: "2%"}}
-                                      size={"sm"} 
-                                      color={"secondary"}
-                                      onClick={() => this.setState({vehicle, moreDetails: true})}
-                                    >
-                                      Book
-                                    </Button>
-                                  </Col>
-                                  <Col sm={12} md={4} lg={4}>
+                                  <Col sm={12} md={6} lg={6}>
                                     <Button
                                       outline
                                       block
@@ -184,7 +183,7 @@ export default class ManageVehicles extends React.Component<any, any> {
                                       Update
                                     </Button>
                                   </Col>
-                                  <Col sm={12} md={4} lg={4}>
+                                  <Col sm={12} md={6} lg={6}>
                                     <Button
                                       outline
                                       block

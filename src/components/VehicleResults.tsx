@@ -22,15 +22,29 @@ export default class VehicleResults extends React.Component<any, any> {
   
 
   render() {
-    const { location, user, vehicles } = this.props;
+    const { location, user, vehicles, pickupDate, returnDate } = this.props;
     const { moreDetails, vehicle } = this.state;
+
+    if (moreDetails && Object.keys(vehicle).length && user && user.role === "ADMIN") {
+      return <Redirect to={{
+        pathname: "/admin-vehicle-booking",
+        state: {
+          user, 
+          vehicle,
+          pickupDate,
+          returnDate
+        }
+      }} />
+    }
 
     if (moreDetails && Object.keys(vehicle).length) {
       return <Redirect to={{
         pathname: "/client-vehicle-booking",
         state: {
           user, 
-          vehicle
+          vehicle,
+          pickupDate,
+          returnDate
         }
       }} />
     }

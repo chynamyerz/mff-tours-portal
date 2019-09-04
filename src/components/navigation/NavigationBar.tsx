@@ -126,6 +126,7 @@ export default class NavigationBar extends React.Component<any, {}> {
                   {user &&
                     <>
                       { defaultNavItems }
+
                       <NavbarItem onClick={this.toggleNavItem}>
                         <NavItem>
                           <RouterNavLink
@@ -137,6 +138,26 @@ export default class NavigationBar extends React.Component<any, {}> {
                           </RouterNavLink>
                         </NavItem>
                       </NavbarItem>
+                      { user.role === "ADMIN" &&
+                        <NavbarItem>
+                          <UncontrolledDropdown nav inNavbar>
+                            <DropdownToggle nav caret style={{display: "inline", color: "hsl(48, 100%, 67%)"}}>
+                              Dashboard
+                            </DropdownToggle>
+                            <DropdownMenu right={!this.state.isOpen}>
+                              <DropdownItem onClick={this.toggleNavItem}>
+                                <RouterNavLink
+                                  style={{ textDecoration: "none", color: "grey"}}
+                                  exact={true}
+                                  to="/manage-vehicle"
+                                >
+                                  Manage Vehicles
+                                </RouterNavLink>
+                              </DropdownItem>
+                            </DropdownMenu>
+                          </UncontrolledDropdown>
+                        </NavbarItem>
+                      }
 
                       <NavbarItem>
                         <UncontrolledDropdown nav inNavbar>
@@ -144,7 +165,7 @@ export default class NavigationBar extends React.Component<any, {}> {
                             Hi {user.name}
                           </DropdownToggle>
                           <DropdownMenu right={!this.state.isOpen}>
-                            <DropdownItem>
+                            <DropdownItem onClick={this.toggleNavItem}>
                               <RouterNavLink
                                 style={{ textDecoration: "none", color: "grey"}}
                                 exact={true}
@@ -157,7 +178,7 @@ export default class NavigationBar extends React.Component<any, {}> {
                               </RouterNavLink>
                             </DropdownItem>
                             <DropdownItem divider />
-                            <DropdownItem>
+                            <DropdownItem onClick={this.toggleNavItem}>
                               <RouterNavLink
                                 style={{ textDecoration: "none", color: "grey"}}
                                 exact={true}

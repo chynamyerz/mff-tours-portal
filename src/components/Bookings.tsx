@@ -76,9 +76,11 @@ export default class Bookings extends React.Component<any, {}> {
                 return <Spinner color="info" size="lg" style={{marginTop: "15%"}}/>
               }
 
-              const bookings: any = data && data.bookings ? data.bookings.filter((booking: any) => (booking.status === "BOOKED")) : [];
+              const bookings: any = data && data.bookings ? data.bookings.filter((booking: any) => (booking.status === "BOOKED")) : [];              
 
-              if (!bookings.length) {
+              const userBookings: any = bookings.filter((booking: any) => (booking.user.id === user.id))
+
+              if (!userBookings.length) {
                 return (
                   <>
                     <Alert color={"danger"}>You currently have no bookings</Alert>
@@ -90,8 +92,6 @@ export default class Bookings extends React.Component<any, {}> {
                   </>
                 )
               }
-
-              const userBookings: any = bookings.filter((booking: any) => (booking.user.id === user.id))
 
               return (
                 <Mutation
@@ -126,6 +126,7 @@ export default class Bookings extends React.Component<any, {}> {
                                           <CardText>More car details</CardText>
                                           <hr />
                                           <Button 
+                                            outline
                                             disabled={loading}
                                             size={"sm"} 
                                             color={"danger"}

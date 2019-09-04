@@ -101,9 +101,7 @@ export default class SearchVehicles extends React.Component<any, any> {
           returnDate: "",
         },
         searched: true,
-        vehicles: vehicles.data.searchVehicles,
-        pickupDate: "",
-        returnDate: "",
+        vehicles: vehicles.data.searchVehicles
       });
 
     } catch (error) {
@@ -132,29 +130,22 @@ export default class SearchVehicles extends React.Component<any, any> {
     const minPickUpDate: any = moment(Date.now()).add(1, "day").format("YYYY-MM-DD")
     const minReturnDate: any = moment(pickupDate).add(1, "day").format("YYYY-MM-DD")
 
-    if (user && (user.role === "ADMIN")) {
-      return <Redirect to={{
-        pathname: "/manage-vehicle",
-        state: {
-          user
-        }
-      }} />
-    }
-
     if (searched) {
       return <Redirect to={{
         pathname: "/vehicle-results",
         state: {
           user, 
           vehicles,
-          location
+          location,
+          pickupDate,
+          returnDate
         }
       }} />
     }
  
     return (
       <VehicleSearchContainer>
-        <Col sm={12} md={12} lg={{size: 10, offset: 1}}>
+        <Col sm={12} md={12} lg={12}>
           <Mutation
             mutation={SEARCH_VEHICLE_MUTATION}
           >
@@ -168,7 +159,7 @@ export default class SearchVehicles extends React.Component<any, any> {
                   {error && <Alert color={"danger"}>{this.state.errors.responseError}</Alert>}
                   <Card style={{background: "hsl(0, 0%, 96%)"}}>
                     <CardBody>
-                    <Col sm={12} md={{size: 10, offset: 1}} lg={{size: 10, offset: 1}}>
+                    <Col sm={12} md={12} lg={12}>
                       <FormGroup>
                         <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
                           <DropdownToggle size={"sm"} block outline caret>
