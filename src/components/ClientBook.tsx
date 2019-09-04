@@ -1,12 +1,12 @@
 import React from 'react';
-import { Col, Card, CardImg, CardBody, CardTitle, CardSubtitle, CardText, Button, Row, Form, FormGroup, Label, Input, Spinner, Alert } from 'reactstrap';
+import { Col, Card, CardImg, CardBody, CardTitle, CardSubtitle, CardText, Button, Row, Form, FormGroup, Label, Input, Spinner, Alert, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import moment from "moment";
 import { Mutation } from 'react-apollo';
 import { BOOK_VEHICLE_MUTATION } from '../graphql/Mutation';
 import { USER_QUERY, VEHICLE_QUERY, VEHICLE_BOOKINGS_QUERY } from '../graphql/Query';
 import { ErrorMessage } from './util/ErrorMessage';
 import { Redirect } from 'react-router-dom';
-import { Error } from './util/Error';
+import TermsAndConditions from './TermsAndConditions';
 
 const validateCarField = (
   bookInput: any
@@ -34,7 +34,9 @@ export default class ClientBook extends React.Component<any, any> {
       pickupDate: "",
       returnDate: ""
     },
+    signed: false,
     booked: false,
+    modal: false,
     goToSearch: false,
     pickupDate: "",
     returnDate: "",
@@ -43,7 +45,7 @@ export default class ClientBook extends React.Component<any, any> {
   handleSubmit = async (e: React.FormEvent<EventTarget>, user: any, vehicle: any, bookVehicle: any) => {
     e.preventDefault();
 
-    const { pickupDate, returnDate } = this.state
+    const { pickupDate, returnDate } = this.props.location.state
 
     // Validate the user input fields
     const errors: object = validateCarField({pickupDate, returnDate});
@@ -85,11 +87,19 @@ export default class ClientBook extends React.Component<any, any> {
   ) => {
     const name = e.target.name;
     const value = e.target.value;
-    // Update the userInput property of the state when input field values change
-    this.setState({
-      ...this.state,
-      [name]: value
-    });
+    if (name === "signed") {
+      // Update the userInput property of the state when input field values change
+      this.setState({
+        ...this.state,
+        signed: !this.state.signed
+      });
+    } else {
+      // Update the userInput property of the state when input field values change
+      this.setState({
+        ...this.state,
+        [name]: value
+      });
+    }
   };
 
   goToSearch = () => {
@@ -99,12 +109,16 @@ export default class ClientBook extends React.Component<any, any> {
     }))
   }
 
+  toggle = () => {
+    this.setState({
+      ...this.state,
+      modal: !this.state.modal
+    });
+  }
+
   render() {
     const { user, vehicle } = this.props;
-    const { goToSearch, booked ,errors, pickupDate } = this.state;
-
-    const minPickUpDate: any = moment(Date.now()).add(1, "day").format("YYYY-MM-DD")
-    const minReturnDate: any = moment(pickupDate).add(1, "day").format("YYYY-MM-DD")
+    const { goToSearch, booked, signed } = this.state;
 
     if (goToSearch) {
       return <Redirect to={"/"} />
@@ -143,6 +157,19 @@ export default class ClientBook extends React.Component<any, any> {
             }
             return (
               <>
+                <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className} size={"lg"}>
+
+                    <ModalHeader toggle={this.toggle}><strong>MFF Cars Rental Terms and Conditions</strong></ModalHeader>
+                    
+                    <ModalBody>
+                      <TermsAndConditions />
+                    </ModalBody>
+
+                    <ModalFooter>
+                      <Button color="secondary" onClick={this.toggle}>Cancel</Button>
+                    </ModalFooter>
+                    
+                  </Modal>
                 {error && <ErrorMessage>{error.message.replace("Network error: ", "").replace("GraphQL error: ", "")}</ErrorMessage>}
                 <Card>
                   <Row>
@@ -157,38 +184,34 @@ export default class ClientBook extends React.Component<any, any> {
                         <CardText>Car details</CardText>
                         <hr />
                         <Form style={{ textAlign: "left"}}> 
-                          <Row>
-                            <Col md={6}>
-                              <FormGroup>
-                                <Label for="pickupDate">Pick up date</Label>
-                                <Input 
-                                  type="date" 
-                                  name="pickupDate" 
-                                  id="pickupDate"
-                                  min={minPickUpDate}  
-                                  onChange={this.onInputChange}
-                                />
-                                {errors.pickupDate && <Error>{ errors.pickupDate }</Error>}
-                              </FormGroup>
-                            </Col>
-                            <Col md={6}>
-                              <FormGroup>
-                                <Label for="returnDate">Return date</Label>
-                                <Input 
-                                  disabled={!pickupDate}
-                                  type="date" 
-                                  name="returnDate" 
-                                  id="returnDate" 
-                                  min={minReturnDate} 
-                                  onChange={this.onInputChange}
-                                />
-                                {errors.returnDate && <Error>{ errors.returnDate }</Error>}
-                              </FormGroup>
-                            </Col>
-                          </Row>
+                          <FormGroup check>
+                            <Row>
+                              <Col>
+                                <Label for="returnDate" check>
+                                  <Input 
+                                    checked={signed}
+                                    name="signed" 
+                                    id="signed" 
+                                    type="checkbox" 
+                                    onChange={this.onInputChange}
+                                  />{'  '}
+                                  Agree
+                                </Label>
+                              </Col>
+
+                              <Col>
+                                <Button
+                                  style={{ padding: 0 }}
+                                  color={"link"}
+                                  onClick={this.toggle}
+                                >View terms and conditions</Button> <br />
+                              </Col>
+                            </Row>
+                          </FormGroup>
+
                           <Button 
                             outline
-                            disabled={loading}
+                            disabled={loading || !signed}
                             size={"sm"} 
                             color={"success"}
                             onClick={(e) => this.handleSubmit(e, user, vehicle, bookVehicle)}
