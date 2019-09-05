@@ -215,7 +215,7 @@ export default class Signin extends React.Component<{}, ISigninState> {
                           {errors.password && <Alert color={"danger"}>{ errors.password }</Alert>}
                         </FormGroup>
                         <Row>
-                          <Col sm={12} md={6}>
+                          <Col sm={12} md={12} lg={6}>
                             <FormGroup>
                               <Button
                                 outline
@@ -228,7 +228,7 @@ export default class Signin extends React.Component<{}, ISigninState> {
                             </FormGroup>
                           </Col>
 
-                          <Col sm={12} md={6}>
+                          <Col sm={12} md={12} lg={6}>
                             <FormGroup>
                               <Button
                                 outline

@@ -27,6 +27,16 @@ const validateVehicleSearchField = (
     errors.returnDate = "Please choose return date";
   }
 
+  // Check if pick up time is set
+  if (!bookInput.pickupTime) {
+    errors.pickupTime = "What time will you pick it?";
+  }
+
+  // Check if return time is set
+  if (!bookInput.returnTime) {
+    errors.returnTime = "What time will you return it?";
+  }
+
   // return an array consisting of error message if any or empty.
   return errors;
 };
@@ -37,13 +47,18 @@ export default class SearchVehicles extends React.Component<any, any> {
       responseError: "",
       pickupDate: "",
       returnDate: "",
+      pickupTime: "",
+      returnTime: ""
     },
+    date: [new Date(), new Date()],
     dropdownOpen: false,
     location: "ANY LOCATION",
     searched: false,
     vehicles: [],
     pickupDate: "",
-    returnDate: ""
+    returnDate: "",
+    pickupTime: "",
+    returnTime: ""
   }
 
   /**
@@ -74,13 +89,17 @@ export default class SearchVehicles extends React.Component<any, any> {
     });
   };
 
+  onChange = (date: any) => this.setState({ date })
+
   handleSubmit = async (e: React.FormEvent<EventTarget>, searchVehicles: any) => {
     e.preventDefault();
 
-    const { location, pickupDate, returnDate } = this.state
+    const { location, pickupDate, returnDate, pickupTime, returnTime } = this.state
+
+    console.log((pickupTime))
 
     // Validate the vehicle search input fields
-    const errors: object = validateVehicleSearchField({pickupDate, returnDate});
+    const errors: object = validateVehicleSearchField({pickupDate, returnDate, pickupTime, returnTime});
     this.setState({ errors });
 
     // Check if there is an error, if there is abort searching.
@@ -89,9 +108,11 @@ export default class SearchVehicles extends React.Component<any, any> {
     }
 
     try {
+      const pickupDateTime = pickupDate.concat(" ", pickupTime)
+      const returnDateTime = returnDate.concat(" ", returnTime)
       // Search for vehicles
       const vehicles = await searchVehicles({
-        variables: { location, pickupDate, returnDate }
+        variables: { location, pickupDate: pickupDateTime, returnDate: returnDateTime }
       });
 
       this.setState({
@@ -99,6 +120,8 @@ export default class SearchVehicles extends React.Component<any, any> {
           responseError: "",
           pickupDate: "",
           returnDate: "",
+          pickupTime: "",
+          returnTime: ""
         },
         searched: true,
         vehicles: vehicles.data.searchVehicles
@@ -125,7 +148,7 @@ export default class SearchVehicles extends React.Component<any, any> {
 
   render() {
     const { user } = this.props;
-    const { errors, location, pickupDate, returnDate, searched, vehicles } = this.state;
+    const { errors, location, pickupDate, returnDate, searched, vehicles, pickupTime, returnTime } = this.state;
 
     const minPickUpDate: any = moment(Date.now()).add(1, "day").format("YYYY-MM-DD")
     const minReturnDate: any = moment(pickupDate).add(1, "day").format("YYYY-MM-DD")
@@ -177,6 +200,7 @@ export default class SearchVehicles extends React.Component<any, any> {
                           <FormGroup>
                             <Label for="pickupDate">Pick up date</Label>
                             <Input 
+                              style={{textAlign: "center"}}
                               type="date" 
                               name="pickupDate" 
                               id="pickupDate"
@@ -186,11 +210,24 @@ export default class SearchVehicles extends React.Component<any, any> {
                             />
                             {errors.pickupDate && <Alert color={"danger"}>{ errors.pickupDate }</Alert>}
                           </FormGroup>
+                          <FormGroup>
+                            <Label for="pickupTime">Pick up time</Label>
+                            <Input 
+                              style={{width: "50%", textAlign: "center"}}
+                              type="time" 
+                              name="pickupTime" 
+                              id="pickupTime"
+                              value={pickupTime}  
+                              onChange={this.onInputChange}
+                            />
+                            {errors.pickupTime && <Alert color={"danger"}>{ errors.pickupTime }</Alert>}
+                          </FormGroup>
                         </Col>
                         <Col sm= {12} md={6}>
                           <FormGroup>
                             <Label for="returnDate">Return date</Label>
                             <Input 
+                              style={{textAlign: "center"}}
                               disabled={!pickupDate}
                               type="date" 
                               name="returnDate" 
@@ -200,6 +237,18 @@ export default class SearchVehicles extends React.Component<any, any> {
                               onChange={this.onInputChange}
                             />
                             {errors.returnDate && <Alert color={"danger"}>{ errors.returnDate }</Alert>}
+                          </FormGroup>
+                          <FormGroup>
+                            <Label for="returnTime">Return time</Label>
+                            <Input 
+                              style={{width: "50%", textAlign: "center"}}
+                              type="time" 
+                              name="returnTime" 
+                              id="returnTime" 
+                              value={returnTime} 
+                              onChange={this.onInputChange}
+                            />
+                            {errors.returnTime && <Alert color={"danger"}>{ errors.returnTime }</Alert>}
                           </FormGroup>
                         </Col>
                       </Row>
