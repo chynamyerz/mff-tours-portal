@@ -50,9 +50,8 @@ export default class SearchVehicles extends React.Component<any, any> {
       pickupTime: "",
       returnTime: ""
     },
-    date: [new Date(), new Date()],
     dropdownOpen: false,
-    location: "ANY LOCATION",
+    location: "",
     searched: false,
     vehicles: [],
     pickupDate: "",
@@ -89,14 +88,10 @@ export default class SearchVehicles extends React.Component<any, any> {
     });
   };
 
-  onChange = (date: any) => this.setState({ date })
-
   handleSubmit = async (e: React.FormEvent<EventTarget>, searchVehicles: any) => {
     e.preventDefault();
 
     const { location, pickupDate, returnDate, pickupTime, returnTime } = this.state
-
-    console.log((pickupTime))
 
     // Validate the vehicle search input fields
     const errors: object = validateVehicleSearchField({pickupDate, returnDate, pickupTime, returnTime});
@@ -184,12 +179,12 @@ export default class SearchVehicles extends React.Component<any, any> {
                     <CardBody>
                     <Col sm={12} md={12} lg={12}>
                       <FormGroup>
+                        <Label for="pickupDate">Choose a location</Label>
                         <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
                           <DropdownToggle size={"sm"} block outline caret>
                             {location}
                           </DropdownToggle>
                           <DropdownMenu style={{width: "100%"}}> 
-                            <DropdownItem onClick={(e) => this.onInputClick(e)}>ANY LOCATION</DropdownItem>
                             <DropdownItem onClick={(e) => this.onInputClick(e)}>EMPANGENI</DropdownItem>
                             <DropdownItem onClick={(e) => this.onInputClick(e)}>RICHARDS_BAY</DropdownItem>
                           </DropdownMenu>

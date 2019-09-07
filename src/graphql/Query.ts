@@ -126,6 +126,7 @@ const VEHICLE_QUERY = gql`
       year
       imageURI
       status
+      location
     }
   }
 `;

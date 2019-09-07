@@ -1,5 +1,5 @@
 import React from 'react';
-import { Col, Button, Card, Row, CardImg, CardBody, CardSubtitle, CardTitle, Alert } from 'reactstrap';
+import { Col, Button, Card, Row, CardImg, CardBody, CardSubtitle, CardTitle, Alert, CardText } from 'reactstrap';
 import styled from 'styled-components';
 import { Redirect } from 'react-router-dom';
 import moment from 'moment';
@@ -55,9 +55,9 @@ export default class VehicleResults extends React.Component<any, any> {
           <Alert color={"success"}>
             Vehicle{vehicles.length > 1 ? "s" : null} available at {location === "ANY LOCATION" ? "all branches" :  location}
           </Alert>
-          {vehicles.map((vehicle: any) => {
+          {vehicles.map((vehicle: any, index: number) => {
             return (
-              <CardContainer key={vehicle.id}>
+              <CardContainer key={`${vehicle.id}-${index}`}>
                 <Card>
                   <Row>
                     <Col sm={12} md={6} lg={5}>
@@ -65,8 +65,15 @@ export default class VehicleResults extends React.Component<any, any> {
                     </Col>
                     <Col sm={12} md={6} lg={7}>
                       <CardBody className="text-left">
-                        <CardTitle style={{fontWeight: "bold", fontSize: 20}}>{vehicle.name}</CardTitle>
-                        <CardSubtitle style={{fontWeight: "bold"}}>{vehicle.model} | {vehicle.make} | {moment(vehicle.year).format("YYYY-MM-DD")}</CardSubtitle>
+                        <CardTitle style={{fontWeight: "bold", fontSize: 20}}>
+                          {vehicle.name}
+                        </CardTitle>
+                        <CardSubtitle style={{fontWeight: "bold"}}>
+                          Available at {vehicle.location}
+                        </CardSubtitle>
+                        <CardText>
+                          {vehicle.model} | {vehicle.make} | {moment(vehicle.year).format("YYYY-MM-DD")}
+                        </CardText>
                         <hr />
                         <Button 
                           size={"sm"} 
