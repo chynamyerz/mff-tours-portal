@@ -29,6 +29,18 @@ interface IUpdateUserState {
 const UpdateUserContainer = styled.div`
   margin-top: 3%;
   margin-bottom: 3%;
+
+  @media screen and (max-width: 600px) {
+    margin-top: 12%;
+  }
+
+  @media screen and (max-width: 900px) {
+    margin-top: 6%;
+  }
+
+  @media screen and (max-width: 500px) {
+    margin-top: 10%;
+  }
 `;
 
 const validateUpdateUserField = (
@@ -191,6 +203,7 @@ export default class UpdateUser extends React.Component<{}, IUpdateUserState> {
     return (
       <UpdateUserContainer>
         <Col sm={{ size: 8, offset: 2 }} md={{ size: 6, offset: 3 }}>
+        <h3 style={{paddingTop: "8%"}}><strong>Update your details</strong></h3>
         <Mutation 
           mutation={USER_UPDATE_MUTATION}
           refetchQueries={[{ query: USER_QUERY }]}

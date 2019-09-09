@@ -85,7 +85,29 @@ export default class NavigationBar extends React.Component<any, {}> {
               exact={true}
               to="/about"
             >
-              About
+              About-us
+            </RouterNavLink>
+          </NavItem>
+        </NavbarItem>
+        <NavbarItem onClick={this.toggleNavItem}>
+          <NavItem>
+            <RouterNavLink
+              style={{ textDecoration: "none", color: "hsl(48, 100%, 67%)"}}
+              exact={true}
+              to="/contact"
+            >
+              Contact-us
+            </RouterNavLink>
+          </NavItem>
+        </NavbarItem>
+        <NavbarItem onClick={this.toggleNavItem}>
+          <NavItem>
+            <RouterNavLink
+              style={{ textDecoration: "none", color: "hsl(48, 100%, 67%)"}}
+              exact={true}
+              to="/services"
+            >
+              Services
             </RouterNavLink>
           </NavItem>
         </NavbarItem>
@@ -116,7 +138,7 @@ export default class NavigationBar extends React.Component<any, {}> {
                     exact={true}
                     to="/"
                   >
-                    MFF Tours
+                    MFF-Car-Rentals
                   </RouterNavLink>
                 </NavbarItem>
               </NavbarBrand>
@@ -188,7 +210,7 @@ export default class NavigationBar extends React.Component<any, {}> {
                                 <FontAwesomeIcon
                                   icon="sign-out-alt"
                                 />
-                                Sign-Out
+                                Sign-out
                               </RouterNavLink>
                             </DropdownItem>
                           </DropdownMenu>
@@ -209,7 +231,7 @@ export default class NavigationBar extends React.Component<any, {}> {
                             <FontAwesomeIcon
                               icon="sign-in-alt"
                             />
-                            Sign-In
+                            Sign-in
                           </RouterNavLink>
                         </NavItem>
                       </NavbarItem>

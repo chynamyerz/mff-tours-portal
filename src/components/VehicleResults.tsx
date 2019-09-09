@@ -2,10 +2,22 @@ import React from 'react';
 import { Col, Button, Card, Row, CardImg, CardBody, CardSubtitle, CardTitle, Alert, CardText } from 'reactstrap';
 import styled from 'styled-components';
 import { Redirect } from 'react-router-dom';
-import moment from 'moment';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const VehicleSearchContainer = styled.div`
-  margin: 5%;
+  margin: 8%;
+
+  @media screen and (max-width: 600px) {
+    margin-top: 20%;
+  }
+
+  @media screen and (max-width: 900px) {
+    margin-top: 15%;
+  }
+
+  @media screen and (max-width: 500px) {
+    margin-top: 25%;
+  }
 `;
 
 const CardContainer = styled.div`
@@ -52,9 +64,15 @@ export default class VehicleResults extends React.Component<any, any> {
     return (
       <VehicleSearchContainer>
         <Col sm={12} md={12} lg={{size: 8, offset: 2}}>
-          <Alert color={"success"}>
-            Vehicle{vehicles.length > 1 ? "s" : null} available at {location === "ANY LOCATION" ? "all branches" :  location}
-          </Alert>
+          {!vehicles.length ?
+            <Alert color={"info"}>
+              Sorry, no vehicles available {location === "EMPANGENI" ? "at a" : "at the"} {location} for the specified dates.<br />
+            </Alert> :
+            <Alert color={"success"}>
+              Vehicle{vehicles.length > 1 ? "s" : null} available at {location}.
+            </Alert>
+          }
+        
           {vehicles.map((vehicle: any, index: number) => {
             return (
               <CardContainer key={`${vehicle.id}-${index}`}>
@@ -65,21 +83,27 @@ export default class VehicleResults extends React.Component<any, any> {
                     </Col>
                     <Col sm={12} md={6} lg={7}>
                       <CardBody className="text-left">
-                        <CardTitle style={{fontWeight: "bold", fontSize: 20}}>
-                          {vehicle.name}
-                        </CardTitle>
                         <CardSubtitle style={{fontWeight: "bold"}}>
-                          Available at {vehicle.location}
+                          {vehicle.size}
                         </CardSubtitle>
+                        <CardTitle style={{fontWeight: "bold", fontSize: 20}}>
+                          {vehicle.name} {vehicle.make}
+                        </CardTitle>
+                        <CardText>Or similar group {vehicle.group} car</CardText>
+                        <hr />
                         <CardText>
-                          {vehicle.model} | {vehicle.make} | {moment(vehicle.year).format("YYYY-MM-DD")}
+                          <p style={{fontSize: "1.5em"}}> 
+                            <span>ZAR</span><span>899</span>.<span style={{fontSize: "0.7em"}}>99</span>
+                          </p>
                         </CardText>
                         <hr />
                         <Button 
                           size={"sm"} 
                           color={"success"}
                           onClick={() => this.setState({vehicle, moreDetails: true})}
-                        >{"More details"}</Button>
+                        >{"More details "}<FontAwesomeIcon
+                        icon="angle-right"
+                      /></Button>
                       </CardBody>
                     </Col>
                   </Row>

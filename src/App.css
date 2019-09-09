@@ -31,3 +31,22 @@
     transform: rotate(360deg);
   }
 }
+
+.Home {
+  background-image: url('../src/assets/images/background.jpeg');
+  background-size: cover;
+  background-position: center center;
+  position: relative;
+  top: 0;
+  bottom: 0;
+  height: 100vh;
+}
+
+.Home-overlay {
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.1);
+  top: 0;
+  bottom: 0;
+  height: 100%;
+  width: 100%;
+}

@@ -5,10 +5,11 @@ import { Mutation } from 'react-apollo';
 import { Redirect } from 'react-router-dom';
 import { SEARCH_VEHICLE_MUTATION } from '../graphql/Mutation';
 import moment from 'moment';
+import '../css/DatePicker.css'
+import Datetime from 'react-datetime';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const VehicleSearchContainer = styled.div`
-  margin-top: 10%;
-  margin: 5%;
 `;
 
 const validateVehicleSearchField = (
@@ -16,25 +17,20 @@ const validateVehicleSearchField = (
 ) => {
   // An object to store errors for all fields.
   const errors: any = {};
+  
+  // Check if pick up date is chosen
+  if (!bookInput.location || (bookInput.location && bookInput.location === "Start here. Select a location.")) {
+    errors.location = "Pick up location required";
+  }
 
   // Check if pick up date is chosen
   if (!bookInput.pickupDate) {
-    errors.pickupDate = "Please choose pick up date";
+    errors.pickupDate = "Pick up date required";
   }
 
   // Check if return date is chosen
   if (!bookInput.returnDate) {
-    errors.returnDate = "Please choose return date";
-  }
-
-  // Check if pick up time is set
-  if (!bookInput.pickupTime) {
-    errors.pickupTime = "What time will you pick it?";
-  }
-
-  // Check if return time is set
-  if (!bookInput.returnTime) {
-    errors.returnTime = "What time will you return it?";
+    errors.returnDate = "Return date required";
   }
 
   // return an array consisting of error message if any or empty.
@@ -45,19 +41,16 @@ export default class SearchVehicles extends React.Component<any, any> {
   public state = {
     errors: {
       responseError: "",
+      location: "",
       pickupDate: "",
-      returnDate: "",
-      pickupTime: "",
-      returnTime: ""
+      returnDate: ""
     },
     dropdownOpen: false,
-    location: "",
+    location: "Start here. Select a location.",
     searched: false,
     vehicles: [],
     pickupDate: "",
-    returnDate: "",
-    pickupTime: "",
-    returnTime: ""
+    returnDate: ""
   }
 
   /**
@@ -81,6 +74,7 @@ export default class SearchVehicles extends React.Component<any, any> {
   ) => {
     const name = e.target.name;
     const value = e.target.value;
+    console.log(e)
     // Update the userInput property of the state when input field values change
     this.setState({
       ...this.state,
@@ -91,10 +85,10 @@ export default class SearchVehicles extends React.Component<any, any> {
   handleSubmit = async (e: React.FormEvent<EventTarget>, searchVehicles: any) => {
     e.preventDefault();
 
-    const { location, pickupDate, returnDate, pickupTime, returnTime } = this.state
+    const { location, pickupDate, returnDate } = this.state
 
     // Validate the vehicle search input fields
-    const errors: object = validateVehicleSearchField({pickupDate, returnDate, pickupTime, returnTime});
+    const errors: object = validateVehicleSearchField({location, pickupDate, returnDate});
     this.setState({ errors });
 
     // Check if there is an error, if there is abort searching.
@@ -103,20 +97,17 @@ export default class SearchVehicles extends React.Component<any, any> {
     }
 
     try {
-      const pickupDateTime = pickupDate.concat(" ", pickupTime)
-      const returnDateTime = returnDate.concat(" ", returnTime)
       // Search for vehicles
       const vehicles = await searchVehicles({
-        variables: { location, pickupDate: pickupDateTime, returnDate: returnDateTime }
+        variables: { location, pickupDate, returnDate }
       });
 
       this.setState({
         errors: {
           responseError: "",
+          location: "",
           pickupDate: "",
-          returnDate: "",
-          pickupTime: "",
-          returnTime: ""
+          returnDate: ""
         },
         searched: true,
         vehicles: vehicles.data.searchVehicles
@@ -143,7 +134,9 @@ export default class SearchVehicles extends React.Component<any, any> {
 
   render() {
     const { user } = this.props;
-    const { errors, location, pickupDate, returnDate, searched, vehicles, pickupTime, returnTime } = this.state;
+    const { errors, location, pickupDate, returnDate, searched, vehicles } = this.state;
+
+    console.log(pickupDate)
 
     const minPickUpDate: any = moment(Date.now()).add(1, "day").format("YYYY-MM-DD")
     const minReturnDate: any = moment(pickupDate).add(1, "day").format("YYYY-MM-DD")
@@ -175,87 +168,87 @@ export default class SearchVehicles extends React.Component<any, any> {
               return (
                 <Form style={{ textAlign: "left"}}> 
                   {error && <Alert color={"danger"}>{this.state.errors.responseError}</Alert>}
-                  <Card style={{background: "hsl(0, 0%, 96%)"}}>
+                  <Card style={{background: "transparent", backgroundColor: "rgba(0, 0, 0, 0.2)"}}>
                     <CardBody>
-                    <Col sm={12} md={12} lg={12}>
+                    <Col sm={12} md={12} lg={{size: 8, offset: 2}}>
                       <FormGroup>
-                        <Label for="pickupDate">Choose a location</Label>
-                        <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
-                          <DropdownToggle size={"sm"} block outline caret>
-                            {location}
-                          </DropdownToggle>
-                          <DropdownMenu style={{width: "100%"}}> 
-                            <DropdownItem onClick={(e) => this.onInputClick(e)}>EMPANGENI</DropdownItem>
-                            <DropdownItem onClick={(e) => this.onInputClick(e)}>RICHARDS_BAY</DropdownItem>
-                          </DropdownMenu>
-                        </Dropdown>
+                        <Label for="pickupLocation" style={{color: "white"}}>Pick-up location</Label>
+                        <Col sm={12}>
+                          <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
+                            <DropdownToggle size={"sm"} block outline style={{color: "white"}}>
+                              {location}
+                            </DropdownToggle>
+                            <DropdownMenu style={{
+                              width: "100%",
+                              background: "transparent",
+                              backgroundColor: "rgba(0, 0, 0, 1)"
+                            }}
+                            > 
+                              <DropdownItem style={{color: "white", background: "transparent", backgroundColor: "rgba(0, 0, 0, 0.1)"}} onClick={(e) => this.onInputClick(e)}>EMPANGENI</DropdownItem>
+                              <DropdownItem style={{color: "white", background: "transparent", backgroundColor: "rgba(0, 0, 0, 0.1)"}} onClick={(e) => this.onInputClick(e)}>RICHARDS_BAY</DropdownItem>
+                            </DropdownMenu>
+                          </Dropdown>
+                          {errors.location && <Alert color={"danger"}>{ errors.location }</Alert>}
+                        </Col>
                       </FormGroup>
                       <Row>
                         <Col sm= {12} md={6}>
                           <FormGroup>
-                            <Label for="pickupDate">Pick up date</Label>
-                            <Input 
-                              style={{textAlign: "center"}}
-                              type="date" 
-                              name="pickupDate" 
-                              id="pickupDate"
-                              min={minPickUpDate}
-                              value={pickupDate}  
-                              onChange={this.onInputChange}
-                            />
-                            {errors.pickupDate && <Alert color={"danger"}>{ errors.pickupDate }</Alert>}
-                          </FormGroup>
-                          <FormGroup>
-                            <Label for="pickupTime">Pick up time</Label>
-                            <Input 
-                              style={{width: "50%", textAlign: "center"}}
-                              type="time" 
-                              name="pickupTime" 
-                              id="pickupTime"
-                              value={pickupTime}  
-                              onChange={this.onInputChange}
-                            />
-                            {errors.pickupTime && <Alert color={"danger"}>{ errors.pickupTime }</Alert>}
+                            <Label style={{color: "white"}}>Pick-up date</Label>
+                            <Col>
+                              <Datetime
+                                inputProps={{
+                                  style: {
+                                    color: "white",
+                                    background: "transparent", 
+                                    backgroundColor: "rgba(0, 0, 0, 0.2)"
+                                  }
+                                }}
+                                dateFormat={"YYYY-MM-DD"}
+                                onChange={(date: any) => this.setState({
+                                  pickupDate: moment(date).format("YYYY-MM-DD HH:mm")
+                                })}
+                              />
+                              {errors.pickupDate && <Alert color={"danger"}>{ errors.pickupDate }</Alert>}
+                            </Col>
                           </FormGroup>
                         </Col>
                         <Col sm= {12} md={6}>
                           <FormGroup>
-                            <Label for="returnDate">Return date</Label>
-                            <Input 
-                              style={{textAlign: "center"}}
-                              disabled={!pickupDate}
-                              type="date" 
-                              name="returnDate" 
-                              id="returnDate" 
-                              min={minReturnDate}
-                              value={returnDate} 
-                              onChange={this.onInputChange}
-                            />
-                            {errors.returnDate && <Alert color={"danger"}>{ errors.returnDate }</Alert>}
-                          </FormGroup>
-                          <FormGroup>
-                            <Label for="returnTime">Return time</Label>
-                            <Input 
-                              style={{width: "50%", textAlign: "center"}}
-                              type="time" 
-                              name="returnTime" 
-                              id="returnTime" 
-                              value={returnTime} 
-                              onChange={this.onInputChange}
-                            />
-                            {errors.returnTime && <Alert color={"danger"}>{ errors.returnTime }</Alert>}
+                            <Label style={{color: "white"}}>Return date</Label>
+                            <Col>
+                              <Datetime
+                                inputProps={{
+                                  style: {
+                                    color: "white",
+                                    background: "transparent", 
+                                    backgroundColor: "rgba(0, 0, 0, 0.2)"
+                                  }
+                                }}
+                                dateFormat={"YYYY-MM-DD"}
+                                onChange={(date: any) => this.setState({
+                                  returnDate: moment(date).format("YYYY-MM-DD HH:mm")
+                                })}
+                              />
+                              {errors.returnDate && <Alert color={"danger"}>{ errors.returnDate }</Alert>}
+                            </Col>
                           </FormGroup>
                         </Col>
                       </Row>
-                      <FormGroup>
-                        <Button
-                          outline
-                          size={"sm"}
-                          block
-                          color={"success"}
-                          onClick={(e) => this.handleSubmit(e, searchVehicles)}
-                        >{ loading ? "Searching..." : "Search" }</Button>
-                      </FormGroup>
+                      <Col sm={12} md={{size: 10, offset: 1}} lg={{size: 8, offset: 2}}>
+                        <FormGroup>
+                          <Button
+                            outline
+                            size={"sm"}
+                            block
+                            color={"success"}
+                            onClick={(e) => this.handleSubmit(e, searchVehicles)}
+                          >{ loading ? "Searching..." : "Search " }{!loading && <FontAwesomeIcon
+                            icon="search"
+                          />}</Button>
+                        </FormGroup>
+                      </Col>
+                      
                     </Col>
                     </CardBody>
                   </Card>

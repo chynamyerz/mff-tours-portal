@@ -1,6 +1,5 @@
 import React from 'react';
 import { Col, Card, CardImg, CardBody, CardTitle, CardSubtitle, CardText, Button, Row, Form, FormGroup, Label, Input, Spinner, Alert, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import moment from "moment";
 import { Mutation } from 'react-apollo';
 import { BOOK_VEHICLE_MUTATION } from '../graphql/Mutation';
 import { USER_QUERY, VEHICLE_QUERY, VEHICLE_BOOKINGS_QUERY } from '../graphql/Query';
@@ -9,6 +8,23 @@ import TermsAndConditions from './TermsAndConditions';
 import { validate } from 'isemail';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import FirstTimeUser from './FirstTimeUser';
+import styled from 'styled-components';
+import moment from 'moment';
+
+const ClientBookContainer = styled.div`
+  @media screen and (max-width: 600px) {
+    margin-top: 12%;
+  }
+
+  @media screen and (max-width: 900px) {
+    margin-top: 6%;
+  }
+
+  @media screen and (max-width: 500px) {
+    margin-top: 10%;
+  }
+`;
+
 
 const validateCarField = (
   bookInput: any
@@ -163,7 +179,7 @@ export default class ClientBook extends React.Component<any, any> {
   }
 
   render() {
-    const { user, vehicle } = this.props;
+    const { user, vehicle, pickupDate, returnDate } = this.props;
     const { email, firstTimeBook, notFirstTimeBook, goToSearch, booked, signed, terms, errors } = this.state;
 
     if (goToSearch) {
@@ -202,7 +218,7 @@ export default class ClientBook extends React.Component<any, any> {
               return <Spinner color="info" size="lg" style={{marginTop: "15%"}}/>
             }
             return (
-              <>
+              <ClientBookContainer>
                 <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className} size={"lg"}>
 
                   { firstTimeBook &&
@@ -233,6 +249,7 @@ export default class ClientBook extends React.Component<any, any> {
                   
                 </Modal>
                 {error && <Alert color={"danger"}>{this.state.errors.responseError}</Alert>}
+                <h3 style={{paddingTop: "8%"}}><strong>Complete the booking</strong></h3>
                 <Card>
                   <Row>
                     <Col sm={12} md={6} lg={5}>
@@ -240,10 +257,80 @@ export default class ClientBook extends React.Component<any, any> {
                     </Col>
                     <Col sm={12} md={6} lg={7}>
                       <CardBody className="text-left">
-                        <CardTitle style={{fontWeight: "bold", fontSize: 20}}>{vehicle.name}</CardTitle>
-                        <CardSubtitle style={{fontWeight: "bold"}}>{vehicle.model} | {vehicle.make} | {moment(vehicle.year).format("YYYY-MM-DD")}</CardSubtitle>
+                        <CardSubtitle style={{fontWeight: "bold"}}>
+                          {vehicle.size}
+                        </CardSubtitle>
+                        <CardTitle style={{fontWeight: "bold", fontSize: 20}}>
+                          {vehicle.name} {vehicle.make}
+                        </CardTitle>
                         <hr />
-                        <CardText>Car details</CardText>
+                        <CardText style={{color: "hsl(0, 0%, 71%)"}}>From: {vehicle.location} {moment(pickupDate).format("YYYY-MM-DD LT")}</CardText>
+                        <CardText style={{color: "hsl(0, 0%, 71%)"}}>To: {vehicle.location} {moment(returnDate).format("YYYY-MM-DD LT")}</CardText>
+                        <CardText>
+                          <p style={{fontSize: "1.5em", color: "hsl(348, 100%, 61%)"}}> 
+                            <span>@ZAR</span><span>899</span>.<span style={{fontSize: "0.7em"}}>99</span>
+                          </p>
+                        </CardText>
+                        <hr />
+                        <Col>
+                          <Row style={{marginBottom: "2%"}}>
+                            <Col> 
+                              <Row>
+                                <CardImg 
+                                  src={require("../assets/images/door.png")} 
+                                  style={{height: "25px", width: "25px", borderRadius: "50%"}}
+                                /><CardText>7 doors</CardText>
+                              </Row>
+                              
+                            </Col>
+                            <Col>
+                              <Row>
+                                <CardImg 
+                                  src={require("../assets/images/seat.png")} 
+                                  style={{height: "25px", width: "25px", borderRadius: "50%"}}
+                                /><CardText>9 seater</CardText>
+                              </Row>
+                            </Col>
+                          </Row>
+                          <Row style={{marginBottom: "2%"}}>
+                            <Col> 
+                              <Row>
+                                <CardImg 
+                                  src={require("../assets/images/fuel.png")} 
+                                  style={{height: "25px", width: "25px", borderRadius: "50%"}}
+                                /><CardText>Petrol</CardText>
+                              </Row>
+                              
+                            </Col>
+                            <Col>
+                              <Row>
+                                <CardImg 
+                                  src={require("../assets/images/gear.png")} 
+                                  style={{height: "25px", width: "25px", borderRadius: "50%"}}
+                                /><CardText>Manual</CardText>
+                              </Row>
+                            </Col>
+                          </Row>
+                          <Row style={{marginBottom: "2%"}}>
+                            <Col> 
+                              <Row>
+                                <CardImg 
+                                  src={require("../assets/images/aircon.png")} 
+                                  style={{height: "25px", width: "25px", borderRadius: "50%"}}
+                                /><CardText>Aircon</CardText>
+                              </Row>
+                              
+                            </Col>
+                            <Col>
+                              <Row>
+                                <CardImg 
+                                  src={require("../assets/images/airbag.png")} 
+                                  style={{height: "25px", width: "25px", borderRadius: "50%"}}
+                                /><CardText>2 Bags</CardText>
+                              </Row>
+                            </Col>
+                          </Row>
+                        </Col>
                         <hr />
                         <Form style={{ textAlign: "left"}}> 
                           <FormGroup>
@@ -327,7 +414,7 @@ export default class ClientBook extends React.Component<any, any> {
                     </Col>
                   </Row>
                 </Card>
-              </>
+              </ClientBookContainer>
             )
           }}
         </Mutation>

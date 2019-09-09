@@ -12,6 +12,18 @@ import DeleteVehicle from './DeleteVehicle';
 
 const VehiclesContainer = styled.div`
   margin: 5%;
+
+  @media screen and (max-width: 600px) {
+    margin-top: 12%;
+  }
+
+  @media screen and (max-width: 900px) {
+    margin-top: 6%;
+  }
+
+  @media screen and (max-width: 500px) {
+    margin-top: 10%;
+  }
 `;
 
 export default class ManageVehicles extends React.Component<any, any> {
@@ -80,6 +92,7 @@ export default class ManageVehicles extends React.Component<any, any> {
     return (
       <VehiclesContainer>
         <Col sm={12} md={12} lg={12}>
+        <h3 style={{paddingTop: "8%"}}><strong>Manage Vehicles</strong></h3>
           <Query
             query={VEHICLE_QUERY}
           >

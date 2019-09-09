@@ -29,6 +29,18 @@ interface ISignupState {
 const SignupContainer = styled.div`
   margin-top: 3%;
   margin-bottom: 3%;
+
+  @media screen and (max-width: 600px) {
+    margin-top: 12%;
+  }
+
+  @media screen and (max-width: 900px) {
+    margin-top: 6%;
+  }
+
+  @media screen and (max-width: 500px) {
+    margin-top: 10%;
+  }
 `;
 
 const validateSignupField = (
@@ -201,6 +213,7 @@ export default class Signup extends React.Component<{}, ISignupState> {
     return (
       <SignupContainer>
         <Col sm={{ size: 8, offset: 2 }} md={{ size: 6, offset: 3 }}>
+        <h3 style={{paddingTop: "8%"}}><strong>Sign up</strong></h3>
         <Mutation mutation={SIGNUP_MUTATION}>
           { (signup: any, { loading, error }: any) => {
             return (

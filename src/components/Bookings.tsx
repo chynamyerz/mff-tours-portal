@@ -9,7 +9,17 @@ import { ErrorMessage } from './util/ErrorMessage';
 import { Redirect } from 'react-router-dom';
 
 const VehicleContainer = styled.div`
-  margin: 3%;
+  @media screen and (max-width: 600px) {
+    margin-top: 12%;
+  }
+
+  @media screen and (max-width: 900px) {
+    margin-top: 6%;
+  }
+
+  @media screen and (max-width: 500px) {
+    margin-top: 10%;
+  }
 `;
 
 const CardContainer = styled.div`
@@ -67,7 +77,8 @@ export default class Bookings extends React.Component<any, {}> {
  
     return (
       <VehicleContainer>
-        <Col sm={12} md={12} lg={{size: 8, offset: 2}}>
+        <Col sm={{size: 10, offset: 1}} md={{size: 10, offset: 1}} lg={{size: 8, offset: 2}}>
+          <h3 style={{paddingTop: "8%"}}><strong>Your bookings</strong></h3>
           <Query
             query={VEHICLE_BOOKINGS_QUERY}
           >

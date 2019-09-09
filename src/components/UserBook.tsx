@@ -8,6 +8,25 @@ import { ErrorMessage } from './util/ErrorMessage';
 import { Error } from './util/Error';
 import AddUser from './AddUser';
 import { validate } from 'isemail';
+import styled from 'styled-components';
+
+const UserBookContainer = styled.div`
+  margin-top: 8%;
+  margin-bottom: 3%;
+
+  @media screen and (max-width: 600px) {
+    margin-top: 20%;
+  }
+
+  @media screen and (max-width: 900px) {
+    margin-top: 15%;
+  }
+
+  @media screen and (max-width: 500px) {
+    margin-top: 25%;
+  }
+`;
+
 
 const validateCarField = (
   bookInput: any
@@ -108,7 +127,7 @@ export default class UserBook extends React.Component<any, {}> {
   }
 
   render() {
-    const { user, vehicle } = this.props;
+    const { user, vehicle, pickupDate, returnDate } = this.props;
     const { email1, errors } = this.state;
  
     return (
@@ -123,7 +142,7 @@ export default class UserBook extends React.Component<any, {}> {
         >
           {(bookVehicle: any, {loading, error}: any) => {
             return (
-              <>
+              <UserBookContainer>
                 <div>
                   <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
                     <ModalHeader toggle={this.toggle}><strong>Add a new client</strong></ModalHeader>
@@ -156,10 +175,20 @@ export default class UserBook extends React.Component<any, {}> {
                     </Col>
                     <Col sm={12} md={6} lg={7}>
                       <CardBody className="text-left">
-                        <CardTitle style={{fontWeight: "bold", fontSize: 20}}>{vehicle.name}</CardTitle>
-                        <CardSubtitle style={{fontWeight: "bold"}}>{vehicle.model} | {vehicle.make} | {moment(vehicle.year).format("YYYY-MM-DD")}</CardSubtitle>
+                        <CardSubtitle style={{fontWeight: "bold"}}>
+                          {vehicle.size}
+                        </CardSubtitle>
+                        <CardTitle style={{fontWeight: "bold", fontSize: 20}}>
+                          {vehicle.name} {vehicle.make}
+                        </CardTitle>
                         <hr />
-                        <CardText>Car details</CardText>
+                        <CardText style={{color: "hsl(0, 0%, 71%)"}}>From: {vehicle.location} {moment(pickupDate).format("YYYY-MM-DD LT")}</CardText>
+                        <CardText style={{color: "hsl(0, 0%, 71%)"}}>To: {vehicle.location} {moment(returnDate).format("YYYY-MM-DD LT")}</CardText>
+                        <CardText>
+                          <p style={{fontSize: "1.5em", color: "hsl(348, 100%, 61%)"}}> 
+                            <span>@ZAR</span><span>899</span>.<span style={{fontSize: "0.7em"}}>99</span>
+                          </p>
+                        </CardText>
                         <hr />
                         <Form style={{ textAlign: "left"}}> 
                           <Row>
@@ -191,7 +220,7 @@ export default class UserBook extends React.Component<any, {}> {
                     </Col>
                   </Row>
                 </Card>
-              </>
+              </UserBookContainer>
             )
           }}
         </Mutation>
