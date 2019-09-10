@@ -91,10 +91,8 @@ export default class VehicleResults extends React.Component<any, any> {
                         </CardTitle>
                         <CardText>Or similar group {vehicle.group} car</CardText>
                         <hr />
-                        <CardText>
-                          <p style={{fontSize: "1.5em"}}> 
-                            <span>ZAR</span><span>899</span>.<span style={{fontSize: "0.7em"}}>99</span>
-                          </p>
+                        <CardText style={{color: "hsl(348, 100%, 61%)"}}>
+                          <span style={{fontSize: "1.5em"}}>ZAR 899 </span>.<span style={{fontSize: "0.7em"}}>99</span>
                         </CardText>
                         <hr />
                         <Button 

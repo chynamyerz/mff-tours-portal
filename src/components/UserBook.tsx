@@ -184,10 +184,8 @@ export default class UserBook extends React.Component<any, {}> {
                         <hr />
                         <CardText style={{color: "hsl(0, 0%, 71%)"}}>From: {vehicle.location} {moment(pickupDate).format("YYYY-MM-DD LT")}</CardText>
                         <CardText style={{color: "hsl(0, 0%, 71%)"}}>To: {vehicle.location} {moment(returnDate).format("YYYY-MM-DD LT")}</CardText>
-                        <CardText>
-                          <p style={{fontSize: "1.5em", color: "hsl(348, 100%, 61%)"}}> 
-                            <span>@ZAR</span><span>899</span>.<span style={{fontSize: "0.7em"}}>99</span>
-                          </p>
+                        <CardText style={{color: "hsl(348, 100%, 61%)"}}>
+                          <span style={{fontSize: "1.5em"}}>@ZAR 899</span>.<span style={{fontSize: "0.7em"}}>99</span>
                         </CardText>
                         <hr />
                         <Form style={{ textAlign: "left"}}> 

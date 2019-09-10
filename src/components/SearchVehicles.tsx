@@ -1,5 +1,5 @@
 import React from 'react';
-import { Col, Button, Spinner, Form, FormGroup, Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Card, CardBody, Row, Input, Label, Alert } from 'reactstrap';
+import { Col, Button, Spinner, Form, FormGroup, Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Card, CardBody, Row, Label, Alert } from 'reactstrap';
 import styled from 'styled-components';
 import { Mutation } from 'react-apollo';
 import { Redirect } from 'react-router-dom';
@@ -74,7 +74,7 @@ export default class SearchVehicles extends React.Component<any, any> {
   ) => {
     const name = e.target.name;
     const value = e.target.value;
-    console.log(e)
+
     // Update the userInput property of the state when input field values change
     this.setState({
       ...this.state,
@@ -136,10 +136,8 @@ export default class SearchVehicles extends React.Component<any, any> {
     const { user } = this.props;
     const { errors, location, pickupDate, returnDate, searched, vehicles } = this.state;
 
-    console.log(pickupDate)
-
-    const minPickUpDate: any = moment(Date.now()).format("YYYY-MM-DD")
-    const minReturnDate: any = moment(pickupDate).format("YYYY-MM-DD")
+    const minPickUpDate: any = moment(Date.now()).format("YYYY-MM-DDTHH:mm")
+    const minReturnDate: any = moment(pickupDate).format("YYYY-MM-DDTHH:mm")
 
     if (searched) {
       return <Redirect to={{
@@ -207,7 +205,7 @@ export default class SearchVehicles extends React.Component<any, any> {
                                 isValidDate={(current) => current.isAfter(minPickUpDate)}
                                 dateFormat={"YYYY-MM-DD"}
                                 onChange={(date: any) => this.setState({
-                                  pickupDate: moment(date).format("YYYY-MM-DD HH:mm")
+                                  pickupDate: moment(date).format("YYYY-MM-DDTHH:mm")
                                 })}
                               />
                               {errors.pickupDate && <Alert color={"danger"}>{ errors.pickupDate }</Alert>}
@@ -229,7 +227,7 @@ export default class SearchVehicles extends React.Component<any, any> {
                                 isValidDate={(current) => current.isAfter(minReturnDate)}
                                 dateFormat={"YYYY-MM-DD"}
                                 onChange={(date: any) => this.setState({
-                                  returnDate: moment(date).format("YYYY-MM-DD HH:mm")
+                                  returnDate: moment(date).format("YYYY-MM-DDTHH:mm")
                                 })}
                               />
                               {errors.returnDate && <Alert color={"danger"}>{ errors.returnDate }</Alert>}

@@ -1,7 +1,6 @@
 import React from 'react';
 import { Col, Card, CardImg, CardBody, CardTitle, CardSubtitle, CardText, Button, Row, Spinner, Alert } from 'reactstrap';
 import styled from 'styled-components';
-import moment from "moment";
 import { Mutation, Query } from 'react-apollo';
 import { CANCEL_VEHICLE_BOOKING_MUTATION } from '../graphql/Mutation';
 import { USER_QUERY, VEHICLE_QUERY, VEHICLE_BOOKINGS_QUERY } from '../graphql/Query';
