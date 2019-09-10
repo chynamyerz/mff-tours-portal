@@ -9,16 +9,16 @@ import { ErrorMessage } from './util/ErrorMessage';
 import { Redirect } from 'react-router-dom';
 
 const VehicleContainer = styled.div`
+  @media screen and (max-width: 500px) {
+    margin-top: 20%;
+  }
+
   @media screen and (max-width: 600px) {
-    margin-top: 12%;
+    margin-top: 15%;
   }
 
   @media screen and (max-width: 900px) {
     margin-top: 6%;
-  }
-
-  @media screen and (max-width: 500px) {
-    margin-top: 10%;
   }
 `;
 
@@ -77,8 +77,8 @@ export default class Bookings extends React.Component<any, {}> {
  
     return (
       <VehicleContainer>
-        <Col sm={{size: 10, offset: 1}} md={{size: 10, offset: 1}} lg={{size: 8, offset: 2}}>
-          <h3 style={{paddingTop: "8%"}}><strong>Your bookings</strong></h3>
+        <Col sm={{size: 8, offset: 2}} md={{size: 8, offset: 2}} lg={{size: 6, offset: 3}}>
+          <h3 style={{paddingTop: "15%"}}><strong>Your bookings</strong></h3>
           <Query
             query={VEHICLE_BOOKINGS_QUERY}
           >
@@ -93,14 +93,18 @@ export default class Bookings extends React.Component<any, {}> {
 
               if (!userBookings.length) {
                 return (
-                  <>
-                    <Alert color={"danger"}>You currently have no bookings</Alert>
-                    <Button
-                      outline
-                      size={"sm"}
-                      onClick={this.goToSearch}
-                    >Click here to search for available vehicles</Button>
-                  </>
+                  <Col sm={{size: 6, offset: 3}} md={{size: 6, offset: 3}} lg={{size: 4, offset: 4}}>
+                    <Col>
+                      <Alert color={"danger"} style={{padding: "0px", textAlign: "left"}}>You currently have no bookings</Alert>
+                    </Col>
+                    <Col>
+                      <Button
+                        outline
+                        size={"sm"}
+                        onClick={this.goToSearch}
+                      >Click here to search for available vehicles</Button>
+                    </Col>
+                  </Col>
                 )
               }
 
@@ -128,13 +132,17 @@ export default class Bookings extends React.Component<any, {}> {
                                   <Card>
                                     <Row>
                                       <Col sm={12} md={6} lg={5}>
-                                        <CardImg width="100%" src={booking.vehicle.imageURI} alt="Card image cap" />
+                                        <CardImg src={booking.vehicle.imageURI} alt="Card image cap" />
                                       </Col>
                                       <Col sm={12} md={6} lg={7}>
                                         <CardBody className="text-left">
-                                          <CardTitle style={{fontWeight: "bold", fontSize: 20}}>{booking.vehicle.name}</CardTitle>
-                                          <CardSubtitle style={{fontWeight: "bold"}}>{booking.vehicle.model} | {booking.vehicle.make} | {moment(booking.vehicle.year).format("YYYY-MM-DD")}</CardSubtitle>
-                                          <CardText>More car details</CardText>
+                                        <CardSubtitle style={{fontWeight: "bold"}}>
+                                          {booking.vehicle.size}
+                                        </CardSubtitle>
+                                        <CardTitle style={{fontWeight: "bold", fontSize: 20}}>
+                                          {booking.vehicle.name} {booking.vehicle.make}
+                                        </CardTitle>
+                                        <CardText>Or similar group {booking.vehicle.group} car</CardText>
                                           <hr />
                                           <Button 
                                             outline

@@ -22,18 +22,17 @@ interface ISigninState {
 };
 
 const SigninContainer = styled.div`
-  margin-top: 10%;
   margin-bottom: 5%;
 
+  @media screen and (max-width: 500px) {
+    margin-top: 20%;
+  }
+
   @media screen and (max-width: 600px) {
-    margin-top: 12%;
+    margin-top: 15%;
   }
 
   @media screen and (max-width: 900px) {
-    margin-top: 6%;
-  }
-
-  @media screen and (max-width: 500px) {
     margin-top: 10%;
   }
 `;
@@ -173,8 +172,8 @@ export default class Signin extends React.Component<{}, ISigninState> {
 
     return (
       <SigninContainer>
-        <Col sm={12} md={{ size: 8, offset: 2 }}>
-        <h3 style={{paddingTop: "8%"}}><strong>Sign in</strong></h3>
+        <Col sm={{ size: 8, offset: 2 }} md={{ size: 8, offset: 2 }} lg={{ size: 6, offset: 3 }}>
+        <h3 style={{paddingTop: "20%"}}><strong>Sign in</strong></h3>
         <Mutation
           mutation={LOGIN_MUTATION}
           refetchQueries={[{ query: USER_QUERY }]}

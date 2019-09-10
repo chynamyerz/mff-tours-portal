@@ -1,5 +1,5 @@
 import React from 'react';
-import { Col, Button, Form, FormGroup, Label, Input } from 'reactstrap';
+import { Col, Button, Form, FormGroup, Label, Input, Row } from 'reactstrap';
 import styled from 'styled-components';
 import { Redirect } from 'react-router-dom';
 import { Mutation } from 'react-apollo';
@@ -22,6 +22,18 @@ interface IResetPasswordState {
 const ResetPasswordContainer = styled.div`
   margin-top: 5%;
   margin-bottom: 5%;
+
+  @media screen and (max-width: 500px) {
+    margin-top: 25%;
+  }
+
+  @media screen and (max-width: 600px) {
+    margin-top: 15%;
+  }
+
+  @media screen and (max-width: 900px) {
+    margin-top: 10%;
+  }
 `;
 
 const validateRequestPasswordField = (
@@ -145,7 +157,8 @@ export default class ResetPassword extends React.Component<{}, IResetPasswordSta
 
     return (
       <ResetPasswordContainer>
-        <Col sm={{ size: 6, offset: 3 }} md={{ size: 4, offset: 4 }}>
+        <Col sm={{size: 8, offset: 2}} md={{size: 8, offset: 2}} lg={{size: 6, offset: 3}}>
+        <h3 style={{paddingTop: "15%"}}><strong>Reset Password</strong></h3>
         <Mutation
           mutation={RESET_PASSWORD_MUTATION}
         >
@@ -154,41 +167,49 @@ export default class ResetPassword extends React.Component<{}, IResetPasswordSta
               <Form style={{ textAlign: "left"}}> 
                 {error && <ErrorMessage>{this.state.errors.responseError}</ErrorMessage>}
                 <FormGroup>
-                  <Label for="oneTimePin">Password</Label>
+                  <Label for="oneTimePin">One Time Pin</Label>
                   <Input 
                     type="text" 
                     name="oneTimePin" 
                     id="oneTimePin" 
-                    placeholder="It was sent to your" 
+                    placeholder="It was sent to your email address" 
                     value={oneTimePin}
                     onChange={this.onInputChange}
                   />
                   {errors.oneTimePin && <Error>{ errors.oneTimePin }</Error>}
                 </FormGroup>
-                <FormGroup>
-                  <Label for="password">Password</Label>
-                  <Input 
-                    type="password" 
-                    name="password" 
-                    id="password" 
-                    placeholder="Must be 5 characters long" 
-                    value={password}
-                    onChange={this.onInputChange}
-                  />
-                  {errors.password && <Error>{ errors.password }</Error>}
-                </FormGroup>
-                <FormGroup>
-                  <Label for="confirmPassword">Confirm password</Label>
-                  <Input 
-                    type="password" 
-                    name="confirmPassword" 
-                    id="confirmPassword" 
-                    placeholder="" 
-                    value={confirmPassword}
-                    onChange={this.onInputChange}
-                  />
-                  {errors.confirmPassword && <Error>{ errors.confirmPassword }</Error>}
-                </FormGroup>
+                <Row>
+                  <Col sm={12} md={6}>
+                    <FormGroup>
+                      <Label for="password">New Password</Label>
+                      <Input 
+                        type="password" 
+                        name="password" 
+                        id="password" 
+                        placeholder="Must be 5 characters long" 
+                        value={password}
+                        onChange={this.onInputChange}
+                      />
+                      {errors.password && <Error>{ errors.password }</Error>}
+                    </FormGroup>
+                  </Col>
+
+                  <Col sm={12} md={6}>
+                    <FormGroup>
+                      <Label for="confirmPassword">Confirm password</Label>
+                      <Input 
+                        type="password" 
+                        name="confirmPassword" 
+                        id="confirmPassword" 
+                        placeholder="" 
+                        value={confirmPassword}
+                        onChange={this.onInputChange}
+                      />
+                      {errors.confirmPassword && <Error>{ errors.confirmPassword }</Error>}
+                    </FormGroup>
+                  </Col>
+                </Row>
+                
                 <Button
                   outline
                   disabled={ loading }

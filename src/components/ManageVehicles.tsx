@@ -11,18 +11,16 @@ import UpdateVehicle from './UpdateVehicle';
 import DeleteVehicle from './DeleteVehicle';
 
 const VehiclesContainer = styled.div`
-  margin: 5%;
+  @media screen and (max-width: 500px) {
+    margin-top: 20%;
+  }
 
   @media screen and (max-width: 600px) {
-    margin-top: 12%;
+    margin-top: 15%;
   }
 
   @media screen and (max-width: 900px) {
     margin-top: 6%;
-  }
-
-  @media screen and (max-width: 500px) {
-    margin-top: 10%;
   }
 `;
 
@@ -91,8 +89,8 @@ export default class ManageVehicles extends React.Component<any, any> {
 
     return (
       <VehiclesContainer>
-        <Col sm={12} md={12} lg={12}>
-        <h3 style={{paddingTop: "8%"}}><strong>Manage Vehicles</strong></h3>
+        <Col sm={{size: 10, offset: 1}} md={{size: 10, offset: 1}} lg={{size: 8, offset: 2}}>
+        <h3 style={{paddingTop: "15%"}}><strong>Manage Vehicles</strong></h3>
           <Query
             query={VEHICLE_QUERY}
           >
@@ -141,10 +139,10 @@ export default class ManageVehicles extends React.Component<any, any> {
                     
                   </Modal>
                   {error && <ErrorMessage>{error.message.replace("Network error: ", "").replace("GraphQL error: ", "")}</ErrorMessage>}
-                  <div style={{textAlign: "left", marginBottom: "2%"}}>
+                  <div style={{textAlign: "left"}}>
                     <Row>
                       <Button
-                        style={{marginRight: "2%"}}
+                        style={{marginRight: "2%", marginLeft: "2%", marginBottom: "2%"}}
                         outline
                         size={"sm"} 
                         color={"info"}
@@ -155,7 +153,7 @@ export default class ManageVehicles extends React.Component<any, any> {
                     
                       <Button
                         outline
-                        style={{marginRight: "2%"}}
+                        style={{marginRight: "2%", marginLeft: "2%", marginBottom: "2%"}}
                         size={"sm"} 
                         color={"secondary"}
                         onClick={() => this.setState({book: true})}

@@ -21,6 +21,18 @@ interface IRequestPasswordResetState {
 const RequestPasswordResetContainer = styled.div`
   margin-top: 5%;
   margin-bottom: 5%;
+
+  @media screen and (max-width: 500px) {
+    margin-top: 25%;
+  }
+
+  @media screen and (max-width: 600px) {
+    margin-top: 15%;
+  }
+
+  @media screen and (max-width: 900px) {
+    margin-top: 10%;
+  }
 `;
 
 const validateRequestPasswordField = (
@@ -126,7 +138,8 @@ export default class RequestPasswordReset extends React.Component<{}, IRequestPa
 
     return (
       <RequestPasswordResetContainer>
-        <Col sm={{ size: 6, offset: 3 }} md={{ size: 4, offset: 4 }}>
+        <Col sm={{size: 6, offset: 3}} md={{size: 6, offset: 3}} lg={{size: 4, offset: 4}}>
+        <h3 style={{paddingTop: "15%"}}><strong>Reset Password</strong></h3>
         <Mutation
           mutation={REQUEST_RESET_MUTATION}
         >

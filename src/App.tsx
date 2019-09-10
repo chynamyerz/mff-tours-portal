@@ -21,12 +21,13 @@ import UserBook from './components/UserBook';
 import ManageVehicles from './components/ManageVehicles';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faEnvelope, faKey, faSignInAlt, faSignOutAlt, faEdit, faSearch, faAngleRight } from '@fortawesome/free-solid-svg-icons';
-import Footer from './components/navigation/Footer';
+import Contact from './components/Contact';
+import Services from './components/Services';
 
 library.add(faEnvelope, faKey, faSignInAlt, faSignOutAlt, faEdit, faSearch, faAngleRight);
 
 const AppContainer = styled.div`
-  margin-top: 4%;
+  margin-top: 0%;
 `;
 
 /**
@@ -96,7 +97,7 @@ class App extends React.Component {
                       path="/contact"
                       component={() => (
                         <>
-                          <h1>Contract under construction</h1>
+                          <Contact />
                         </>
                       )}
                     />
@@ -106,7 +107,7 @@ class App extends React.Component {
                       path="/services"
                       component={() => (
                         <>
-                          <h1>Services under construction</h1>
+                          <Services />
                         </>
                       )}
                     />
@@ -231,7 +232,6 @@ class App extends React.Component {
                     />
                   </Switch>
                 </AppContainer>
-                <Footer user={currentUser} />
               </>
             )
           }}

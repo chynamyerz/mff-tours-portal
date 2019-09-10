@@ -138,8 +138,8 @@ export default class SearchVehicles extends React.Component<any, any> {
 
     console.log(pickupDate)
 
-    const minPickUpDate: any = moment(Date.now()).add(1, "day").format("YYYY-MM-DD")
-    const minReturnDate: any = moment(pickupDate).add(1, "day").format("YYYY-MM-DD")
+    const minPickUpDate: any = moment(Date.now()).format("YYYY-MM-DD")
+    const minReturnDate: any = moment(pickupDate).format("YYYY-MM-DD")
 
     if (searched) {
       return <Redirect to={{
@@ -204,6 +204,7 @@ export default class SearchVehicles extends React.Component<any, any> {
                                     backgroundColor: "rgba(0, 0, 0, 0.2)"
                                   }
                                 }}
+                                isValidDate={(current) => current.isAfter(minPickUpDate)}
                                 dateFormat={"YYYY-MM-DD"}
                                 onChange={(date: any) => this.setState({
                                   pickupDate: moment(date).format("YYYY-MM-DD HH:mm")
@@ -225,6 +226,7 @@ export default class SearchVehicles extends React.Component<any, any> {
                                     backgroundColor: "rgba(0, 0, 0, 0.2)"
                                   }
                                 }}
+                                isValidDate={(current) => current.isAfter(minReturnDate)}
                                 dateFormat={"YYYY-MM-DD"}
                                 onChange={(date: any) => this.setState({
                                   returnDate: moment(date).format("YYYY-MM-DD HH:mm")

@@ -3,15 +3,15 @@ import styled from 'styled-components';
 import { Card, CardBody, CardTitle, CardText, Row, Col, CardImg } from 'reactstrap';
 
 const AboutContainer = styled.div`
+  @media screen and (max-width: 500px) {
+    margin-top: 20%;
+  }
+
   @media screen and (max-width: 600px) {
-    margin-top: 12%;
+    margin-top: 15%;
   }
 
   @media screen and (max-width: 900px) {
-    margin-top: 6%;
-  }
-
-  @media screen and (max-width: 500px) {
     margin-top: 10%;
   }
 `;
@@ -21,7 +21,7 @@ export default class About extends React.Component<any, {}> {
     return (
       <AboutContainer>
         <Col sm={12} md={{size: 10, offset: 1}} lg={{size: 8, offset: 2}}>
-          <h3 style={{paddingTop: "8%"}}><strong>About MFF Car Rental</strong></h3>
+          <h3 style={{paddingTop: "10%"}}><strong>About MFF Car Rental</strong></h3>
           <Card style={{background: "hsl(0, 0%, 96%)", textAlign: "left"}}>
             <Row>
               <Col sm={12} md={6}>

@@ -14,16 +14,16 @@ const UserBookContainer = styled.div`
   margin-top: 8%;
   margin-bottom: 3%;
 
-  @media screen and (max-width: 600px) {
+  @media screen and (max-width: 500px) {
     margin-top: 20%;
   }
 
-  @media screen and (max-width: 900px) {
+  @media screen and (max-width: 600px) {
     margin-top: 15%;
   }
 
-  @media screen and (max-width: 500px) {
-    margin-top: 25%;
+  @media screen and (max-width: 900px) {
+    margin-top: 6%;
   }
 `;
 

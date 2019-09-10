@@ -18,7 +18,12 @@ import { USER_QUERY } from '../../graphql/Query';
 import { LOGOUT_USER_MUTATION } from '../../graphql/Mutation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-const NavbarItem = styled.div`
+
+const FooterContainer = styled.div`
+  margin-top: 10%;
+`;
+
+const FooterItem = styled.div`
   margin-right: 5px;
   margin-left: 5px;
 `;
@@ -65,55 +70,6 @@ export default class Footer extends React.Component<any, {}> {
   render() {
     const { user } = this.props;
 
-    const defaultNavItems = (
-      <>
-        <NavbarItem onClick={this.toggleNavItem}>
-          <NavItem>
-            <RouterNavLink
-              style={{ textDecoration: "none", color: "hsl(48, 100%, 67%)"}}
-              exact={true}
-              to="/"
-            >
-              Home
-            </RouterNavLink>
-          </NavItem>
-        </NavbarItem>
-        <NavbarItem onClick={this.toggleNavItem}>
-          <NavItem>
-            <RouterNavLink
-              style={{ textDecoration: "none", color: "hsl(48, 100%, 67%)"}}
-              exact={true}
-              to="/about"
-            >
-              About-us
-            </RouterNavLink>
-          </NavItem>
-        </NavbarItem>
-        <NavbarItem onClick={this.toggleNavItem}>
-          <NavItem>
-            <RouterNavLink
-              style={{ textDecoration: "none", color: "hsl(48, 100%, 67%)"}}
-              exact={true}
-              to="/contact"
-            >
-              Contact-us
-            </RouterNavLink>
-          </NavItem>
-        </NavbarItem>
-        <NavbarItem onClick={this.toggleNavItem}>
-          <NavItem>
-            <RouterNavLink
-              style={{ textDecoration: "none", color: "hsl(48, 100%, 67%)"}}
-              exact={true}
-              to="/services"
-            >
-              Services
-            </RouterNavLink>
-          </NavItem>
-        </NavbarItem>
-      </>
-    )
-
     return (
       <Mutation
         mutation={LOGOUT_USER_MUTATION}
@@ -121,11 +77,11 @@ export default class Footer extends React.Component<any, {}> {
       >
         {(logout: any) => {
           return (
-            <>
+            <FooterContainer>
               <Navbar fixed="bottom" color="ligh" light expand="md">
                 <p>@Copy Right Lotter IT Solutions 2019</p>
               </Navbar>
-            </>
+            </FooterContainer>
           )
         }}
       </Mutation>
