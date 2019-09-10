@@ -168,7 +168,7 @@ export default class SearchVehicles extends React.Component<any, any> {
                   {error && <Alert color={"danger"}>{this.state.errors.responseError}</Alert>}
                   <Card style={{background: "transparent", backgroundColor: "rgba(0, 0, 0, 0.2)"}}>
                     <CardBody>
-                    <Col sm={12} md={12} lg={{size: 8, offset: 2}}>
+                    <Col sm={12} md={12} lg={{size: 10, offset: 1}}>
                       <FormGroup>
                         <Label for="pickupLocation" style={{color: "white"}}>Pick-up location</Label>
                         <Col sm={12}>
@@ -194,20 +194,24 @@ export default class SearchVehicles extends React.Component<any, any> {
                           <FormGroup>
                             <Label style={{color: "white"}}>Pick-up date</Label>
                             <Col>
-                              <Datetime
-                                inputProps={{
-                                  style: {
-                                    color: "white",
-                                    background: "transparent", 
-                                    backgroundColor: "rgba(0, 0, 0, 0.2)"
-                                  }
-                                }}
-                                isValidDate={(current) => current.isAfter(minPickUpDate)}
-                                dateFormat={"YYYY-MM-DD"}
-                                onChange={(date: any) => this.setState({
-                                  pickupDate: moment(date).format("YYYY-MM-DDTHH:mm")
-                                })}
-                              />
+                              <div>
+                                <Datetime
+                                  inputProps={{
+                                    style: {
+                                      color: "white",
+                                      background: "transparent", 
+                                      backgroundColor: "rgba(0, 0, 0, 0.2)",
+                                    },
+                                  }}
+                                  
+                                  defaultValue={moment(minPickUpDate).format("YYYY/MM/DD LT")}
+                                  isValidDate={(current) => current.isAfter(minPickUpDate)}
+                                  dateFormat={"YYYY/MM/DD"}
+                                  onChange={(date: any) => this.setState({
+                                    pickupDate: moment(date).format("YYYY-MM-DDTHH:mm")
+                                  })}
+                                />
+                              </div>
                               {errors.pickupDate && <Alert color={"danger"}>{ errors.pickupDate }</Alert>}
                             </Col>
                           </FormGroup>
@@ -216,20 +220,24 @@ export default class SearchVehicles extends React.Component<any, any> {
                           <FormGroup>
                             <Label style={{color: "white"}}>Return date</Label>
                             <Col>
-                              <Datetime
-                                inputProps={{
-                                  style: {
-                                    color: "white",
-                                    background: "transparent", 
-                                    backgroundColor: "rgba(0, 0, 0, 0.2)"
-                                  }
-                                }}
-                                isValidDate={(current) => current.isAfter(minReturnDate)}
-                                dateFormat={"YYYY-MM-DD"}
-                                onChange={(date: any) => this.setState({
-                                  returnDate: moment(date).format("YYYY-MM-DDTHH:mm")
-                                })}
-                              />
+                              <div>
+                                <Datetime
+                                  inputProps={{
+                                    style: {
+                                      color: "white",
+                                      background: "transparent", 
+                                      backgroundColor: "rgba(0, 0, 0, 0.2)"
+                                    }
+                                  }}
+
+                                  defaultValue={moment(minPickUpDate).format("YYYY/MM/DD LT")}
+                                  isValidDate={(current) => current.isAfter(minReturnDate)}
+                                  dateFormat={"YYYY/MM/DD"}
+                                  onChange={(date: any) => this.setState({
+                                    returnDate: moment(date).format("YYYY-MM-DDTHH:mm")
+                                  })}
+                                />
+                              </div>
                               {errors.returnDate && <Alert color={"danger"}>{ errors.returnDate }</Alert>}
                             </Col>
                           </FormGroup>

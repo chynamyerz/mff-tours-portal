@@ -20,11 +20,29 @@ import ClientBook from './components/ClientBook';
 import UserBook from './components/UserBook';
 import ManageVehicles from './components/ManageVehicles';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faEnvelope, faKey, faSignInAlt, faSignOutAlt, faEdit, faSearch, faAngleRight } from '@fortawesome/free-solid-svg-icons';
+import { 
+  faEnvelope, 
+  faKey, 
+  faSignInAlt, 
+  faSignOutAlt, 
+  faEdit, 
+  faSearch, 
+  faAngleRight,
+  faCalendar
+} from '@fortawesome/free-solid-svg-icons';
 import Contact from './components/Contact';
 import Services from './components/Services';
 
-library.add(faEnvelope, faKey, faSignInAlt, faSignOutAlt, faEdit, faSearch, faAngleRight);
+library.add(
+  faEnvelope, 
+  faKey, 
+  faSignInAlt, 
+  faSignOutAlt, 
+  faEdit, 
+  faSearch, 
+  faAngleRight,
+  faCalendar
+);
 
 const AppContainer = styled.div`
   margin-top: 0%;
