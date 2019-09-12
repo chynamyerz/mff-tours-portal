@@ -9,6 +9,7 @@ import { Error } from './util/Error';
 import AddUser from './AddUser';
 import { validate } from 'isemail';
 import styled from 'styled-components';
+import VehicleDetails from './vehicle/VehicleDetails';
 
 const UserBookContainer = styled.div`
   margin-top: 8%;
@@ -129,6 +130,9 @@ export default class UserBook extends React.Component<any, {}> {
   render() {
     const { user, vehicle, pickupDate, returnDate } = this.props;
     const { email1, errors } = this.state;
+
+    const rands = String(vehicle.price).split(".")[0]
+    const cents = String(vehicle.price).split(".")[1]
  
     return (
       <Col sm={12} md={12} lg={{size: 8, offset: 2}}>
@@ -185,8 +189,10 @@ export default class UserBook extends React.Component<any, {}> {
                         <CardText style={{color: "hsl(0, 0%, 71%)"}}>From: {vehicle.location} {moment(pickupDate).format("YYYY-MM-DD LT")}</CardText>
                         <CardText style={{color: "hsl(0, 0%, 71%)"}}>To: {vehicle.location} {moment(returnDate).format("YYYY-MM-DD LT")}</CardText>
                         <CardText style={{color: "hsl(348, 100%, 61%)"}}>
-                          <span style={{fontSize: "1.5em"}}>@ZAR 899</span>.<span style={{fontSize: "0.7em"}}>99</span>
+                          <span style={{fontSize: "1.5em"}}>@ZAR {rands}</span>.<span style={{fontSize: "0.7em"}}>{cents}</span>
                         </CardText>
+                        <hr />
+                          <VehicleDetails vehicle={vehicle}/>
                         <hr />
                         <Form style={{ textAlign: "left"}}> 
                           <Row>

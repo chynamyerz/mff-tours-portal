@@ -31,6 +31,14 @@ const USER_QUERY = gql`
           year
           imageURI
           status
+          location
+          doors
+          seaters
+          fuelType
+          transmissionType
+          airType
+          bags
+          price
         }
       }
     }
@@ -68,6 +76,14 @@ const USERS_QUERY = gql`
           year
           imageURI
           status
+          location
+          doors
+          seaters
+          fuelType
+          transmissionType
+          airType
+          bags
+          price
         }
       }
     }
@@ -94,6 +110,14 @@ const VEHICLE_BOOKINGS_QUERY = gql`
         year
         imageURI
         status
+        location
+        doors
+        seaters
+        fuelType
+        transmissionType
+        airType
+        bags
+        price
       }
       user {
         id
@@ -127,6 +151,13 @@ const VEHICLE_QUERY = gql`
       imageURI
       status
       location
+      doors
+      seaters
+      fuelType
+      transmissionType
+      airType
+      bags
+      price
     }
   }
 `;

@@ -181,6 +181,14 @@ const ADD_VEHICLE_MUTATION = gql`
     $year: String!
     $imageURI: String!
     $status: String!
+    $location: String!
+    $doors: Int!
+    $seaters: Int!
+    $fuelType: String!
+    $transmissionType: String!
+    $airType: String!
+    $bags: Int!
+    $price: String!
   ){
     addVehicle(
       group: $group
@@ -191,6 +199,14 @@ const ADD_VEHICLE_MUTATION = gql`
       year: $year
       imageURI: $imageURI
       status: $status
+      location: $location
+      doors: $doors
+      seaters: $seaters
+      fuelType: $fuelType
+      transmissionType: $transmissionType
+      airType: $airType
+      bags: $bags
+      price: $price
     ){
       message
     }
@@ -229,7 +245,16 @@ const UPDATE_VEHICLE_MUTATION = gql`
     $year: String
     $imageURI: String
     $status: String
+    $location: String
+    $doors: Int
+    $seaters: Int
+    $fuelType: String
+    $transmissionType: String
+    $airType: String
+    $bags: Int
+    $price: String
     $password: String!
+
   ){
     updateVehicle(
       vehicleId: $vehicleId
@@ -241,6 +266,14 @@ const UPDATE_VEHICLE_MUTATION = gql`
       year: $year
       imageURI: $imageURI
       status: $status
+      location: $location
+      doors: $doors
+      seaters: $seaters
+      fuelType: $fuelType
+      transmissionType: $transmissionType
+      airType: $airType
+      bags: $bags
+      price: $price
       password: $password
     ){
       message
@@ -313,6 +346,13 @@ const SEARCH_VEHICLE_MUTATION = gql`
       imageURI
       status
       location
+      doors
+      seaters
+      fuelType
+      transmissionType
+      airType
+      bags
+      price
     }
   }
 `;

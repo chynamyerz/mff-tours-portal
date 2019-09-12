@@ -10,6 +10,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import FirstTimeUser from './FirstTimeUser';
 import styled from 'styled-components';
 import moment from 'moment';
+import VehicleDetails from './vehicle/VehicleDetails';
 
 const ClientBookContainer = styled.div`
   @media screen and (max-width: 600px) {
@@ -202,7 +203,8 @@ export default class ClientBook extends React.Component<any, any> {
         </>
       )
     }
- 
+    const rands = String(vehicle.price).split(".")[0]
+    const cents = String(vehicle.price).split(".")[1]
     return (
       <Col sm={12} md={12} lg={{size: 8, offset: 2}}>
         <Mutation
@@ -267,68 +269,10 @@ export default class ClientBook extends React.Component<any, any> {
                         <CardText style={{color: "hsl(0, 0%, 71%)"}}>From: {vehicle.location} {moment(pickupDate).format("YYYY-MM-DD LT")}</CardText>
                         <CardText style={{color: "hsl(0, 0%, 71%)"}}>To: {vehicle.location} {moment(returnDate).format("YYYY-MM-DD LT")}</CardText>
                         <CardText style={{color: "hsl(348, 100%, 61%)"}}>
-                          <span style={{fontSize: "1.5em"}}>@ZAR 899</span>.<span style={{fontSize: "0.7em"}}>99</span>
+                          <span style={{fontSize: "1.5em"}}>@ZAR {rands}</span>.<span style={{fontSize: "0.7em"}}>{cents}</span>
                         </CardText>
                         <hr />
-                        <Col>
-                          <Row style={{marginBottom: "2%"}}>
-                            <Col> 
-                              <Row>
-                                <CardImg 
-                                  src={require("../assets/images/door.png")} 
-                                  style={{height: "25px", width: "25px", borderRadius: "50%"}}
-                                /><CardText>7 doors</CardText>
-                              </Row>
-                              
-                            </Col>
-                            <Col>
-                              <Row>
-                                <CardImg 
-                                  src={require("../assets/images/seat.png")} 
-                                  style={{height: "25px", width: "25px", borderRadius: "50%"}}
-                                /><CardText>9 seater</CardText>
-                              </Row>
-                            </Col>
-                          </Row>
-                          <Row style={{marginBottom: "2%"}}>
-                            <Col> 
-                              <Row>
-                                <CardImg 
-                                  src={require("../assets/images/fuel.png")} 
-                                  style={{height: "25px", width: "25px", borderRadius: "50%"}}
-                                /><CardText>Petrol</CardText>
-                              </Row>
-                              
-                            </Col>
-                            <Col>
-                              <Row>
-                                <CardImg 
-                                  src={require("../assets/images/gear.png")} 
-                                  style={{height: "25px", width: "25px", borderRadius: "50%"}}
-                                /><CardText>Manual</CardText>
-                              </Row>
-                            </Col>
-                          </Row>
-                          <Row style={{marginBottom: "2%"}}>
-                            <Col> 
-                              <Row>
-                                <CardImg 
-                                  src={require("../assets/images/aircon.png")} 
-                                  style={{height: "25px", width: "25px", borderRadius: "50%"}}
-                                /><CardText>Aircon</CardText>
-                              </Row>
-                              
-                            </Col>
-                            <Col>
-                              <Row>
-                                <CardImg 
-                                  src={require("../assets/images/airbag.png")} 
-                                  style={{height: "25px", width: "25px", borderRadius: "50%"}}
-                                /><CardText>2 Bags</CardText>
-                              </Row>
-                            </Col>
-                          </Row>
-                        </Col>
+                        <VehicleDetails vehicle={vehicle}/>
                         <hr />
                         <Form style={{ textAlign: "left"}}> 
                           <FormGroup>

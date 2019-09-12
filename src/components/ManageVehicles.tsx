@@ -1,7 +1,6 @@
 import React from 'react';
 import { Col, Button, Row, Spinner, Table, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import styled from 'styled-components';
-import moment from "moment";
 import { Query } from 'react-apollo';
 import { VEHICLE_QUERY } from '../graphql/Query';
 import { ErrorMessage } from './util/ErrorMessage';
@@ -134,7 +133,7 @@ export default class ManageVehicles extends React.Component<any, any> {
                       )
                     }
                     <ModalFooter>
-                      <Button color="secondary" onClick={this.toggle}>Cancel</Button>
+                      <Button color="secondary" onClick={this.toggle}>Done</Button>
                     </ModalFooter>
                     
                   </Modal>
@@ -168,7 +167,10 @@ export default class ManageVehicles extends React.Component<any, any> {
                       <tr>
                         <th>Brand</th>
                         <th>Make</th>
-                        <th>Year</th>
+                        <th>Transmission</th>
+                        <th>Location</th>
+                        <th>Doors</th>
+                        <th>Seaters</th>
                         <th>Actions</th>
                       </tr>
                     </thead>
@@ -179,7 +181,10 @@ export default class ManageVehicles extends React.Component<any, any> {
                             <tr key={vehicle.id}>
                               <th scope="row">{vehicle.name}</th>
                               <td>{vehicle.make}</td>
-                              <td>{moment(vehicle.year).format("YYYY-MM-DD")}</td>
+                              <td>{vehicle.transmissionType}</td>
+                              <td>{vehicle.location}</td>
+                              <td>{vehicle.doors}</td>
+                              <td>{vehicle.seaters}</td>
                               <td style={{textAlign: "right"}}>
                                 <Row>
                                   <Col sm={12} md={6} lg={6}>
