@@ -172,7 +172,7 @@ export default class SearchVehicles extends React.Component<any, any> {
                       <FormGroup>
                         <Label for="pickupLocation" style={{color: "white"}}>Pick-up location</Label>
                         <Col sm={12}>
-                          <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
+                          <Dropdown size={"sm"} isOpen={this.state.dropdownOpen} toggle={this.toggle}>
                             <DropdownToggle size={"sm"} block outline style={{color: "white"}}>
                               {location}
                             </DropdownToggle>

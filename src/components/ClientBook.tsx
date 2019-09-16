@@ -60,6 +60,7 @@ export default class ClientBook extends React.Component<any, any> {
       returnDate: "",
       responseError: ""
     },
+    beyondKZN: false,
     email: "",
     signed: false,
     booked: false,
@@ -76,7 +77,7 @@ export default class ClientBook extends React.Component<any, any> {
     e.preventDefault();
 
     const { pickupDate, returnDate } = this.props
-    const { email } = this.state;
+    const { beyondKZN, email } = this.state;
 
     // Validate the user input fields
     const errors: object = validateCarField({email, pickupDate, returnDate});
@@ -90,10 +91,11 @@ export default class ClientBook extends React.Component<any, any> {
     try {
       // Book the car
       await bookVehicle({
-        variables: { vehicleId: vehicle.id, pickupDate, returnDate, email }
+        variables: { beyondKZN, vehicleId: vehicle.id, pickupDate, returnDate, email }
       });
 
       this.setState({
+        beyondKZN: false,
         booked: true,
         email: "",
         pickupDate: "",
@@ -121,7 +123,13 @@ export default class ClientBook extends React.Component<any, any> {
   ) => {
     const name = e.target.name;
     const value = e.target.value;
-    if (name === "signed") {
+    if (name === "beyondKZN") {
+      // Update the userInput property of the state when input field values change
+      this.setState({
+        ...this.state,
+        beyondKZN: !this.state.beyondKZN
+      });
+    } else if (name === "signed") {
       // Update the userInput property of the state when input field values change
       this.setState({
         ...this.state,
@@ -181,7 +189,7 @@ export default class ClientBook extends React.Component<any, any> {
 
   render() {
     const { user, vehicle, pickupDate, returnDate } = this.props;
-    const { email, firstTimeBook, notFirstTimeBook, goToSearch, booked, signed, terms, errors } = this.state;
+    const { beyondKZN, email, firstTimeBook, notFirstTimeBook, goToSearch, booked, signed, terms, errors } = this.state;
 
     if (goToSearch) {
       return <Redirect to={"/"} />
@@ -203,7 +211,7 @@ export default class ClientBook extends React.Component<any, any> {
         </>
       )
     }
-    const rands = String(vehicle.price).split(".")[0]
+    const rands = beyondKZN ? "2000" : String(vehicle.price).split(".")[0]
     const cents = String(vehicle.price).split(".")[1]
     return (
       <Col sm={12} md={12} lg={{size: 8, offset: 2}}>
@@ -258,23 +266,38 @@ export default class ClientBook extends React.Component<any, any> {
                       <CardImg width="100%" src={vehicle.imageURI} alt="MFF TOURS VEHICLE" />
                     </Col>
                     <Col sm={12} md={6} lg={7}>
-                      <CardBody className="text-left">
-                        <CardSubtitle style={{fontWeight: "bold"}}>
-                          {vehicle.size}
-                        </CardSubtitle>
-                        <CardTitle style={{fontWeight: "bold", fontSize: 20}}>
-                          {vehicle.name} {vehicle.make}
-                        </CardTitle>
-                        <hr />
-                        <CardText style={{color: "hsl(0, 0%, 71%)"}}>From: {vehicle.location} {moment(pickupDate).format("YYYY-MM-DD LT")}</CardText>
-                        <CardText style={{color: "hsl(0, 0%, 71%)"}}>To: {vehicle.location} {moment(returnDate).format("YYYY-MM-DD LT")}</CardText>
-                        <CardText style={{color: "hsl(348, 100%, 61%)"}}>
-                          <span style={{fontSize: "1.5em"}}>@ZAR {rands}</span>.<span style={{fontSize: "0.7em"}}>{cents}</span>
-                        </CardText>
-                        <hr />
-                        <VehicleDetails vehicle={vehicle}/>
-                        <hr />
-                        <Form style={{ textAlign: "left"}}> 
+                      <Form style={{ textAlign: "left"}}> 
+                        <CardBody className="text-left">
+                          <CardSubtitle style={{fontWeight: "bold"}}>
+                            {vehicle.size}
+                          </CardSubtitle>
+                          <CardTitle style={{fontWeight: "bold", fontSize: 20}}>
+                            {vehicle.name} {vehicle.make}
+                          </CardTitle>
+                          <hr />
+                          <CardText style={{color: "hsl(0, 0%, 71%)"}}>From: {vehicle.location} {moment(pickupDate).format("YYYY-MM-DD LT")}</CardText>
+                          <CardText style={{color: "hsl(0, 0%, 71%)"}}>To: {vehicle.location} {moment(returnDate).format("YYYY-MM-DD LT")}</CardText>
+                          <CardText style={{color: "hsl(348, 100%, 61%)"}}>
+                            <span style={{fontSize: "1.5em"}}>@ZAR {rands}</span>.<span style={{fontSize: "0.7em"}}>{cents}</span>
+                          </CardText>
+                          {vehicle.transmissionType === "Manual" &&
+                            <FormGroup check>
+                              <Label check>
+                                <Input 
+                                  type="checkbox" 
+                                  name="beyondKZN" 
+                                  id="beyondKZN"
+                                  checked={beyondKZN}
+                                  onChange={this.onInputChange}
+                                />{' '}
+                                Is your destination outside of Kwa-Zulu Natal?
+                              </Label>
+                            </FormGroup>
+                          }
+                          <hr />
+                          <VehicleDetails vehicle={vehicle}/>
+                          <hr />
+                        
                           <FormGroup>
                             <Row>
                               <Col>
@@ -295,7 +318,8 @@ export default class ClientBook extends React.Component<any, any> {
                                 >Booked before?</Button>
                               </Col>
                             </Row>
-                            
+                            <br />
+                            {!notFirstTimeBook && errors.email && <Alert color={"danger"}>{errors.email}</Alert>}
                           </FormGroup>
                           {
                             notFirstTimeBook &&
@@ -321,7 +345,7 @@ export default class ClientBook extends React.Component<any, any> {
                           <FormGroup check>
                             <Row>
                               <Col>
-                                <Label for="returnDate" check>
+                                <Label for="signed" check>
                                   <Input 
                                     checked={signed}
                                     name="signed" 
@@ -351,8 +375,8 @@ export default class ClientBook extends React.Component<any, any> {
                               onClick={(e) => this.handleSubmit(e, user, vehicle, bookVehicle)}
                             >{loading ? "Booking..." : "Book"}</Button>
                           </FormGroup>
-                        </Form>
-                      </CardBody>
+                        </CardBody>
+                      </Form>
                     </Col>
                   </Row>
                 </Card>

@@ -144,7 +144,7 @@ class App extends React.Component {
                             returnDate={state ? state.returnDate : ""}
                           />
                         )
-                    }}
+                      }}
                     />
 
                     <Route
@@ -160,23 +160,7 @@ class App extends React.Component {
                             returnDate={state ? state.returnDate : ""}
                           />
                         )
-                    }}
-                    />
-
-                    <Route
-                      exact={true}
-                      path="/admin-vehicle-booking"
-                      component={(props: any) => {
-                        const { state } = props.location
-                        return (
-                          <UserBook 
-                            user={state ? state.user : null}
-                            vehicle={state ? state.vehicle : {}}
-                            pickupDate={state ? state.pickupDate : ""}
-                            returnDate={state ? state.returnDate : ""}
-                          />
-                        )
-                    }}
+                      }}
                     />
 
                     <Route
@@ -205,6 +189,23 @@ class App extends React.Component {
                       exact={true}
                       path="/request-password-reset"
                       component={RequestPasswordReset}
+                    />
+
+                    <ProtectedRoute
+                      user={currentUser}
+                      exact={true}
+                      path="/admin-vehicle-booking"
+                      component={(props: any) => {
+                        const { state } = props.location
+                        return (
+                          <UserBook 
+                            user={state ? state.user : null}
+                            vehicle={state ? state.vehicle : {}}
+                            pickupDate={state ? state.pickupDate : ""}
+                            returnDate={state ? state.returnDate : ""}
+                          />
+                        )
+                      }}
                     />
 
                     <ProtectedRoute

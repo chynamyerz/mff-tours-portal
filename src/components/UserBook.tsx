@@ -10,6 +10,7 @@ import AddUser from './AddUser';
 import { validate } from 'isemail';
 import styled from 'styled-components';
 import VehicleDetails from './vehicle/VehicleDetails';
+import { Redirect } from 'react-router-dom';
 
 const UserBookContainer = styled.div`
   margin-top: 8%;
@@ -62,6 +63,7 @@ export default class UserBook extends React.Component<any, {}> {
       returnDate: "",
       email1: "",
     },
+    beyondKZN: false,
     email1: "",
     modal: false,
   }
@@ -69,7 +71,7 @@ export default class UserBook extends React.Component<any, {}> {
   handleSubmit = async (e: React.FormEvent<EventTarget>, user: any, vehicle: any, bookVehicle: any) => {
     e.preventDefault();
 
-    const { email1 } = this.state
+    const { beyondKZN, email1 } = this.state
     const { pickupDate, returnDate } = this.props
 
     // Validate the user input fields
@@ -89,11 +91,12 @@ export default class UserBook extends React.Component<any, {}> {
     try {
       // Book the car
       await bookVehicle({
-        variables: { email: email1, vehicleId: vehicle.id, pickupDate, returnDate }
+        variables: { beyondKZN, email: email1, vehicleId: vehicle.id, pickupDate, returnDate }
       });
 
       this.setState({
         booked: true,
+        beyondKZN: false,
         email1: "",
         pickupDate: "",
         returnDate: "",
@@ -113,11 +116,19 @@ export default class UserBook extends React.Component<any, {}> {
   ) => {
     const name = e.target.name;
     const value = e.target.value;
-    // Update the userInput property of the state when input field values change
-    this.setState({
-      ...this.state,
-      [name]: value
-    });
+    if (name === "beyondKZN") {
+      // Update the userInput property of the state when input field values change
+      this.setState({
+        ...this.state,
+        beyondKZN: !this.state.beyondKZN
+      });
+    } else {
+      // Update the userInput property of the state when input field values change
+      this.setState({
+        ...this.state,
+        [name]: value
+      });
+    }
   };
 
   toggle = () => {
@@ -129,10 +140,14 @@ export default class UserBook extends React.Component<any, {}> {
 
   render() {
     const { user, vehicle, pickupDate, returnDate } = this.props;
-    const { email1, errors } = this.state;
+    const { beyondKZN, booked, email1, errors } = this.state;
 
-    const rands = String(vehicle.price).split(".")[0]
+    const rands = beyondKZN ? "2000" : String(vehicle.price).split(".")[0]
     const cents = String(vehicle.price).split(".")[1]
+
+    if (booked) {
+      return (<Redirect to="/" />)
+    }
  
     return (
       <Col sm={12} md={12} lg={{size: 8, offset: 2}}>
@@ -178,23 +193,37 @@ export default class UserBook extends React.Component<any, {}> {
                       <CardImg width="100%" src={vehicle.imageURI} alt="Card image cap" />
                     </Col>
                     <Col sm={12} md={6} lg={7}>
-                      <CardBody className="text-left">
-                        <CardSubtitle style={{fontWeight: "bold"}}>
-                          {vehicle.size}
-                        </CardSubtitle>
-                        <CardTitle style={{fontWeight: "bold", fontSize: 20}}>
-                          {vehicle.name} {vehicle.make}
-                        </CardTitle>
-                        <hr />
-                        <CardText style={{color: "hsl(0, 0%, 71%)"}}>From: {vehicle.location} {moment(pickupDate).format("YYYY-MM-DD LT")}</CardText>
-                        <CardText style={{color: "hsl(0, 0%, 71%)"}}>To: {vehicle.location} {moment(returnDate).format("YYYY-MM-DD LT")}</CardText>
-                        <CardText style={{color: "hsl(348, 100%, 61%)"}}>
-                          <span style={{fontSize: "1.5em"}}>@ZAR {rands}</span>.<span style={{fontSize: "0.7em"}}>{cents}</span>
-                        </CardText>
-                        <hr />
-                          <VehicleDetails vehicle={vehicle}/>
-                        <hr />
-                        <Form style={{ textAlign: "left"}}> 
+                      <Form style={{ textAlign: "left"}}> 
+                        <CardBody className="text-left">
+                          <CardSubtitle style={{fontWeight: "bold"}}>
+                            {vehicle.size}
+                          </CardSubtitle>
+                          <CardTitle style={{fontWeight: "bold", fontSize: 20}}>
+                            {vehicle.name} {vehicle.make}
+                          </CardTitle>
+                          <hr />
+                          <CardText style={{color: "hsl(0, 0%, 71%)"}}>From: {vehicle.location} {moment(pickupDate).format("YYYY-MM-DD LT")}</CardText>
+                          <CardText style={{color: "hsl(0, 0%, 71%)"}}>To: {vehicle.location} {moment(returnDate).format("YYYY-MM-DD LT")}</CardText>
+                          <CardText style={{color: "hsl(348, 100%, 61%)"}}>
+                            <span style={{fontSize: "1.5em"}}>@ZAR {rands}</span>.<span style={{fontSize: "0.7em"}}>{cents}</span>
+                          </CardText>
+                          {vehicle.transmissionType === "Manual" &&
+                            <FormGroup check>
+                              <Label check>
+                                <Input 
+                                  type="checkbox" 
+                                  name="beyondKZN" 
+                                  id="beyondKZN"
+                                  checked={beyondKZN}
+                                  onChange={this.onInputChange}
+                                />{' '}
+                                Is your destination outside of Kwa-Zulu Natal?
+                              </Label>
+                            </FormGroup>
+                          }
+                          <hr />
+                            <VehicleDetails vehicle={vehicle}/>
+                          <hr />
                           <Row>
                             <Col>
                               <FormGroup>
@@ -219,8 +248,8 @@ export default class UserBook extends React.Component<any, {}> {
                             color={"success"}
                             onClick={(e) => this.handleSubmit(e, user, vehicle, bookVehicle)}
                           >{loading ? "Booking..." : "Book"}</Button>
-                        </Form>
-                      </CardBody>
+                        </CardBody>
+                      </Form>
                     </Col>
                   </Row>
                 </Card>

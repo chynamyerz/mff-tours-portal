@@ -88,7 +88,7 @@ export default class ManageVehicles extends React.Component<any, any> {
 
     return (
       <VehiclesContainer>
-        <Col sm={{size: 10, offset: 1}} md={{size: 10, offset: 1}} lg={{size: 8, offset: 2}}>
+        <Col sm={12} md={{size: 10, offset: 1}} lg={{size: 8, offset: 2}}>
         <h3 style={{paddingTop: "15%"}}><strong>Manage Vehicles</strong></h3>
           <Query
             query={VEHICLE_QUERY}
@@ -162,7 +162,7 @@ export default class ManageVehicles extends React.Component<any, any> {
                     </Row>
                     
                   </div>
-                  <Table striped>
+                  <Table size={"sm"} responsive={true} striped={true} dark={true}>
                     <thead style={{textAlign: "left"}}>
                       <tr>
                         <th>Brand</th>
@@ -191,9 +191,9 @@ export default class ManageVehicles extends React.Component<any, any> {
                                     <Button
                                       outline
                                       block
-                                      style={{marginRight: "2%"}}
+                                      style={{marginRight: "2%", marginBottom: "2%", color: "white"}}
                                       size={"sm"} 
-                                      color={"primary"}
+                                      color={"info"}
                                       onClick={() => this.toggleForUpdateVehicle(vehicle)}
                                     >
                                       Update
@@ -204,7 +204,7 @@ export default class ManageVehicles extends React.Component<any, any> {
                                       outline
                                       block
                                       disabled={loading}
-                                      style={{marginRight: "2%"}}
+                                      style={{marginRight: "2%", color: "white"}}
                                       size={"sm"} 
                                       color={"danger"}
                                       onClick={() => this.toggleForDeleteVehicle(vehicle)}

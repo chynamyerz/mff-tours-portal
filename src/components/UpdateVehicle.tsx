@@ -404,7 +404,7 @@ export default class UpdateVehicle extends React.Component<any, IUpdateVehicleSt
                 <Col sm= {12} md={4}>
                   <FormGroup>
                       <Label for="location">Location</Label>
-                      <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
+                      <Dropdown size={"sm"} isOpen={this.state.dropdownOpen} toggle={this.toggle}>
                         <DropdownToggle size={"sm"} block outline>
                           {location}
                         </DropdownToggle>

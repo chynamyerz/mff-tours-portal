@@ -115,12 +115,14 @@ const USER_UPDATE_MUTATION = gql`
  */
 const BOOK_VEHICLE_MUTATION = gql`
   mutation BOOK_VEHICLE_MUTATION(
+    $beyondKZN: Boolean!
     $email: String
     $vehicleId: ID!
     $pickupDate: String!
     $returnDate: String!
   ){
     bookVehicle(
+      beyondKZN: $beyondKZN
       email: $email
       vehicleId: $vehicleId
       pickupDate: $pickupDate
