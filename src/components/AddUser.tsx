@@ -150,7 +150,9 @@ export default class AddUser extends React.Component<any, ISignupState> {
         }
       });
       this.props.closeModal()
-      this.props.newEmail(this.state.newUserEmail)
+      if (window.location.pathname === "admin-vehicle-booking") {
+        this.props.newEmail(this.state.newUserEmail)
+      }
       alert("Successfully added client information.");
     } catch (error) {
       this.setState({

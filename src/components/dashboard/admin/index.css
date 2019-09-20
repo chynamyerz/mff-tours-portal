@@ -1,0 +1,33 @@
+.AdminDashboard {
+  background-image: url('../../../assets/images/mff-tours-admin-dashboard.jpg');
+  background-size: cover;
+  background-position: center center;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100vh;
+}
+
+.AdminDashboard-overlay {
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.1);
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  width: 100%;
+}
+
+.my-custom-scrollbar {
+  position: relative;
+  height: 60vh;
+  overflow-y: auto;
+  width: 100%;
+}
+
+.table-wrapper-scroll-y {
+  display: block;
+ }

@@ -58,22 +58,7 @@ export default class UpdateVehicle extends React.Component<any, IUpdateVehicleSt
     updated: false,
     dropdownOpen: false,
     vehicleInput: {
-      group: "",
-      size: "",
-      name: "",
-      model: "",
-      make: "",
-      year: "",
-      imageURI: "",
-      status: "",
-      location: "Vehicle location",
-      doors: "",
-      seaters: "",
-      fuelType: "",
-      transmissionType: "",
-      airType: "",
-      bags: "",
-      price: "",
+      ...this.props.vehicle,
       password: ""
     }
   };

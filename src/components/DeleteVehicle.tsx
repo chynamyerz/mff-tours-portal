@@ -72,6 +72,7 @@ export default class DeleteVehicle extends React.Component<any, IDeleteVehicleSt
           password: ""
         }
       });
+      this.props.closeModal()
       alert("Successfully deleted vehicle information");
     } catch (error) {
       this.setState({
@@ -105,17 +106,13 @@ export default class DeleteVehicle extends React.Component<any, IDeleteVehicleSt
 
   render() {
     const { user } = this.props;
-    const { deleted ,errors } = this.state;
+    const { errors } = this.state;
     const {
       password
     } = this.state.vehicleInput;
 
     if (user && user.role !== "ADMIN") {
       alert("Only admin can delete a vehicle.")
-      return <Redirect to="/vehicle-results" />
-    }
-
-    if (deleted) {
       return <Redirect to="/vehicle-results" />
     }
 

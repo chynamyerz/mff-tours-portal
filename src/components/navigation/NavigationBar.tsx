@@ -161,24 +161,19 @@ export default class NavigationBar extends React.Component<any, {}> {
                         </NavItem>
                       </NavbarItem>
                       { user.role === "ADMIN" &&
-                        <NavbarItem>
-                          <UncontrolledDropdown nav inNavbar>
-                            <DropdownToggle nav caret style={{display: "inline", color: "hsl(48, 100%, 67%)"}}>
-                              Dashboard
-                            </DropdownToggle>
-                            <DropdownMenu right={!this.state.isOpen}>
-                              <DropdownItem onClick={this.toggleNavItem}>
-                                <RouterNavLink
-                                  style={{ textDecoration: "none", color: "grey"}}
-                                  exact={true}
-                                  to="/manage-vehicle"
-                                >
-                                  Manage Vehicles
-                                </RouterNavLink>
-                              </DropdownItem>
-                            </DropdownMenu>
-                          </UncontrolledDropdown>
-                        </NavbarItem>
+                        <>
+                          <NavbarItem onClick={this.toggleNavItem}>
+                            <NavItem>
+                              <RouterNavLink
+                                style={{ textDecoration: "none", color: "hsl(48, 100%, 67%)"}}
+                                exact={true}
+                                to="/admin-dashboard"
+                              >
+                                Admin-Dashboard
+                              </RouterNavLink>
+                            </NavItem>
+                          </NavbarItem>
+                        </>
                       }
 
                       <NavbarItem>

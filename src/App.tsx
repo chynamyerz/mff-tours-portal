@@ -18,7 +18,6 @@ import About from './components/About';
 import AddVehicle from './components/AddVehicle';
 import ClientBook from './components/ClientBook';
 import UserBook from './components/UserBook';
-import ManageVehicles from './components/ManageVehicles';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { 
   faEnvelope, 
@@ -32,6 +31,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import Contact from './components/Contact';
 import Services from './components/Services';
+import AdminDashboard from './components/dashboard/admin';
 
 library.add(
   faEnvelope, 
@@ -225,12 +225,11 @@ class App extends React.Component {
                     <ProtectedRoute
                       user={currentUser}
                       exact={true}
-                      path="/manage-vehicle"
+                      path="/admin-dashboard"
                       component={(props: any) => {
-                        const { state } = props.location
                         return (
-                          <ManageVehicles 
-                            user={state ? state.user : null}
+                          <AdminDashboard 
+                            user={currentUser}
                           />
                         )
                       }}
@@ -247,7 +246,7 @@ class App extends React.Component {
                       user={currentUser}
                       exact={true}
                       path="/update-user"
-                      component={() => <UpdateUser />}
+                      component={() => <UpdateUser user={currentUser}/>}
                     />
                   </Switch>
                 </AppContainer>

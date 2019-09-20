@@ -1,12 +1,11 @@
 import React from 'react';
 import { validate } from "isemail";
 import { Col, Row, Button, Form, FormGroup, Label, Input } from 'reactstrap';
-import styled from 'styled-components';
 import { Mutation } from 'react-apollo';
 import { USER_UPDATE_MUTATION } from '../graphql/Mutation';
 import { ErrorMessage } from './util/ErrorMessage';
 import { Error } from './util/Error';
-import { USER_QUERY } from '../graphql/Query';
+import { USERS_QUERY } from '../graphql/Query';
 
 interface IUpdateUserFormInput {
   email: string;
@@ -25,20 +24,6 @@ interface IUpdateUserState {
   errors: Partial<IUpdateUserFormInput> & { responseError?: string };
   userInput: IUpdateUserFormInput;
 };
-
-const UpdateUserContainer = styled.div`
-  @media screen and (max-width: 500px) {
-    margin-top: 20%;
-  }
-
-  @media screen and (max-width: 600px) {
-    margin-top: 15%;
-  }
-
-  @media screen and (max-width: 900px) {
-    margin-top: 6%;
-  }
-`;
 
 const validateUpdateUserField = (
   updateUserInput: IUpdateUserFormInput
@@ -70,7 +55,7 @@ const validateUpdateUserField = (
   return errors;
 };
 
-export default class UpdateUser extends React.Component<any, IUpdateUserState> {
+export default class AdminUpdateUser extends React.Component<any, IUpdateUserState> {
   public state = {
     errors: {
       email: "",
@@ -143,6 +128,7 @@ export default class UpdateUser extends React.Component<any, IUpdateUserState> {
           confirmPassword: ""
         }
       });
+      this.props.closeModal()
       alert("Successfully updated your information.");
     } catch (error) {
       this.setState({
@@ -191,12 +177,10 @@ export default class UpdateUser extends React.Component<any, IUpdateUserState> {
     } = this.state.userInput;
 
     return (
-      <UpdateUserContainer>
-        <Col sm={{ size: 8, offset: 2 }} md={{ size: 6, offset: 3 }}>
-        <h3 style={{paddingTop: "15%"}}><strong>Update your details</strong></h3>
+      <Col>
         <Mutation 
           mutation={USER_UPDATE_MUTATION}
-          refetchQueries={[{ query: USER_QUERY }]}
+          refetchQueries={[{ query: USERS_QUERY }]}
         >
           { (updateUser: any, { loading, error }: any) => {
             return (
@@ -370,8 +354,7 @@ export default class UpdateUser extends React.Component<any, IUpdateUserState> {
             )
           }}
         </Mutation>
-        </Col>
-      </UpdateUserContainer>
+      </Col>
     );
   }
 }

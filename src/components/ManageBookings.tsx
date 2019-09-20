@@ -1,14 +1,14 @@
 import React from 'react';
 import { Col, Button, Row, Spinner, Table, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { Query } from 'react-apollo';
-import { VEHICLE_QUERY } from '../graphql/Query';
+import { VEHICLE_BOOKINGS_QUERY } from '../graphql/Query';
 import { ErrorMessage } from './util/ErrorMessage';
 import { Redirect } from 'react-router-dom';
 import AddVehicle from './AddVehicle';
 import UpdateVehicle from './UpdateVehicle';
 import DeleteVehicle from './DeleteVehicle';
 
-export default class ManageVehicles extends React.Component<any, any> {
+export default class ManageBookings extends React.Component<any, any> {
   public state = {
     addVehicle: false,
     deleteVehicle: false,
@@ -76,13 +76,13 @@ export default class ManageVehicles extends React.Component<any, any> {
         <Col>
         <h3 style={{textAlign: "center"}}><strong>Manage Vehicles</strong></h3>
           <Query
-            query={VEHICLE_QUERY}
+            query={VEHICLE_BOOKINGS_QUERY}
           >
             {({data, loading, error}: any) => {
               if (loading) {
                 return <Spinner color="info" size="lg" style={{marginTop: "15%", marginLeft: "50%"}}/>
               }
-              const vehicles: any = data && data.vehicles ? data.vehicles : []
+              const bookings: any = data && data.bookings ? data.bookings : []
 
               return (
                 <>
@@ -123,70 +123,59 @@ export default class ManageVehicles extends React.Component<any, any> {
                     
                   </Modal>
                   {error && <ErrorMessage>{error.message.replace("Network error: ", "").replace("GraphQL error: ", "")}</ErrorMessage>}
-                  <div style={{textAlign: "left"}}>
-                    <Row>
-                      <Button
-                        style={{marginRight: "2%", marginLeft: "2%", marginBottom: "2%", color: "white"}}
-                        outline
-                        size={"sm"} 
-                        color={"info"}
-                        onClick={this.toggleForAddVehicle}
-                      >
-                        Add a new vehicle
-                      </Button>
-                    
-                      <Button
-                        outline
-                        style={{marginRight: "2%", marginLeft: "2%", marginBottom: "2%", color: "white"}}
-                        size={"sm"} 
-                        color={"secondary"}
-                        onClick={() => this.setState({book: true})}
-                      >
-                        Book for a client
-                      </Button>
-                    </Row>
-                  </div>
+                  
                   <div className={"table-wrapper-scroll-y my-custom-scrollbar"}>
                     <Table size={"sm"} responsive striped dark>
                       <thead style={{textAlign: "left"}}>
                         <tr>
-                          <th>Brand</th>
-                          <th>Make</th>
-                          <th>Transmission</th>
+                          <th>Booked by</th>
+                          <th>Pickup date</th>
+                          <th>Return date</th>
                           <th>Location</th>
-                          <th>Doors</th>
-                          <th>Seaters</th>
+                          <th>Vehicle</th>
                           <th>Status</th>
                           <th>Actions</th>
                         </tr>
                       </thead>
                       <tbody style={{textAlign: "left"}}>
                         {
-                          vehicles.map((vehicle: any) => {
+                          bookings.map((booking: any) => {
                             return (
-                              <tr key={vehicle.id}>
-                                <td>{vehicle.name}</td>
-                                <td>{vehicle.make}</td>
-                                <td>{vehicle.transmissionType}</td>
-                                <td>{vehicle.location}</td>
-                                <td>{vehicle.doors}</td>
-                                <td>{vehicle.seaters}</td>
-                                <td>{vehicle.status}</td>
+                              <tr key={booking.id}>
+                                <td>{booking.user.name}</td>
+                                <td>{booking.pickupDate}</td>
+                                <td>{booking.returnDate}</td>
+                                <td>{booking.vehicle.location}</td>
+                                <td>{booking.vehicle.name}</td>
+                                <td>{booking.status}</td>
                                 <td style={{textAlign: "right"}}>
                                   <Row>
-                                    <Col sm={12} md={12} lg={6}>
+                                    <Col sm={12} style={{marginBottom: "5%"}}>
                                       <Button
                                         outline
                                         block
-                                        style={{marginRight: "2%", marginBottom: "10%", color: "white"}}
+                                        disabled={loading}
+                                        style={{marginRight: "2%", color: "white"}}
                                         size={"sm"} 
-                                        color={"info"}
-                                        onClick={() => this.toggleForUpdateVehicle(vehicle)}
+                                        color={"secondary"}
+                                        onClick={() => ({})}
                                       >
-                                        Update
+                                        Picked up
                                       </Button>
                                     </Col>
-                                    <Col sm={12} md={12} lg={6}>
+                                    <Col sm={12} style={{marginBottom: "5%"}}>
+                                      <Button
+                                        outline
+                                        block
+                                        style={{marginRight: "2%", marginBottom: "2%", color: "white"}}
+                                        size={"sm"} 
+                                        color={"info"}
+                                        onClick={() => ({})}
+                                      >
+                                        Returned
+                                      </Button>
+                                    </Col>
+                                    <Col sm={12}>
                                       <Button
                                         outline
                                         block
@@ -194,9 +183,9 @@ export default class ManageVehicles extends React.Component<any, any> {
                                         style={{marginRight: "2%", color: "white"}}
                                         size={"sm"} 
                                         color={"danger"}
-                                        onClick={() => this.toggleForDeleteVehicle(vehicle)}
+                                        onClick={() => ({})}
                                       >
-                                        Delete
+                                        Cancel
                                       </Button>
                                     </Col>
                                   </Row>
