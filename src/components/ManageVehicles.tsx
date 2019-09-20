@@ -146,7 +146,7 @@ export default class ManageVehicles extends React.Component<any, any> {
                       </Button>
                     </Row>
                   </div>
-                  <div className={"table-wrapper-scroll-y my-custom-scrollbar"}>
+                  <div className={"table-wrapper-scroll-y my-custom-table-scrollbar"}>
                     <Table size={"sm"} responsive striped dark>
                       <thead style={{textAlign: "left"}}>
                         <tr>

@@ -124,7 +124,7 @@ export default class ManageBookings extends React.Component<any, any> {
                   </Modal>
                   {error && <ErrorMessage>{error.message.replace("Network error: ", "").replace("GraphQL error: ", "")}</ErrorMessage>}
                   
-                  <div className={"table-wrapper-scroll-y my-custom-scrollbar"}>
+                  <div className={"table-wrapper-scroll-y my-custom-table-scrollbar"}>
                     <Table size={"sm"} responsive striped dark>
                       <thead style={{textAlign: "left"}}>
                         <tr>

@@ -98,7 +98,7 @@ export default class ManageUsers extends React.Component<any, any> {
                       </Button>
                     </Row>
                   </div>
-                  <div className={"table-wrapper-scroll-y my-custom-scrollbar"}>
+                  <div className={"table-wrapper-scroll-y my-custom-table-scrollbar"}>
                     <Table size={"sm"} responsive={true} striped={true} dark={true}>
                       <thead style={{textAlign: "left"}}>
                         <tr>

@@ -2,7 +2,7 @@
   background-image: url('../../../assets/images/mff-tours-admin-dashboard.jpg');
   background-size: cover;
   background-position: center center;
-  position: absolute;
+  position: fixed;
   top: 0;
   bottom: 0;
   left: 0;
@@ -21,7 +21,7 @@
   width: 100%;
 }
 
-.my-custom-scrollbar {
+.my-custom-table-scrollbar {
   position: relative;
   height: 60vh;
   overflow-y: auto;
@@ -29,5 +29,17 @@
 }
 
 .table-wrapper-scroll-y {
+  display: block;
+ }
+
+ .my-custom-page-scrollbar {
+  position: relative;
+  height: 90vh;
+  overflow-y: auto;
+  width: 100%;
+}
+
+
+ .page-wrapper-scroll-y {
   display: block;
  }

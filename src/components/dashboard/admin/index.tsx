@@ -82,40 +82,42 @@ export default class AdminDashboard extends React.Component<any, any> {
 
     return (
       <AdminDashboardContainer className={"AdminDashboard"}>
-        <div className={"AdminDashboard-overlay"}>
-          <AdminDashboardRowContainer>
-            <Row style={{width: "100%"}}>
-              <Col sm={4} md={2} lg={2} style={{color: "hsl(0, 0%, 86%)", textAlign: "left", paddingLeft: "5%"}}>
-                <h2>Menu</h2>
-                <hr />
-                <Nav vertical>
-                  <NavItem>
-                    <p onClick={this.toggleUsers} style={{cursor: "pointer"}}>Users</p>
-                  </NavItem>
+        <div className={"page-wrapper-scroll-y my-custom-page-scrollbar"}>
+          <div className={"AdminDashboard-overlay"}>
+            <AdminDashboardRowContainer>
+              <Row style={{width: "100%"}}>
+                <Col sm={2} md={2} lg={2} style={{color: "hsl(0, 0%, 86%)", textAlign: "left", paddingLeft: "5%"}}>
+                  <h2>Menu</h2>
                   <hr />
-                  <NavItem>
-                    <p onClick={this.toggleVehicles} style={{cursor: "pointer"}}>Vehicles</p>
-                  </NavItem>
+                  <Nav vertical>
+                    <NavItem>
+                      <p onClick={this.toggleUsers} style={{cursor: "pointer"}}>Users</p>
+                    </NavItem>
+                    <hr />
+                    <NavItem>
+                      <p onClick={this.toggleVehicles} style={{cursor: "pointer"}}>Vehicles</p>
+                    </NavItem>
+                    <hr />
+                    <NavItem>
+                      <p onClick={this.toggleBookings} style={{cursor: "pointer"}}>Bookings</p>
+                    </NavItem>
+                    <hr />
+                    {/* <NavItem>
+                      <p onClick={this.toggleStatistics} style={{cursor: "pointer"}}>Statistics</p>
+                    </NavItem> */}
+                  </Nav>
                   <hr />
-                  <NavItem>
-                    <p onClick={this.toggleBookings} style={{cursor: "pointer"}}>Bookings</p>
-                  </NavItem>
-                  <hr />
-                  {/* <NavItem>
-                    <p onClick={this.toggleStatistics} style={{cursor: "pointer"}}>Statistics</p>
-                  </NavItem> */}
-                </Nav>
-                <hr />
-              </Col>
-              <Col sm={8} md={10} lg={10} style={{color: "hsl(0, 0%, 86%)", textAlign: "left", paddingRight: "5%"}}>
-                {users && <ManageUsers />}
-                {vehicles && <ManageVehicles />}
-                {bookings && <ManageBookings />}
-                {statistics && <div><h1>See perfomance summary under construction</h1></div>}
-              </Col>
-            </Row>   
-          </AdminDashboardRowContainer>
-        </div>       
+                </Col>
+                <Col sm={10} md={10} lg={10} style={{color: "hsl(0, 0%, 86%)", textAlign: "left", paddingRight: "5%"}}>
+                  {users && <ManageUsers />}
+                  {vehicles && <ManageVehicles />}
+                  {bookings && <ManageBookings />}
+                  {statistics && <div><h1>See perfomance summary under construction</h1></div>}
+                </Col>
+              </Row>   
+            </AdminDashboardRowContainer>
+          </div>   
+        </div>    
       </AdminDashboardContainer>
     );
   }
