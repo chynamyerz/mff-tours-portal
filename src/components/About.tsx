@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Card, CardBody, CardTitle, CardText, Row, Col, CardImg, Alert } from 'reactstrap';
+import { Card, CardBody, CardTitle, CardText, Col, Alert } from 'reactstrap';
 
 const AboutContainer = styled.div`
   @media screen and (max-width: 500px) {

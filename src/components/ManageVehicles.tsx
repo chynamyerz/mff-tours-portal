@@ -147,7 +147,7 @@ export default class ManageVehicles extends React.Component<any, any> {
                     </Row>
                   </div>
                   <div className={"table-wrapper-scroll-y my-custom-table-scrollbar"}>
-                    <Table size={"sm"} responsive striped dark>
+                    <Table size={"sm"} responsive striped dark hover>
                       <thead style={{textAlign: "left"}}>
                         <tr>
                           <th>Brand</th>

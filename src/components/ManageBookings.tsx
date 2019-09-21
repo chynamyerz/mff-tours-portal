@@ -7,6 +7,7 @@ import { Redirect } from 'react-router-dom';
 import AddVehicle from './AddVehicle';
 import UpdateVehicle from './UpdateVehicle';
 import DeleteVehicle from './DeleteVehicle';
+import moment from 'moment';
 
 export default class ManageBookings extends React.Component<any, any> {
   public state = {
@@ -125,7 +126,7 @@ export default class ManageBookings extends React.Component<any, any> {
                   {error && <ErrorMessage>{error.message.replace("Network error: ", "").replace("GraphQL error: ", "")}</ErrorMessage>}
                   
                   <div className={"table-wrapper-scroll-y my-custom-table-scrollbar"}>
-                    <Table size={"sm"} responsive striped dark>
+                    <Table size={"sm"} responsive striped dark hover>
                       <thead style={{textAlign: "left"}}>
                         <tr>
                           <th>Booked by</th>
@@ -143,14 +144,14 @@ export default class ManageBookings extends React.Component<any, any> {
                             return (
                               <tr key={booking.id}>
                                 <td>{booking.user.name}</td>
-                                <td>{booking.pickupDate}</td>
-                                <td>{booking.returnDate}</td>
+                                <td>{moment(booking.pickupDate).format("YYYY-MM-DD LT")}</td>
+                                <td>{moment(booking.returnDate).format("YYYY-MM-DD LT")}</td>
                                 <td>{booking.vehicle.location}</td>
                                 <td>{booking.vehicle.name}</td>
                                 <td>{booking.status}</td>
                                 <td style={{textAlign: "right"}}>
                                   <Row>
-                                    <Col sm={12} style={{marginBottom: "5%"}}>
+                                    <Col sm={12} md={4} style={{marginBottom: "5%"}}>
                                       <Button
                                         outline
                                         block
@@ -163,7 +164,7 @@ export default class ManageBookings extends React.Component<any, any> {
                                         Picked up
                                       </Button>
                                     </Col>
-                                    <Col sm={12} style={{marginBottom: "5%"}}>
+                                    <Col sm={12} md={4} style={{marginBottom: "5%"}}>
                                       <Button
                                         outline
                                         block
@@ -175,7 +176,7 @@ export default class ManageBookings extends React.Component<any, any> {
                                         Returned
                                       </Button>
                                     </Col>
-                                    <Col sm={12}>
+                                    <Col sm={12} md={4}>
                                       <Button
                                         outline
                                         block

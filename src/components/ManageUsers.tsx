@@ -99,7 +99,7 @@ export default class ManageUsers extends React.Component<any, any> {
                     </Row>
                   </div>
                   <div className={"table-wrapper-scroll-y my-custom-table-scrollbar"}>
-                    <Table size={"sm"} responsive={true} striped={true} dark={true}>
+                    <Table size={"sm"} responsive striped dark hover>
                       <thead style={{textAlign: "left"}}>
                         <tr>
                           <th>Name</th>
