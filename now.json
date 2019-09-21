@@ -2,7 +2,13 @@
   "version": 2,
   "build": {
     "env": {
-      "REACT_APP_MMF_BACKEND_URL": "@react_app_mmf_backend_url"
+      "REACT_APP_MMF_BACKEND_URL": "@react_app_mmf_backend_url",
+      "REACT_APP_MMF_SUCCESS_URL": "@react_app_mmf_success_url",
+      "REACT_APP_MMF_CANCEL_URL": "@react_app_mmf_cancel_url",
+      "REACT_APP_MMF_MERCHANT_ID_SANDBOX": "@react_app_mmf_merchant_id_sandbox",
+      "REACT_APP_MMF_PAYFAST_SANDBOX": "@react_app_mmf_payfast_sandbox",
+      "REACT_APP_MMF_MERCHANT_ID_PROD": "@react_app_mmf_merchant_id_prod",
+      "REACT_APP_MMF_PAYFAST_PROD": "@react_app_mmf_payfast_prod"
     }
   }
 }

@@ -151,7 +151,7 @@ export default class ManageBookings extends React.Component<any, any> {
                                 <td>{booking.status}</td>
                                 <td style={{textAlign: "right"}}>
                                   <Row>
-                                    <Col sm={12} md={4} style={{marginBottom: "5%"}}>
+                                    <Col sm={12} md={12} lg={4} style={{marginBottom: "5%"}}>
                                       <Button
                                         outline
                                         block
@@ -164,7 +164,7 @@ export default class ManageBookings extends React.Component<any, any> {
                                         Picked up
                                       </Button>
                                     </Col>
-                                    <Col sm={12} md={4} style={{marginBottom: "5%"}}>
+                                    <Col sm={12} md={12} lg={4} style={{marginBottom: "5%"}}>
                                       <Button
                                         outline
                                         block
@@ -176,7 +176,7 @@ export default class ManageBookings extends React.Component<any, any> {
                                         Returned
                                       </Button>
                                     </Col>
-                                    <Col sm={12} md={4}>
+                                    <Col sm={12} md={12} lg={4}>
                                       <Button
                                         outline
                                         block

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Col, FormGroup, Label, Input } from 'reactstrap';
 
-export default class Checkout extends React.Component<any, {}> {
+export default class Checkout extends React.Component<any, any> {
   state = {
     card: false,
   }
@@ -29,20 +29,19 @@ export default class Checkout extends React.Component<any, {}> {
     }
   };
 
+  click_49beac3ea4be6541f3bee2b321f7267f( aform_reference: any ) {
+    var aform = aform_reference;
+    aform['amount'].value = Math.round( aform['amount'].value*Math.pow( 10,2 ) )/Math.pow( 10,2 );
+  }
+
   render() {
     const { card } = this.state
+    const { user, vehicle } = this.props
 
-    console.log(process.env.SUCCESS_URL)
-
-    const SUCCESS_URL = process.env.SUCCESS_URL
-    const CANCEL_URL = process.env.CANCEL_URL
-    const PAYFAST_MERCHANT_ID = process.env.MERCHANT_ID_PROD ? process.env.MERCHANT_ID_PROD : process.env.MERCHANT_ID_SANDBOX
-    const PAYFAST_URL = process.env.PAYFAST_PROD ? process.env.PAYFAST_PROD : process.env.PAYFAST_SANDBOX
-
-    const itemName = 'Hyundai'
-    const itemDescription = 'Rentin a vehicle'
-    const itemPrice = 800
-
+    const SUCCESS_URL = process.env.REACT_APP_MMF_SUCCESS_URL
+    const CANCEL_URL = process.env.REACT_APP_MMF_CANCEL_URL
+    const PAYFAST_MERCHANT_ID = process.env.REACT_APP_MMF_MERCHANT_ID_PROD ? process.env.REACT_APP_MMF_MERCHANT_ID_PROD : process.env.REACT_APP_MMF_MERCHANT_ID_SANDBOX
+    const PAYFAST_URL = process.env.REACT_APP_MMF_PAYFAST_PROD ? process.env.REACT_APP_MMF_PAYFAST_PROD : process.env.REACT_APP_MMF_PAYFAST_SANDBOX
 
     return (
       <Col>
@@ -62,15 +61,40 @@ export default class Checkout extends React.Component<any, {}> {
         </Col>
         <Col>
           {card && <>
-            <a href={`${PAYFAST_URL}&amp;receiver=${PAYFAST_MERCHANT_ID}&amp;item_name=${itemName}&amp;item_description=${itemDescription}&amp;amount=${itemPrice}&amp;return_url=${SUCCESS_URL}&amp;cancel_url=${CANCEL_URL}`}>
-              <img 
-                src="https://www.payfast.co.za/images/buttons/light-small-paynow.png" 
-                width="165" 
-                height="36" 
-                alt="Pay" 
-                title="Pay Now with PayFast" 
-              />
-            </a>
+            <form 
+              action={PAYFAST_URL} 
+              method={"POST"}
+              onSubmit={() => this.UNSAFE_componentWillUpdate}
+            >
+              <input type="hidden" name="cmd" value="_paynow" />
+              <input type="hidden" name="receiver" value={PAYFAST_MERCHANT_ID} />
+              <input type="hidden" name="item_name" value={vehicle.name} />
+              <input type="hidden" name="amount" value={vehicle.price} />
+              <input type="hidden" name="item_description" value={vehicle.make} />
+              <input type="hidden" name="return_url" value={SUCCESS_URL} />
+              <input type="hidden" name="cancel_url" value={CANCEL_URL} />
+              <input type="hidden" name="name_first" value={user && user.name ? user.name : ""} />
+              <input type="hidden" name="name_last" value={user && user.surname ? user.surname : ""} />
+              <input type="hidden" name="email_address" value={user && user.email ? user.email : ""} />
+              <input type="hidden" name="email_confirmation" id="email_confirmation" value="1" />
+              <input type="hidden" name="confirmation_address" id="confirmation_address" value=""></input>
+
+              <table>
+                <tbody>
+                  <tr>
+                    <td>
+                      <input 
+                        type="image" 
+                        src="https://www.payfast.co.za/images/buttons/dark-large-paynow.png" 
+                        width="174" 
+                        height="59" 
+                        alt="Pay Now" 
+                        title="Pay Now with PayFast" />
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </form>            
           </>}
         </Col>
       </Col>

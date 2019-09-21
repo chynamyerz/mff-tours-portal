@@ -253,7 +253,7 @@ export default class ClientBook extends React.Component<any, any> {
                       <ModalHeader toggle={this.toggle}><strong>Checkout.</strong></ModalHeader>
                     
                       <ModalBody>
-                        <Checkout />
+                        <Checkout user={user} vehicle={vehicle} />
                       </ModalBody>
                     </>
                   }
@@ -303,7 +303,7 @@ export default class ClientBook extends React.Component<any, any> {
                           </CardTitle>
                           <hr />
                           <CardText style={{color: "hsl(0, 0%, 71%)"}}>From: {vehicle.location} {moment(pickupDate).format("YYYY-MM-DD LT")}</CardText>
-                          <CardText style={{color: "hsl(0, 0%, 71%)"}}>To: {vehicle.location} {moment(returnDate).format("YYYY-MM-DD LT")}</CardText>
+                          <CardText style={{color: "hsl(0, 0%, 71%)"}}>Return: {vehicle.location} {moment(returnDate).format("YYYY-MM-DD LT")}</CardText>
                           <CardText style={{color: "hsl(348, 100%, 61%)"}}>
                             <span style={{fontSize: "1.5em"}}>@ZAR {rands}</span>.<span style={{fontSize: "0.7em"}}>{cents}</span>
                           </CardText>
