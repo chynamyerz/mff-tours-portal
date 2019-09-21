@@ -40,8 +40,8 @@ export default class Checkout extends React.Component<any, any> {
 
     const SUCCESS_URL = process.env.REACT_APP_MMF_SUCCESS_URL
     const CANCEL_URL = process.env.REACT_APP_MMF_CANCEL_URL
-    const PAYFAST_MERCHANT_ID = process.env.REACT_APP_MMF_MERCHANT_ID_PROD ? process.env.REACT_APP_MMF_MERCHANT_ID_PROD : process.env.REACT_APP_MMF_MERCHANT_ID_SANDBOX
-    const PAYFAST_URL = process.env.REACT_APP_MMF_PAYFAST_PROD ? process.env.REACT_APP_MMF_PAYFAST_PROD : process.env.REACT_APP_MMF_PAYFAST_SANDBOX
+    const PAYFAST_MERCHANT_ID = process.env.REACT_APP_ENV === "PROD" ? process.env.REACT_APP_MMF_MERCHANT_ID_PROD : process.env.REACT_APP_MMF_MERCHANT_ID_SANDBOX
+    const PAYFAST_URL = process.env.REACT_APP_ENV === "PROD" ? process.env.REACT_APP_MMF_PAYFAST_PROD : process.env.REACT_APP_MMF_PAYFAST_SANDBOX
 
     return (
       <Col>
