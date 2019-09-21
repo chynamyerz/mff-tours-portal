@@ -11,6 +11,7 @@ import FirstTimeUser from './FirstTimeUser';
 import styled from 'styled-components';
 import moment from 'moment';
 import VehicleDetails from './vehicle/VehicleDetails';
+import Checkout from './Checkout';
 
 const ClientBookContainer = styled.div`
   @media screen and (max-width: 600px) {
@@ -63,6 +64,7 @@ export default class ClientBook extends React.Component<any, any> {
     beyondKZN: false,
     email: "",
     signed: false,
+    book: false,
     booked: false,
     modal: false,
     firstTimeBook: false,
@@ -96,6 +98,7 @@ export default class ClientBook extends React.Component<any, any> {
 
       this.setState({
         beyondKZN: false,
+        book: false,
         booked: true,
         email: "",
         pickupDate: "",
@@ -158,11 +161,23 @@ export default class ClientBook extends React.Component<any, any> {
     });
   }
 
+  toggleBook = () => {
+    this.setState({
+      ...this.state,
+      modal: !this.state.modal,
+      book: true,
+      firstTimeBook: false,
+      terms: false,
+      notFirstTimeBook: false
+    });
+  }
+
   toggleFirstTimeBook = () => {
     this.setState({
       ...this.state,
       modal: !this.state.modal,
       firstTimeBook: true,
+      book: false,
       terms: false,
       notFirstTimeBook: false
     });
@@ -173,6 +188,7 @@ export default class ClientBook extends React.Component<any, any> {
       ...this.state,
       notFirstTimeBook: true,
       firstTimeBook: false,
+      book: false,
       terms: false
     });
   }
@@ -183,13 +199,14 @@ export default class ClientBook extends React.Component<any, any> {
       modal: !this.state.modal,
       terms: true,
       firstTimeBook: false,
-      notFirstTimeBook: false
+      notFirstTimeBook: false,
+      book: false
     });
   }
 
   render() {
     const { user, vehicle, pickupDate, returnDate } = this.props;
-    const { beyondKZN, email, firstTimeBook, notFirstTimeBook, goToSearch, booked, signed, terms, errors } = this.state;
+    const { book, beyondKZN, email, firstTimeBook, notFirstTimeBook, goToSearch, booked, signed, terms, errors } = this.state;
 
     if (goToSearch) {
       return <Redirect to={"/"} />
@@ -230,6 +247,16 @@ export default class ClientBook extends React.Component<any, any> {
             return (
               <ClientBookContainer>
                 <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className} size={"lg"}>
+
+                { book &&
+                    <>
+                      <ModalHeader toggle={this.toggle}><strong>Checkout.</strong></ModalHeader>
+                    
+                      <ModalBody>
+                        <Checkout />
+                      </ModalBody>
+                    </>
+                  }
 
                   { firstTimeBook &&
                     <>
@@ -372,8 +399,8 @@ export default class ClientBook extends React.Component<any, any> {
                               disabled={loading || !signed}
                               size={"sm"} 
                               color={"success"}
-                              onClick={(e) => this.handleSubmit(e, user, vehicle, bookVehicle)}
-                            >{loading ? "Booking..." : "Book"}</Button>
+                              onClick={this.toggleBook}
+                            >{"Checkout"}</Button>
                           </FormGroup>
                         </CardBody>
                       </Form>

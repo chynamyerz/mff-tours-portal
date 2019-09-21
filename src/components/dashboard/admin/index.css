@@ -25,14 +25,13 @@
   position: relative;
   height: 60vh;
   overflow-y: auto;
-  width: 100%;
 }
 
 .table-wrapper-scroll-y {
   display: block;
  }
 
- .my-custom-page-scrollbar {
+.my-custom-page-scrollbar {
   position: relative;
   height: 90vh;
   overflow-y: auto;
@@ -40,6 +39,6 @@
 }
 
 
- .page-wrapper-scroll-y {
+.page-wrapper-scroll-y {
   display: block;
- }
+}
