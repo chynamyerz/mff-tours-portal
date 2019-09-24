@@ -156,6 +156,7 @@ export default class ManageVehicles extends React.Component<any, any> {
                           <th>Location</th>
                           <th>Doors</th>
                           <th>Seaters</th>
+                          <th>Count left</th>
                           <th>Status</th>
                           <th>Actions</th>
                         </tr>
@@ -171,6 +172,7 @@ export default class ManageVehicles extends React.Component<any, any> {
                                 <td>{vehicle.location}</td>
                                 <td>{vehicle.doors}</td>
                                 <td>{vehicle.seaters}</td>
+                                <td>{vehicle.count}</td>
                                 <td>{vehicle.status}</td>
                                 <td style={{textAlign: "right"}}>
                                   <Row>
