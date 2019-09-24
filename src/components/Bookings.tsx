@@ -26,7 +26,7 @@ const CardContainer = styled.div`
 `;
 
 export default class Bookings extends React.Component<any, {}> {
-  public state = {
+  state = {
     cancelled: false,
     selected: "",
     goToSearch: false
@@ -94,7 +94,7 @@ export default class Bookings extends React.Component<any, {}> {
                 return (
                   <Col sm={{size: 6, offset: 3}} md={{size: 6, offset: 3}} lg={{size: 4, offset: 4}}>
                     <Col>
-                      <Alert color={"danger"} style={{padding: "0px", textAlign: "left"}}>You currently have no bookings</Alert>
+                      <Alert color={"danger"} style={{textAlign: "left"}}>You currently have no bookings</Alert>
                     </Col>
                     <Col>
                       <Button

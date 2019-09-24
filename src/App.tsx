@@ -32,6 +32,8 @@ import {
 import Contact from './components/Contact';
 import Services from './components/Services';
 import AdminDashboard from './components/dashboard/admin';
+import BookingSuccess from './components/BookingSuccess';
+import BookingCancelled from './components/BookingCancelled';
 
 library.add(
   faEnvelope, 
@@ -158,6 +160,7 @@ class App extends React.Component {
                             vehicle={state ? state.vehicle : {}}
                             pickupDate={state ? state.pickupDate : ""}
                             returnDate={state ? state.returnDate : ""}
+                            success={state ? state.success : false}
                           />
                         )
                       }}
@@ -189,6 +192,27 @@ class App extends React.Component {
                       exact={true}
                       path="/request-password-reset"
                       component={RequestPasswordReset}
+                    />
+
+                    <Route
+                      exact={true}
+                      path="/success"
+                      component={(props: any) => {
+                        const { state } = props.location
+                        return (
+                          <BookingSuccess 
+                            vehicle={state ? state.vehicle : {}}
+                          />
+                        )
+                      }}
+                    />
+
+                    <Route
+                      exact={true}
+                      path="/cancel"
+                      component={() => (
+                        <BookingCancelled />
+                      )}
                     />
 
                     <ProtectedRoute

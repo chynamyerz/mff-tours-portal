@@ -71,52 +71,76 @@ export default class ClientBook extends React.Component<any, any> {
     notFirstTimeBook: false,
     terms: false,
     goToSearch: false,
-    pickupDate: "",
-    returnDate: "",
+    pickupDate: '',
+    returnDate: '',
   }
 
-  handleSubmit = async (e: React.FormEvent<EventTarget>, user: any, vehicle: any, bookVehicle: any) => {
-    e.preventDefault();
-
-    const { pickupDate, returnDate } = this.props
-    const { beyondKZN, email } = this.state;
-
-    // Validate the user input fields
-    const errors: object = validateCarField({email, pickupDate, returnDate});
-    this.setState({ errors });
-
-    // Check if there is an error, if there is abort booking.
-    if (Object.keys(errors).length > 0) {
-      return;
-    }
+  handleBookVehicle = async (bookVehicle: any) => {
+    const vehicle = JSON.parse((localStorage as any).getItem('vehicle'))
+    const pickupDate = JSON.parse((localStorage as any).getItem('pickupDate'))
+    const returnDate = JSON.parse((localStorage as any).getItem('returnDate'))
+    const beyondKZN = JSON.parse((localStorage as any).getItem('beyondKZN'))
+    const email = JSON.parse((localStorage as any).getItem('email'))
 
     try {
+      console.log(vehicle, pickupDate, returnDate, beyondKZN, email)
       // Book the car
       await bookVehicle({
         variables: { beyondKZN, vehicleId: vehicle.id, pickupDate, returnDate, email }
       });
 
       this.setState({
-        beyondKZN: false,
-        book: false,
-        booked: true,
-        email: "",
-        pickupDate: "",
-        returnDate: "",
+        booked: true
       })
 
-      alert("Booked successfully!");
     } catch (error) {
       this.setState({
-        errors: {
-          ...this.state.errors,
-          responseError: error.message
-            .replace("Network error: ", "")
-            .replace("GraphQL error: ", "")
-        }
+        ...this.state,
+        responseError: error.message
+          .replace("Network error: ", "")
+          .replace("GraphQL error: ", "")
       });
     }
   };
+
+  // handleBookVehicle = async (vehicle: any, bookVehicle: any) => {
+  //   const { beyondKZN, email, pickupDate, returnDate } = this.state;
+
+  //   // Validate the user input fields
+  //   const errors: object = validateCarField({email, pickupDate, returnDate});
+  //   this.setState({ errors });
+
+  //   // Check if there is an error, if there is abort booking.
+  //   if (Object.keys(errors).length > 0) {
+  //     return;
+  //   }
+
+  //   try {
+  //     // Book the car
+  //     await bookVehicle({
+  //       variables: { beyondKZN, vehicleId: vehicle.id, pickupDate, returnDate, email }
+  //     });
+
+  //     this.setState({
+  //       beyondKZN: false,
+  //       book: false,
+  //       email: "",
+  //       pickupDate: "",
+  //       returnDate: "",
+  //     })
+
+  //     alert("Booked successfully!");
+  //   } catch (error) {
+  //     this.setState({
+  //       errors: {
+  //         ...this.state.errors,
+  //         responseError: error.message
+  //           .replace("Network error: ", "")
+  //           .replace("GraphQL error: ", "")
+  //       }
+  //     });
+  //   }
+  // };
 
   /**
    * Update the form content according to the user input.
@@ -150,7 +174,7 @@ export default class ClientBook extends React.Component<any, any> {
   goToSearch = () => {
     this.setState((prevState: any) => ({
       ...prevState,
-      goToSearch: true,
+      goToSearch: true
     }))
   }
 
@@ -162,14 +186,62 @@ export default class ClientBook extends React.Component<any, any> {
   }
 
   toggleBook = () => {
-    this.setState({
-      ...this.state,
-      modal: !this.state.modal,
-      book: true,
-      firstTimeBook: false,
-      terms: false,
-      notFirstTimeBook: false
-    });
+    if (document.referrer && document.referrer.includes("payfast")) {
+      const pickupDate = JSON.parse((localStorage as any).getItem('pickupDate'))
+      const returnDate = JSON.parse((localStorage as any).getItem('returnDate'))
+      const { email } = this.state;
+
+      // Validate the user input fields
+      const errors: object = validateCarField({email, pickupDate, returnDate});
+      this.setState({ errors });
+
+      // Check if there is an error, if there is abort booking.
+      if (Object.keys(errors).length > 0) {
+        return;
+      }
+
+      this.setState({
+        ...this.state,
+        errors: {
+          email: "",
+          pickupDate: "",
+          returnDate: "",
+          responseError: ""
+        },
+        modal: !this.state.modal,
+        book: true,
+        firstTimeBook: false,
+        terms: false,
+        notFirstTimeBook: false
+      });
+    } else {
+      const { pickupDate, returnDate } = this.props
+      const { email } = this.state;
+
+      // Validate the user input fields
+      const errors: object = validateCarField({email, pickupDate, returnDate});
+      this.setState({ errors });
+
+      // Check if there is an error, if there is abort booking.
+      if (Object.keys(errors).length > 0) {
+        return;
+      }
+
+      this.setState({
+        ...this.state,
+        errors: {
+          email: "",
+          pickupDate: "",
+          returnDate: "",
+          responseError: ""
+        },
+        modal: !this.state.modal,
+        book: true,
+        firstTimeBook: false,
+        terms: false,
+        notFirstTimeBook: false
+      });
+    }
   }
 
   toggleFirstTimeBook = () => {
@@ -205,18 +277,26 @@ export default class ClientBook extends React.Component<any, any> {
   }
 
   render() {
-    const { user, vehicle, pickupDate, returnDate } = this.props;
-    const { book, beyondKZN, email, firstTimeBook, notFirstTimeBook, goToSearch, booked, signed, terms, errors } = this.state;
+    const { user, vehicle, pickupDate, returnDate, success } = this.props;
+    const { booked, book, beyondKZN, email, firstTimeBook, notFirstTimeBook, goToSearch, signed, terms, errors } = this.state;
+    console.log(document.referrer)
 
     if (goToSearch) {
       return <Redirect to={"/"} />
     }
 
     if (booked) {
-      return (<Redirect to="/" />)
+      return <>
+        <Alert color={"success"}>Booked successfully!</Alert>
+        <Button
+          outline
+          size={"sm"}
+          onClick={this.goToSearch}
+        >Done</Button>
+      </>
     }
 
-    if (!Object.keys(vehicle).length) {
+    if (!Object.keys(vehicle).length && document.referrer && !document.referrer.includes("payfast")) {
       return (
         <>
           <Alert color={"danger"}>Something doesn't seem right.</Alert>
@@ -244,6 +324,197 @@ export default class ClientBook extends React.Component<any, any> {
             if (loading) {
               return <Spinner color="info" size="lg" style={{marginTop: "15%"}}/>
             }
+
+            if (document.referrer && document.referrer.includes("payfast") && success) {
+              return <Button 
+                style={{marginTop: "25%"}}
+                outline
+                disabled={loading}
+                size={"sm"} 
+                color={"success"}
+                onClick={() => this.handleBookVehicle(bookVehicle)}
+              >{"Click here to complete your booking"}</Button>
+            }
+
+            if (document.referrer && document.referrer.includes("payfast")) {
+              const pickupDate = JSON.parse((localStorage as any).getItem('pickupDate'))
+              const returnDate = JSON.parse((localStorage as any).getItem('returnDate'))
+              const vehicle = JSON.parse((localStorage as any).getItem('vehicle'))
+
+              return (
+                <ClientBookContainer>
+                  <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className} size={"lg"}>
+  
+                  { book &&
+                      <>
+                        <ModalHeader toggle={this.toggle}><strong>Checkout.</strong></ModalHeader>
+                      
+                        <ModalBody>
+                          <Checkout 
+                            user={user} 
+                            vehicle={vehicle} 
+                            beyondKZN={beyondKZN} 
+                            pickupDate={pickupDate}
+                            returnDate={returnDate} 
+                            email={email}
+                          />
+                        </ModalBody>
+                      </>
+                    }
+  
+                    { firstTimeBook &&
+                      <>
+                        <ModalHeader toggle={this.toggle}><strong>Let get to know each other.</strong></ModalHeader>
+                      
+                        <ModalBody>
+                          <FirstTimeUser 
+                            closeModal={this.toggle} 
+                            newEmail={(email: string) => this.setState({email})}
+                          />
+                        </ModalBody>
+                      </>
+                    }
+                    { terms &&
+                      <>
+                        <ModalHeader toggle={this.toggle}><strong>MFF Cars Rental Terms and Conditions</strong></ModalHeader>
+                      
+                        <ModalBody>
+                          <TermsAndConditions />
+                        </ModalBody>
+                      </>
+                    }
+  
+                    <ModalFooter>
+                      <Button color="secondary" onClick={this.toggle}>Cancel</Button>
+                    </ModalFooter>
+                    
+                  </Modal>
+                  {error && <Alert color={"danger"}>{this.state.errors.responseError}</Alert>}
+                  <h3 style={{paddingTop: "8%"}}><strong>Complete the booking</strong></h3>
+                  <Card>
+                    <Row>
+                      <Col sm={12} md={6} lg={5}>
+                        <CardImg width="100%" src={vehicle.imageURI} alt="MFF TOURS VEHICLE" />
+                      </Col>
+                      <Col sm={12} md={6} lg={7}>
+                        <Form style={{ textAlign: "left"}}> 
+                          <CardBody className="text-left">
+                            <CardSubtitle style={{fontWeight: "bold"}}>
+                              {vehicle.size}
+                            </CardSubtitle>
+                            <CardTitle style={{fontWeight: "bold", fontSize: 20}}>
+                              {vehicle.name} {vehicle.make}
+                            </CardTitle>
+                            <hr />
+                            <CardText style={{color: "hsl(0, 0%, 71%)"}}>From: {vehicle.location} {moment(pickupDate).format("YYYY-MM-DD LT")}</CardText>
+                            <CardText style={{color: "hsl(0, 0%, 71%)"}}>Return: {vehicle.location} {moment(returnDate).format("YYYY-MM-DD LT")}</CardText>
+                            <CardText style={{color: "hsl(348, 100%, 61%)"}}>
+                              <span style={{fontSize: "1.5em"}}>@ZAR {rands}</span>.<span style={{fontSize: "0.7em"}}>{cents}</span>
+                            </CardText>
+                            {vehicle.transmissionType === "Manual" &&
+                              <FormGroup check>
+                                <Label check>
+                                  <Input 
+                                    type="checkbox" 
+                                    name="beyondKZN" 
+                                    id="beyondKZN"
+                                    checked={beyondKZN}
+                                    onChange={this.onInputChange}
+                                  />{' '}
+                                  Is your destination outside of Kwa-Zulu Natal?
+                                </Label>
+                              </FormGroup>
+                            }
+                            <hr />
+                            <VehicleDetails vehicle={vehicle}/>
+                            <hr />
+                          
+                            <FormGroup>
+                              <Row>
+                                <Col>
+                                  <Button 
+                                    outline
+                                    size={"sm"} 
+                                    color={"secondary"}
+                                    onClick={this.toggleFirstTimeBook}
+                                  >First time booking?</Button>
+                                </Col>
+  
+                                <Col>
+                                  <Button 
+                                    outline
+                                    size={"sm"} 
+                                    color={"secondary"}
+                                    onClick={this.toggleNotFirstTimeBook}
+                                  >Booked before?</Button>
+                                </Col>
+                              </Row>
+                              <br />
+                              {!notFirstTimeBook && errors.email && <Alert color={"danger"}>{errors.email}</Alert>}
+                            </FormGroup>
+                            {
+                              notFirstTimeBook &&
+                              <FormGroup>
+                                <Label for="email">
+                                  <FontAwesomeIcon
+                                    icon="envelope"
+                                  />
+                                  Please, provide an email address was used when booking previously.
+                                </Label>
+                                <Input 
+                                  type="email" 
+                                  name="email" 
+                                  id="email" 
+                                  placeholder="e.g. example@mail.com" 
+                                  value={email}
+                                  onChange={this.onInputChange}
+                                />
+                                {errors.email && <Alert color={"danger"}>{ errors.email }</Alert>}
+                              </FormGroup>
+                            }
+  
+                            <FormGroup check>
+                              <Row>
+                                <Col>
+                                  <Label for="signed" check>
+                                    <Input 
+                                      checked={signed}
+                                      name="signed" 
+                                      id="signed" 
+                                      type="checkbox" 
+                                      onChange={this.onInputChange}
+                                    />{'  '}
+                                    Agree
+                                  </Label>
+                                </Col>
+  
+                                <Col>
+                                  <Button
+                                    style={{ padding: 0 }}
+                                    color={"link"}
+                                    onClick={this.toggleTerms}
+                                  >View terms and conditions</Button> <br />
+                                </Col>
+                              </Row>
+                            </FormGroup>
+                            <FormGroup>
+                              <Button 
+                                outline
+                                disabled={loading || !signed}
+                                size={"sm"} 
+                                color={"success"}
+                                onClick={this.toggleBook}
+                              >{"Checkout"}</Button>
+                            </FormGroup>
+                          </CardBody>
+                        </Form>
+                      </Col>
+                    </Row>
+                  </Card>
+                </ClientBookContainer>
+              )
+            }
+
             return (
               <ClientBookContainer>
                 <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className} size={"lg"}>
@@ -253,7 +524,14 @@ export default class ClientBook extends React.Component<any, any> {
                       <ModalHeader toggle={this.toggle}><strong>Checkout.</strong></ModalHeader>
                     
                       <ModalBody>
-                        <Checkout user={user} vehicle={vehicle} />
+                        <Checkout 
+                          user={user} 
+                          vehicle={vehicle} 
+                          beyondKZN={beyondKZN} 
+                          pickupDate={pickupDate}
+                          returnDate={returnDate} 
+                          email={email}
+                        />
                       </ModalBody>
                     </>
                   }

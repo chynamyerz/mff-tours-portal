@@ -36,7 +36,14 @@ export default class Checkout extends React.Component<any, any> {
 
   render() {
     const { card } = this.state
-    const { user, vehicle } = this.props
+    const { beyondKZN, user, vehicle, pickupDate, returnDate, email } = this.props
+
+    localStorage.setItem("user", JSON.stringify(user))
+    localStorage.setItem("vehicle", JSON.stringify(vehicle))
+    localStorage.setItem("pickupDate", JSON.stringify(pickupDate))
+    localStorage.setItem("returnDate", JSON.stringify(returnDate))
+    localStorage.setItem("email", JSON.stringify(email))
+    localStorage.setItem("beyondKZN", JSON.stringify(beyondKZN))
 
     const SUCCESS_URL = process.env.REACT_APP_MMF_SUCCESS_URL
     const CANCEL_URL = process.env.REACT_APP_MMF_CANCEL_URL
@@ -69,7 +76,7 @@ export default class Checkout extends React.Component<any, any> {
               <input type="hidden" name="cmd" value="_paynow" />
               <input type="hidden" name="receiver" value={PAYFAST_MERCHANT_ID} />
               <input type="hidden" name="item_name" value={vehicle.name} />
-              <input type="hidden" name="amount" value={vehicle.price} />
+              <input type="hidden" name="amount" value={beyondKZN ? "2000.00" : vehicle.price} />
               <input type="hidden" name="item_description" value={vehicle.make} />
               <input type="hidden" name="return_url" value={SUCCESS_URL} />
               <input type="hidden" name="cancel_url" value={CANCEL_URL} />
