@@ -34,6 +34,8 @@ import Services from './components/Services';
 import AdminDashboard from './components/dashboard/admin';
 import BookingSuccess from './components/BookingSuccess';
 import BookingCancelled from './components/BookingCancelled';
+import TermsAndConditions from './components/TermsAndConditions';
+import { Col } from 'reactstrap';
 
 library.add(
   faEnvelope, 
@@ -48,6 +50,23 @@ library.add(
 
 const AppContainer = styled.div`
   margin-top: 0%;
+`;
+
+const TermasAndConditionsContainer = styled.div`
+  margin-top: 8%;
+  margin-bottom: 3%;
+
+  @media screen and (max-width: 500px) {
+    margin-top: 20%;
+  }
+
+  @media screen and (max-width: 600px) {
+    margin-top: 15%;
+  }
+
+  @media screen and (max-width: 900px) {
+    margin-top: 6%;
+  }
 `;
 
 /**
@@ -129,6 +148,19 @@ class App extends React.Component {
                         <>
                           <Services />
                         </>
+                      )}
+                    />
+
+                    <Route
+                      exact={true}
+                      path="/termsandconditions"
+                      component={() => (
+                        <TermasAndConditionsContainer>
+                          <Col sm={12} md={{size:8, offset: 2}}>
+                            <h1><strong>MFF Cars Rental Terms and Conditions</strong></h1>
+                            <TermsAndConditions />
+                          </Col>
+                        </TermasAndConditionsContainer>
                       )}
                     />
 

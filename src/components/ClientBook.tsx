@@ -83,7 +83,6 @@ export default class ClientBook extends React.Component<any, any> {
     const email = JSON.parse((localStorage as any).getItem('email'))
 
     try {
-      console.log(vehicle, pickupDate, returnDate, beyondKZN, email)
       // Book the car
       await bookVehicle({
         variables: { beyondKZN, vehicleId: vehicle.id, pickupDate, returnDate, email }
@@ -279,7 +278,6 @@ export default class ClientBook extends React.Component<any, any> {
   render() {
     const { user, vehicle, pickupDate, returnDate, success } = this.props;
     const { booked, book, beyondKZN, email, firstTimeBook, notFirstTimeBook, goToSearch, signed, terms, errors } = this.state;
-    console.log(document.referrer)
 
     if (goToSearch) {
       return <Redirect to={"/"} />
@@ -290,6 +288,7 @@ export default class ClientBook extends React.Component<any, any> {
         <Alert color={"success"}>Booked successfully!</Alert>
         <Button
           outline
+          color={"info"}
           size={"sm"}
           onClick={this.goToSearch}
         >Done</Button>
@@ -308,8 +307,9 @@ export default class ClientBook extends React.Component<any, any> {
         </>
       )
     }
-    const rands = beyondKZN ? "2000" : String(vehicle.price).split(".")[0]
-    const cents = String(vehicle.price).split(".")[1]
+    
+    let rands = beyondKZN ? "2000" : String(vehicle.price).split(".")[0]
+    let cents = String(vehicle.price).split(".")[1]
     return (
       <Col sm={12} md={12} lg={{size: 8, offset: 2}}>
         <Mutation
@@ -326,20 +326,27 @@ export default class ClientBook extends React.Component<any, any> {
             }
 
             if (document.referrer && document.referrer.includes("payfast") && success) {
-              return <Button 
-                style={{marginTop: "25%"}}
-                outline
-                disabled={loading}
-                size={"sm"} 
-                color={"success"}
-                onClick={() => this.handleBookVehicle(bookVehicle)}
-              >{"Click here to complete your booking"}</Button>
+              return <Col>
+                <h3><strong>You are nearly done...</strong></h3>
+                <Button 
+                  style={{marginTop: "25%"}}
+                  outline
+                  disabled={loading}
+                  size={"sm"} 
+                  color={"success"}
+                  onClick={() => this.handleBookVehicle(bookVehicle)}
+                ><strong>Click here to complete your booking</strong></Button>
+              </Col>
             }
 
             if (document.referrer && document.referrer.includes("payfast")) {
               const pickupDate = JSON.parse((localStorage as any).getItem('pickupDate'))
               const returnDate = JSON.parse((localStorage as any).getItem('returnDate'))
               const vehicle = JSON.parse((localStorage as any).getItem('vehicle'))
+              const beyondKZN = JSON.parse((localStorage as any).getItem('beyondKZN'))
+
+              rands = beyondKZN ? "2000" : String(vehicle.price).split(".")[0]
+              cents = String(vehicle.price).split(".")[1]
 
               return (
                 <ClientBookContainer>

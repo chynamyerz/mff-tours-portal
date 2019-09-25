@@ -9,6 +9,7 @@
       "REACT_APP_MMF_PAYFAST_SANDBOX": "@react_app_mmf_payfast_sandbox",
       "REACT_APP_MMF_MERCHANT_ID_PROD": "@react_app_mmf_merchant_id_prod",
       "REACT_APP_MMF_PAYFAST_PROD": "@react_app_mmf_payfast_prod",
+      "REACT_APP_MMF_TERMS_AND_CONDITIONS": "@react_app_mmf_terms_and_conditions",
       "REACT_APP_ENV": "@react_app_env"
     }
   }

@@ -5,7 +5,7 @@ import { Col } from 'reactstrap';
 export default class TermsAndConditions extends React.Component<any, any> {
   render() {
     return (
-      <Col sm={12} md={12} lg={12}>
+      <Col sm={12} md={12} lg={12} style={{textAlign: "left"}}>
         <p className="text-muted">
           <strong>BOOKING CONDITIONS</strong>
           <br /><br />
