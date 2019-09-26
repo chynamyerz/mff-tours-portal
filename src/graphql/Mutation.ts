@@ -341,6 +341,7 @@ const SEARCH_VEHICLE_MUTATION = gql`
       id
       group
       size
+      count
       name
       model
       make

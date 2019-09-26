@@ -25,6 +25,7 @@ const USER_QUERY = gql`
           id
           group
           size
+          count
           name
           model
           make
@@ -70,6 +71,7 @@ const USERS_QUERY = gql`
           id
           group
           size
+          count
           name
           model
           make
@@ -102,6 +104,7 @@ const VEHICLE_BOOKINGS_QUERY = gql`
       status
       vehicle {
         id
+        count
         group
         size
         name
@@ -144,6 +147,7 @@ const VEHICLE_QUERY = gql`
       id
       group
       size
+      count
       name
       model
       make

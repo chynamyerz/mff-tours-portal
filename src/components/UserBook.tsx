@@ -1,5 +1,5 @@
 import React from 'react';
-import { Col, Card, CardImg, CardBody, CardTitle, CardSubtitle, CardText, Button, Row, Form, FormGroup, Label, Input, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Col, Card, CardImg, CardBody, CardTitle, CardSubtitle, CardText, Button, Row, Form, FormGroup, Label, Input, Modal, ModalHeader, ModalBody, ModalFooter, Alert } from 'reactstrap';
 import moment from "moment";
 import { Mutation } from 'react-apollo';
 import { BOOK_VEHICLE_MUTATION } from '../graphql/Mutation';
@@ -11,6 +11,7 @@ import { validate } from 'isemail';
 import styled from 'styled-components';
 import VehicleDetails from './vehicle/VehicleDetails';
 import { Redirect } from 'react-router-dom';
+import Checkout from './Checkout';
 
 const UserBookContainer = styled.div`
   margin-top: 8%;
@@ -59,52 +60,50 @@ export default class UserBook extends React.Component<any, {}> {
   public state = {
     booked: false,
     errors: {
+      responseError: "",
       pickupDate: "",
       returnDate: "",
       email1: "",
     },
+    book: false,
+    addNewClient: false,
+    goToSearch: false,
     beyondKZN: false,
     email1: "",
     modal: false,
   }
 
-  handleSubmit = async (e: React.FormEvent<EventTarget>, user: any, vehicle: any, bookVehicle: any) => {
-    e.preventDefault();
-
-    const { beyondKZN, email1 } = this.state
-    const { pickupDate, returnDate } = this.props
-
-    // Validate the user input fields
-    const errors: object = validateCarField({email1, pickupDate, returnDate});
-    this.setState({ errors });
-
-    // Check if there is an error, if there is abort booking.
-    if (Object.keys(errors).length > 0) {
-      return;
-    }
-
-    if (!user) {
-      alert("You must be logged in as an admin to book for a client")
-      return;
-    }
+  handleBookVehicle = async (bookVehicle: any) => {
+    const vehicle = JSON.parse((localStorage as any).getItem('vehicle'))
+    const pickupDate = JSON.parse((localStorage as any).getItem('pickupDate'))
+    const returnDate = JSON.parse((localStorage as any).getItem('returnDate'))
+    const beyondKZN = JSON.parse((localStorage as any).getItem('beyondKZN'))
+    const email = JSON.parse((localStorage as any).getItem('email'))
 
     try {
       // Book the car
       await bookVehicle({
-        variables: { beyondKZN, email: email1, vehicleId: vehicle.id, pickupDate, returnDate }
+        variables: { beyondKZN, vehicleId: vehicle.id, pickupDate, returnDate, email }
       });
 
+      localStorage.removeItem('vehicle')
+      localStorage.removeItem('pickupDate')
+      localStorage.removeItem('returnDate')
+      localStorage.removeItem('beyondKZN')
+      localStorage.removeItem('email')
+      localStorage.removeItem('user')
+
       this.setState({
-        booked: true,
-        beyondKZN: false,
-        email1: "",
-        pickupDate: "",
-        returnDate: "",
+        booked: true
       })
 
-      alert("Booked successfully!");
     } catch (error) {
-      alert("Something went wrong, please try again later.")
+      this.setState({
+        ...this.state,
+        responseError: error.message
+          .replace("Network error: ", "")
+          .replace("GraphQL error: ", "")
+      });
     }
   };
 
@@ -138,16 +137,125 @@ export default class UserBook extends React.Component<any, {}> {
     });
   }
 
-  render() {
-    const { user, vehicle, pickupDate, returnDate } = this.props;
-    const { beyondKZN, booked, email1, errors } = this.state;
+  toggleForAddNewClient = () => {
+    this.setState({
+      ...this.state,
+      modal: !this.state.modal,
+      addNewClient: true,
+      book: false,
+    });
+  }
 
-    const rands = beyondKZN ? "2000" : String(vehicle.price).split(".")[0]
-    const cents = String(vehicle.price).split(".")[1]
+  goToSearch = () => {
+    this.setState((prevState: any) => ({
+      ...prevState,
+      goToSearch: true
+    }))
+  }
+
+
+  toggleBook = () => {
+    if (JSON.parse((localStorage as any).getItem('vehicle')) && Object.keys(JSON.parse((localStorage as any).getItem('vehicle'))).length) {
+      const pickupDate = JSON.parse((localStorage as any).getItem('pickupDate'))
+      const returnDate = JSON.parse((localStorage as any).getItem('returnDate'))
+      const { email1 } = this.state;
+
+      // Validate the user input fields
+      const errors: object = validateCarField({email1, pickupDate, returnDate});
+      this.setState({ errors });
+
+      // Check if there is an error, if there is abort booking.
+      if (Object.keys(errors).length > 0) {
+        return;
+      }
+
+      this.setState({
+        ...this.state,
+        errors: {
+          email1: "",
+          pickupDate: "",
+          returnDate: "",
+          responseError: ""
+        },
+        modal: !this.state.modal,
+        book: true,
+        addNewClient: false
+      });
+    } else {
+      const { pickupDate, returnDate } = this.props
+      const { email1 } = this.state;
+
+      // Validate the user input fields
+      const errors: object = validateCarField({email1, pickupDate, returnDate});
+      this.setState({ errors });
+
+      // Check if there is an error, if there is abort booking.
+      if (Object.keys(errors).length > 0) {
+        return;
+      }
+
+      this.setState({
+        ...this.state,
+        errors: {
+          email1: "",
+          pickupDate: "",
+          returnDate: "",
+          responseError: ""
+        },
+        modal: !this.state.modal,
+        book: true,
+      });
+    }
+  }
+
+
+  render() {
+    let { user, vehicle, pickupDate, returnDate, success } = this.props;
+    let { beyondKZN } = this.state
+    const { addNewClient, book, booked, email1, errors, goToSearch } = this.state;
+
+    let rands = beyondKZN ? "2000" : String(vehicle.price).split(".")[0]
+    let cents = String(vehicle.price).split(".")[1]
+
+    if (goToSearch) {
+      return <Redirect to={"/"} />
+    }
 
     if (booked) {
-      return (<Redirect to="/" />)
+      return <>
+        <Alert color={"success"}>Booked successfully!</Alert>
+        <Button
+          outline
+          color={"info"}
+          size={"sm"}
+          onClick={this.goToSearch}
+        >Done</Button>
+      </>
     }
+
+    if (!Object.keys(vehicle).length && document.referrer && !document.referrer.includes("payfast")) {
+      return (
+        <>
+          <Alert color={"danger"}>Something doesn't seem right.</Alert>
+          <Button
+            outline
+            size={"sm"}
+            onClick={this.goToSearch}
+          >Click here to search for available vehicles</Button>
+        </>
+      )
+    }
+
+    if (JSON.parse((localStorage as any).getItem('vehicle')) && Object.keys(JSON.parse((localStorage as any).getItem('vehicle'))).length) {
+      pickupDate = JSON.parse((localStorage as any).getItem('pickupDate'))
+      returnDate = JSON.parse((localStorage as any).getItem('returnDate'))
+      vehicle = JSON.parse((localStorage as any).getItem('vehicle'))
+      beyondKZN = JSON.parse((localStorage as any).getItem('beyondKZN'))
+
+      rands = beyondKZN ? "2000" : String(vehicle.price).split(".")[0]
+      cents = String(vehicle.price).split(".")[1]
+    }
+    
  
     return (
       <Col sm={12} md={12} lg={{size: 8, offset: 2}}>
@@ -160,17 +268,51 @@ export default class UserBook extends React.Component<any, {}> {
           ]}
         >
           {(bookVehicle: any, {loading, error}: any) => {
+            if (document.referrer && document.referrer.includes("payfast") && success) {
+              return <Col>
+                <h3><strong>You are nearly done...</strong></h3>
+                <Button 
+                  style={{marginTop: "25%"}}
+                  outline
+                  disabled={loading}
+                  size={"sm"} 
+                  color={"success"}
+                  onClick={() => this.handleBookVehicle(bookVehicle)}
+                ><strong>Click here to complete your booking</strong></Button>
+              </Col>
+            }
+
             return (
               <UserBookContainer>
                 <div>
                   <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
-                    <ModalHeader toggle={this.toggle}><strong>Add a new client</strong></ModalHeader>
-                    <ModalBody>
-                      <AddUser 
-                        closeModal={this.toggle} 
-                        newEmail={(email1: string) => this.setState({email1})}
-                      />
-                    </ModalBody>
+                    { book &&
+                      <>
+                        <ModalHeader toggle={this.toggle}><strong>Checkout.</strong></ModalHeader>
+                      
+                        <ModalBody>
+                          <Checkout 
+                            user={user} 
+                            vehicle={vehicle} 
+                            beyondKZN={beyondKZN} 
+                            pickupDate={pickupDate}
+                            returnDate={returnDate} 
+                            email={email1}
+                          />
+                        </ModalBody>
+                      </>
+                    }
+                    {addNewClient && 
+                      <>
+                        <ModalHeader toggle={this.toggle}><strong>Add a new client</strong></ModalHeader>
+                        <ModalBody>
+                          <AddUser 
+                            closeModal={this.toggle} 
+                            newEmail={(email1: string) => this.setState({email1})}
+                          />
+                        </ModalBody>
+                      </>
+                    }
                     <ModalFooter>
                       <Button color="secondary" onClick={this.toggle}>Cancel</Button>
                     </ModalFooter>
@@ -182,7 +324,7 @@ export default class UserBook extends React.Component<any, {}> {
                     outline
                     size={"sm"} 
                     color={"info"}
-                    onClick={this.toggle}
+                    onClick={this.toggleForAddNewClient}
                   >
                     Booking for a new client?
                   </Button>
@@ -241,13 +383,12 @@ export default class UserBook extends React.Component<any, {}> {
                             </Col>
                           </Row>
                           <Button 
-                            outline
-                            disabled={loading}
-                            block
-                            size={"sm"} 
-                            color={"success"}
-                            onClick={(e) => this.handleSubmit(e, user, vehicle, bookVehicle)}
-                          >{loading ? "Booking..." : "Book"}</Button>
+                              outline
+                              disabled={loading}
+                              size={"sm"} 
+                              color={"success"}
+                              onClick={this.toggleBook}
+                            >{"Checkout"}</Button>
                         </CardBody>
                       </Form>
                     </Col>
